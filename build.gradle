@@ -1,0 +1,51 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:3.0.0-beta2'
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+        classpath 'com.google.gms:google-services:3.0.0'
+    }
+}
+
+allprojects {
+    repositories {
+        jcenter()
+        maven { url 'https://maven.google.com' }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+ext {
+    // sdk and tools
+    minSdkVersion = 16
+    targetSdkVersion = 26
+    compileSdkVersion = 26
+    buildToolsVersion = '26.0.0'
+
+    supportLibVersion = '26.0.1'
+    playServicesVersion = '11.0.4'
+    constraintLayoutVersion = '1.0.2'
+    amazonServicesVersion ='2.4.7'
+
+    retrofitVersion = "2.3.0"
+    archTechVersion = "1.0.0-alpha9"
+    butterKnifeVersion = '8.8.1'
+    gsonVersion = '2.3.0'
+    logginInterceptorVersion = '3.8.1'
+    matisseVersion = '0.4.3'
+    permissionDispatcherVersion = '2.4.0'
+    glideVersion = '3.7.0'
+    converterGsonVersion = '2.1.0'
+    timberVersion = '4.5.1'
+
+    espressoCoreVersion = '2.3-alpha'
+    jUnitVersion = '4.12'
+}

@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "114229756158",
+    "firebase_url": "https://latrans-30827.firebaseio.com",
+    "project_id": "latrans-30827",
+    "storage_bucket": "latrans-30827.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114229756158:android:764ec6373e7be609",
+        "android_client_info": {
+          "package_name": "com.example.victor.latrans"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114229756158-fpinr515eo7kov4m5erv16o3upk57p1h.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.victor.latrans",
+            "certificate_hash": "1e81794b24e9e84fb55ca7f134918dacd3a79b0a"
+          }
+        },
+        {
+          "client_id": "114229756158-hgs4r2tktq7e7vr60nn5ltse6ilntdgg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEfxk5yG3SWtOiEoBACHpau4Nf1lBkzPQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114229756158-hgs4r2tktq7e7vr60nn5ltse6ilntdgg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

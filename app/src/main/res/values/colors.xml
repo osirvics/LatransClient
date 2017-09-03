@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#193446</color>
+    <color name="colorPrimaryDark">#192e46</color>
+    <color name="colorAccent">#ff9500</color><!-- Global colors -->
+    <!--<color name="colorPrimary">#7d62d9</color>-->
+    <!--<color name="colorPrimaryDark">#512DA8</color>-->
+    <!--<color name="colorAccent">#26c6da</color>-->
+
+    <color name="textColorPrimary">#3a414d</color>
+    <color name="textColorLight">#6f7c92</color>
+
+    <color name="window_background">#193446</color>
+
+    <color name="black">#000000</color>
+    <color name="jet">#222222</color>
+    <color name="oil">#333333</color>
+    <color name="monsoon">#777777</color>
+    <color name="jumbo">#888888</color>
+    <color name="aluminum">#999999</color>
+    <color name="base">#AAAAAA</color>
+    <color name="iron">#CCCCCC</color>
+    <color name="white">#FFFFFF</color>
+
+
+
+    <color name="gray">#7e7e7e</color>
+    <color name="semi_gray">#979797</color>
+    <color name="dark_gray">#696969</color>
+    <color name="shadow">#d0d8dc</color>
+    <color name="link_color_highlight">#2196f3</color>
+
+    <color name="bg_action_mode">#757575</color>
+    <color name="bg_circle_default">#666666</color>
+    <color name="list_divider">#90909090</color>
+    <color name="timestamp">#4285f4</color>
+
+
+
+
+
+</resources>

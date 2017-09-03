@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Latrans</string>
+    <string name="action_settings">Settings</string>
+
+
+    <!-- login -->
+    <string name="username">Username or email</string>
+    <string name="create_account">Create Account</string>
+    <string name="login">Login</string>
+    <string name="password_hint">Password</string>
+    <string name="text_create_account">No account yet?</string>
+    <string name="registration_email">Email</string>
+    <string name="registration_username">Username</string>
+    <string name="text_already_member">Already a member? </string>
+
+
+    <!--Login Validation-->
+    <string name="empty_email">Please provide a non empty email.</string>
+    <string name="invalid_email">Please provide a valid email or password.</string>
+    <string name="empty_password">Please provide a non empty password.</string>
+
+    <!--SignUp Validation-->
+    <string name="error_invalid_username">Enter between 4 and 32 characters</string>
+    <string name="username_exists">Username already exists</string>
+    <string name="email_exists">Email address already exists</string>
+    <string name="error_invalid_email">Enter a valid email address</string>
+    <string name="error_invalid_password"> Enter between 6 and 16 alphanumeric characters</string>
+    <string name="title_activity_trip">TripActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_message">Message</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_post">Post</string>
+    <string name="title_order">Order</string>
+
+
+</resources>
