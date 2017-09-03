@@ -31,6 +31,8 @@ public class App extends Application {
 		});
 
 
+
+
 		applicationComponent = DaggerApplicationComponent
 				.builder()
 				.applicationModule(new ApplicationModule(this))
@@ -42,6 +44,12 @@ public class App extends Application {
 	public ApplicationComponent getComponent(){
 		return applicationComponent;
 	}
+
+//	    @Override
+//    protected void attachBaseContext(Context base) {
+//        super.attachBaseContext(base);
+//        MultiDex.install(this);
+//    }
 
 
 
