@@ -13,6 +13,7 @@ import com.example.victor.latrans.google.AppExecutors;
 import com.example.victor.latrans.repocitory.local.db.AppDatabase;
 import com.example.victor.latrans.repocitory.local.db.entity.Conversation;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
+import com.example.victor.latrans.repocitory.local.model.ConversationAndMessage;
 import com.example.victor.latrans.view.ui.App;
 import com.example.victor.latrans.view.ui.message.MessageActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -97,10 +98,19 @@ public class LatransFirebaseMessagingService extends FirebaseMessagingService {
         message.sender_picture = data.get(JSON_KEY_SENDER_PICTURE);
         message.conversation_id = conversation_id;
 
+        ConversationAndMessage conversationAndMessage = new ConversationAndMessage();
+        conversationAndMessage.id = conversation_id;
+        conversationAndMessage.message = data.get(JSON_KEY_MESSAGE);
+        conversationAndMessage.sender_username = data.get(JSON_KEY_SENDER_USERNAME);
+        conversationAndMessage.sender_picture =  data.get(JSON_KEY_SENDER_PICTURE);
+        conversationAndMessage.time_sent = time;
+
 
         mAppExecutors.diskIO().execute(() -> {
             mAppDatabase.conversationDao().insertConversation(conversation);
             mAppDatabase.messageDao().insertMesaage(message);
+            mAppDatabase.dialogueDao().insertDialogue(conversationAndMessage);
+
 
                 List<Conversation> con = mAppDatabase.conversationDao().getAllConversationNL();
                 Timber.e("Conversation size: " + con.size());

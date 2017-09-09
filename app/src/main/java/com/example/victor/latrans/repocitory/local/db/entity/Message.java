@@ -3,18 +3,20 @@ package com.example.victor.latrans.repocitory.local.db.entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.Index;
+import android.arch.persistence.room.PrimaryKey;
 
-@Entity(primaryKeys = {"conversation_id", "id", "sender_id", "recipient_id"}, foreignKeys = {
+@Entity( foreignKeys = {
         @ForeignKey(entity = Conversation.class,
-                parentColumns = {"id", "user_one_id","user_two_id"},
-                childColumns = {"conversation_id", "sender_id","recipient_id"},
+                parentColumns = {"id"},
+                childColumns = {"conversation_id"},
                 onUpdate = ForeignKey.CASCADE,
                 onDelete= ForeignKey.NO_ACTION,
                 deferred = true)
-                })
+                }, indices = @Index(value = "id", unique = true))
 @SuppressWarnings("all")
 public class Message {
-
+    @PrimaryKey
     public long id;
     public long sender_id;
     public long recipient_id;

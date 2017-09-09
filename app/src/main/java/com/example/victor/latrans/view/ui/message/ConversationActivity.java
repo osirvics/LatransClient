@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import com.example.victor.latrans.dependency.AppFactory;
 import com.example.victor.latrans.google.Resource;
 import com.example.victor.latrans.repocitory.local.model.ConversationAndMessage;
 import com.example.victor.latrans.util.DividerItemDecoration;
+import com.example.victor.latrans.util.OnItemClick;
 import com.example.victor.latrans.view.adapter.ConversationAdapter;
 import com.example.victor.latrans.view.ui.App;
 
@@ -27,7 +29,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class ConversationActivity extends BaseActivity implements LifecycleRegistryOwner{
+public class ConversationActivity extends BaseActivity implements LifecycleRegistryOwner, OnItemClick{
 
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     @BindView(R.id.recycler_view_conversation)
@@ -123,4 +125,10 @@ public class ConversationActivity extends BaseActivity implements LifecycleRegis
     }
 
 
+    @Override
+    public void onClick(int position) {
+        Intent intent = MessageActivity.newIntent(this, position);
+        startActivity(intent);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
 }

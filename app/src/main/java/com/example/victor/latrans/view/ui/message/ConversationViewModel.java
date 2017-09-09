@@ -33,6 +33,7 @@ public class ConversationViewModel extends ViewModel implements AppComponent.Inj
     }
 
     private void queryResponse(){
-        mLiveData = mMessageRepository.getConversation(1);
+        //TODO remove hardcoded id here
+        mLiveData = mMessageRepository.getMessagesAndConversation(1);
     }
 }

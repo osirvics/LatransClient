@@ -15,7 +15,7 @@ import java.util.List;
 public interface TripDao {
 
 
-    @Query("select * from trip")
+    @Query("select * from trip ORDER BY id DESC LIMIT 20")
     LiveData<List<Trip>> getAllTrips();
 
     @Query("select * from trip where id = :id")

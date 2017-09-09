@@ -67,10 +67,21 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         return (mMessages == null) ? 0: mMessages.size();
     }
 
+    public void addMessages(List<Message> trips) {
+        mMessages.clear();
+        mMessages.addAll(trips);
+        notifyDataSetChanged();
+    }
+
+    public void clearMessages() {
+        mMessages.clear();
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemViewType(int position) {
         Message message = mMessages.get(position);
-        if(message.getId()== mSenderId) return VIEW_TYPE_MESSAGE_SENT;
+        if(message.sender_id == mSenderId) return VIEW_TYPE_MESSAGE_SENT;
         else return VIEW_TYPE_MESSAGE_RECEIVED;
     }
 

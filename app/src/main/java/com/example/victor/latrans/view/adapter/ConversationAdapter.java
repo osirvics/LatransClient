@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.example.victor.latrans.R;
 import com.example.victor.latrans.repocitory.local.model.ConversationAndMessage;
 import com.example.victor.latrans.util.DateUtils;
+import com.example.victor.latrans.util.OnItemClick;
 
 import java.util.List;
 
@@ -21,10 +22,12 @@ import butterknife.ButterKnife;
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ConversationHolder> {
     private List<ConversationAndMessage> mConversations;
     private Context mContext;
+    OnItemClick mOnItemClick;
 
     public ConversationAdapter(List<ConversationAndMessage> conversations, Context context){
         this.mConversations = conversations;
         this.mContext = context;
+        this.mOnItemClick = ((OnItemClick) context);
     }
 
 
@@ -59,7 +62,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         notifyDataSetChanged();
     }
 
-    public class ConversationHolder extends RecyclerView.ViewHolder {
+    public class ConversationHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.sender_username)TextView mTextViewSenderName;
         @BindView(R.id.last_message)TextView mTextViewLastMessage;
         @BindView(R.id.profile_image)
@@ -68,6 +71,14 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         public ConversationHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            long conversationId = mConversations.get(getLayoutPosition()).id;
+            int i = (int) conversationId;
+            mOnItemClick.onClick(i);
         }
     }
 }

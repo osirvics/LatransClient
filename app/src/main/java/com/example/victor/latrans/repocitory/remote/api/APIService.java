@@ -6,6 +6,7 @@ import android.arch.lifecycle.LiveData;
 import com.example.victor.latrans.google.ApiResponse;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
 import com.example.victor.latrans.repocitory.local.model.ConversationResponse;
+import com.example.victor.latrans.repocitory.local.model.MessageResponse;
 import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.repocitory.local.model.Oauth;
 import com.example.victor.latrans.repocitory.local.model.Registration;
@@ -32,6 +33,9 @@ public interface APIService {
 
     @GET("users/{user_id}/conversations")
     LiveData<ApiResponse<ConversationResponse>> getConversations(@Path("user_id") long user_id);
+
+    @GET("users/{user_id}/messages")
+    LiveData<ApiResponse<MessageResponse>> getMessages(@Path("user_id") long user_id);
 
 
     @POST("items")

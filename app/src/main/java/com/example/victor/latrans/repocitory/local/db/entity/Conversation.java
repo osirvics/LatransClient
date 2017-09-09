@@ -3,15 +3,17 @@ package com.example.victor.latrans.repocitory.local.db.entity;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
-
+import android.arch.persistence.room.PrimaryKey;
 
 
 //indices = {@Index("id"), @Index("user_one_id"), @Index("user_two_id")}
 //primaryKeys = {"id", "user_one_id", "user_two_id"}, indices = @Index("id")
+//, primaryKeys = {"id", "user_one_id", "user_two_id"}
 @Entity(indices = {@Index(value = {"user_one_id", "user_two_id"},
-        unique = true), @Index(value = "id", unique = true)}, primaryKeys = {"id", "user_one_id", "user_two_id"})
+        unique = true), @Index(value = "id", unique = true)})
 @SuppressWarnings("all")
 public class Conversation {
+    @PrimaryKey
     public long id;
     public long user_one_id;
     public long user_two_id;
