@@ -2,7 +2,6 @@ package com.example.victor.latrans.view.ui.login;
 
 import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.LifecycleRegistryOwner;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
@@ -23,17 +22,15 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.victor.latrans.R;
-import com.example.victor.latrans.di.component.ActivityComponent;
-import com.example.victor.latrans.di.component.DaggerActivityComponent;
-import com.example.victor.latrans.di.module.ActivityModule;
-import com.example.victor.latrans.repocitory.remote.api.ApiResponse;
+import com.example.victor.latrans.dependency.AppFactory;
+import com.example.victor.latrans.google.Resource;
+import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.view.ui.App;
 import com.example.victor.latrans.view.ui.signup.SignupActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 @SuppressWarnings("all")
 public class LoginActivity extends AppCompatActivity implements LifecycleRegistryOwner {
@@ -55,17 +52,6 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
     @BindView(R.id.tem_logout)Button mTempLogout;
     LottieAnimationView animationView;
     private LoginViewModel mLoginViewModel;
-    private ActivityComponent activityComponent;
-
-    public ActivityComponent getActivityComponent() {
-        if (activityComponent == null) {
-            activityComponent = DaggerActivityComponent.builder()
-                    .activityModule(new ActivityModule(this))
-                    .applicationComponent(App.get(this).getComponent())
-                    .build();
-        }
-        return activityComponent;
-    }
 
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
@@ -78,16 +64,18 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        getActivityComponent().inject(this);
+       //((App) getApplication()).getAppComponent().inject(this);
         ButterKnife.bind(this);
+        App app = (App) this.getApplication();
         setUpCLickListener();
         initLoadingAnim();
-        initViewModel();
+        initViewModel(app);
     }
 
 
-    private void initViewModel() {
-        mLoginViewModel = ViewModelProviders.of(this).get(LoginViewModel.class);
+    private void initViewModel(App app) {
+        mLoginViewModel = ViewModelProviders.of(this, new AppFactory(app)).get(LoginViewModel.class);
+      //subscribeDataStreams(mLoginViewModel);
     }
 
 
@@ -96,35 +84,29 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
      * @param loginViewModel
      */
     private void subscribeDataStreams(final LoginViewModel loginViewModel){
-        loginViewModel.getToken().observe(this, new Observer<ApiResponse>() {
-            @Override
-            public void onChanged(@Nullable ApiResponse response) {
-
-            }
-        });
-    }
-
-
+        loginViewModel.getToken().observe(this, this::handleResponse);}
 
    void enableRetry(){
        stopAnim();
        mLoginButton.setEnabled(true);
     }
 
-    void handleResponse(@Nullable ApiResponse response){
-        if(null != response.getToken()){
-            enableRetry();
-            Timber.e("Returned token: " + response.getToken().getToken());
-        }
-        else if (null != response.getMessage()) {
-            enableRetry();
-            Toast.makeText(LoginActivity.this, response.getMessage().toString(), Toast.LENGTH_SHORT).show();
-        }
-        else {
-            enableRetry();
-            Toast.makeText(LoginActivity.this, response.getError().toString(), Toast.LENGTH_SHORT).show();
+    void handleResponse(@Nullable Resource<NewUser> response){
+       switch (response.status){
+           case SUCCESS:
+               enableRetry();
+               Toast.makeText(LoginActivity.this, response.data.getToken(), Toast.LENGTH_SHORT).show();
+               break;
+           case MESSAGE:
+               enableRetry();
+               Toast.makeText(LoginActivity.this, response.message, Toast.LENGTH_SHORT).show();
+               break;
+           case ERROR:
+               enableRetry();
+               Toast.makeText(LoginActivity.this, response.error.toString(), Toast.LENGTH_SHORT).show();
+               break;
 
-        }
+       }
     }
 
     private void showProgressbar(Boolean flag){
@@ -138,7 +120,6 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
         if(validate()){
             mLoginButton.setEnabled(false);
             hideKeypad();
-            mLoginViewModel.login();
             startAnim();
             subscribeDataStreams(mLoginViewModel);
         }

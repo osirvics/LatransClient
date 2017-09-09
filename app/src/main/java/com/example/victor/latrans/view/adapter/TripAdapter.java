@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.example.victor.latrans.R;
 import com.example.victor.latrans.repocitory.local.db.entity.Trip;
+import com.example.victor.latrans.util.DateUtils;
 
 import java.util.List;
 
@@ -47,6 +48,7 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripHolder> {
         String travelToState = trip.traveling_to_state;
         String travelToCity = trip.traveling_to_city;
         String to = travelToCity + ", " + travelToState;
+        holder.mTextViewTimePosted.setText(String.valueOf(DateUtils.formatDateTime(trip.getPosted_on())));
         holder.mTextViewTravellingDate.setText(trip.traveling_date);
         holder.mTextViewTravelingTo.setText(to);
         holder.mTextViewTravellinfFrom.setText(from);
@@ -70,6 +72,17 @@ public class TripAdapter extends RecyclerView.Adapter<TripAdapter.TripHolder> {
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
+    }
+
+    public void addTrips(List<Trip> trips) {
+        mTrips.clear();
+        mTrips.addAll(trips);
+        notifyDataSetChanged();
+    }
+
+    public void clearTrips() {
+        mTrips.clear();
+        notifyDataSetChanged();
     }
 
 }

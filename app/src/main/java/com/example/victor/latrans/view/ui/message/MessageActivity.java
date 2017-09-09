@@ -1,27 +1,19 @@
 package com.example.victor.latrans.view.ui.message;
 
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
-import com.example.victor.latrans.BaseActivity;
 import com.example.victor.latrans.R;
 
-public class MessageActivity extends BaseActivity {
+public class MessageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(R.layout.activity_message);
+        setContentView(R.layout.activity_message);
     }
 
-    @Override
-    public int getContentViewId() {
-        return R.layout.activity_message;
-    }
 
-    @Override
-    public int getNavigationMenuItemId() {
-        return R.id.navigation_message;
-    }
 
     @Override
     public void onBackPressed() {

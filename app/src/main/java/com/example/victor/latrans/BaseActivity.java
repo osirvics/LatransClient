@@ -9,7 +9,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.victor.latrans.util.Util;
-import com.example.victor.latrans.view.ui.message.MessageActivity;
+import com.example.victor.latrans.view.ui.message.ConversationActivity;
 import com.example.victor.latrans.view.ui.order.OrderActivity;
 import com.example.victor.latrans.view.ui.post.PostActivity;
 import com.example.victor.latrans.view.ui.profile.ProfileActivity;
@@ -59,7 +59,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BottomNa
                 overridePendingTransition(R.anim.enter, R.anim.exit);
             }
             else if(itemId == R.id.navigation_message){
-                startActivity(new Intent(this, MessageActivity.class));
+                startActivity(new Intent(this, ConversationActivity.class));
                 overridePendingTransition(R.anim.enter, R.anim.exit);
             }
             else if(itemId == R.id.navigation_profile){

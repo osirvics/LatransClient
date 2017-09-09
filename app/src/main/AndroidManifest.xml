@@ -33,17 +33,31 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
+
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity android:name=".view.ui.order.OrderActivity">
-
         </activity>
         <activity android:name=".view.ui.post.PostActivity">
         </activity>
         <activity android:name=".view.ui.message.MessageActivity">
         </activity>
         <activity android:name=".view.ui.profile.ProfileActivity">
+        </activity>
+
+        <service android:name=".fcm.LatransFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:name=".fcm.LatransFirebaseInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <activity android:name=".view.ui.message.ConversationActivity">
         </activity>
     </application>
 

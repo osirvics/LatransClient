@@ -10,7 +10,7 @@ import android.arch.persistence.room.PrimaryKey;
 public class User {
 
     @PrimaryKey
-    public int id;
+    public long id;
     public String username;
     public String email;
     public String name;
@@ -36,7 +36,7 @@ public class User {
      * @param surname obvious enough
      * @param ratings ratings for this user
      */
-    public User(String email, int id, String name, String picture, int ratings, String surname, String username) {
+    public User(String email, long id, String name, String picture, int ratings, String surname, String username) {
         super();
         this.email = email;
         this.id = id;
@@ -55,7 +55,7 @@ public class User {
         this.email = email;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

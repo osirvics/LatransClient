@@ -24,6 +24,7 @@ package com.example.victor.latrans.google;
  */
 public enum Status {
     SUCCESS,
-    ERROR,
-    LOADING
+    MESSAGE,
+    LOADING,
+    ERROR
 }

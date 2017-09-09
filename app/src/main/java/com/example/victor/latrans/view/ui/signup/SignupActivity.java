@@ -20,8 +20,11 @@ import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.victor.latrans.R;
-import com.example.victor.latrans.repocitory.remote.api.response.NewUserResponse;
+import com.example.victor.latrans.dependency.AppFactory;
+import com.example.victor.latrans.google.Resource;
+import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.util.Util;
+import com.example.victor.latrans.view.ui.App;
 import com.example.victor.latrans.view.ui.login.LoginActivity;
 
 import butterknife.BindView;
@@ -45,6 +48,9 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
     LottieAnimationView animationView;
     SignUpViewModel mSignUpViewModel;
 
+//    @Inject
+//    ViewModelProvider.Factory mViewModelFactory;
+
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
     @Override
@@ -57,19 +63,22 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
+       // ((App) getApplication()).getAppComponent().inject(this);
+
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        App app = (App) this.getApplication();
 
         setClickListeners();
         initLoadingAnim();
-        initViewModel();
+        initViewModel(app);
 
     }
 
-    private void initViewModel(){
-        mSignUpViewModel = ViewModelProviders.of(this).get(SignUpViewModel.class);
+    private void initViewModel(App application){
+        mSignUpViewModel = ViewModelProviders.of(this, new AppFactory(application)).get(SignUpViewModel.class);
     }
 
 
@@ -89,20 +98,25 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
     }
 
     private void subscribeToDataStreams(final  SignUpViewModel signUpViewModel){
-        signUpViewModel.getResponse().observe(this, response -> handleStreams(response));}
+        signUpViewModel.getResponse().observe(this, this::handleStreams);}
 
-    private void handleStreams(NewUserResponse response){
+    private void handleStreams(Resource<NewUser> response){
+        switch (response.status){
+            case SUCCESS:
+                stopAnim();
+                Toast.makeText(this, "Username: "+ response.data.getToken(), Toast.LENGTH_SHORT).show();
+                break;
+            case MESSAGE:
+                stopAnim();
+                Toast.makeText(this, "Username: "+ response.message, Toast.LENGTH_SHORT).show();
+                break;
+            case ERROR:
+                stopAnim();
+                Toast.makeText(this, "Username: "+ response.error, Toast.LENGTH_SHORT).show();
+                break;
 
-        if(null != response.getNewUser()){
-            stopAnim();
         }
-        else if (null != response.getMessage()){
-            stopAnim();
-            Toast.makeText(getApplicationContext(),  response.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-        else if (null != response.getError()){
-            stopAnim();
-        }
+
     }
 
 

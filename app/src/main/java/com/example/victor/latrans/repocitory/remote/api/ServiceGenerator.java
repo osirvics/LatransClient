@@ -2,6 +2,8 @@ package com.example.victor.latrans.repocitory.remote.api;
 
 import android.text.TextUtils;
 
+import com.example.victor.latrans.util.LiveDataCallAdapterFactory;
+
 import okhttp3.Credentials;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -19,7 +21,8 @@ public class ServiceGenerator {
     private static Retrofit.Builder builder =
             new Retrofit.Builder()
                     .baseUrl(API_BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create());
+                    .addConverterFactory(GsonConverterFactory.create())
+                     .addCallAdapterFactory(new LiveDataCallAdapterFactory());
 
     public static Retrofit retrofit = builder.build();
 

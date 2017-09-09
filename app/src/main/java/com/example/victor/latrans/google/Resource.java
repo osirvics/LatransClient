@@ -19,9 +19,10 @@ package com.example.victor.latrans.google;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import static com.example.victor.latrans.google.Status.SUCCESS;
-import static com.example.victor.latrans.google.Status.LOADING;
 import static com.example.victor.latrans.google.Status.ERROR;
+import static com.example.victor.latrans.google.Status.LOADING;
+import static com.example.victor.latrans.google.Status.MESSAGE;
+import static com.example.victor.latrans.google.Status.SUCCESS;
 /**
  * A generic class that holds a value with its loading status.
  * @param <T>
@@ -37,22 +38,30 @@ public class Resource<T> {
     @Nullable
     public final T data;
 
-    public Resource(@NonNull Status status, @Nullable T data, @Nullable String message) {
+    @Nullable
+    public final Throwable error;
+
+    public Resource(@NonNull Status status, @Nullable T data, @Nullable String message, @Nullable Throwable error) {
         this.status = status;
         this.data = data;
         this.message = message;
+        this.error = error;
     }
 
     public static <T> Resource<T> success(@Nullable T data) {
-        return new Resource<>(SUCCESS, data, null);
+        return new Resource<>(SUCCESS, data, null, null);
     }
 
-    public static <T> Resource<T> error(String msg, @Nullable T data) {
-        return new Resource<>(ERROR, data, msg);
+    public static <T> Resource<T> message(String msg, @Nullable T data) {
+        return new Resource<>(MESSAGE, data, msg, null);
     }
 
     public static <T> Resource<T> loading(@Nullable T data) {
-        return new Resource<>(LOADING, data, null);
+        return new Resource<>(LOADING, data, null, null);
+    }
+
+    public static <T> Resource<T> error(Throwable error) {
+        return new Resource<>(ERROR, null, null,error);
     }
 
     @Override

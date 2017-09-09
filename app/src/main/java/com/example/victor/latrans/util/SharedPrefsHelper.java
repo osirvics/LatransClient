@@ -1,17 +1,18 @@
 package com.example.victor.latrans.util;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
+/**
+ * Created by Victor on 29/08/2017.
+ */
 
-@Singleton
 public class SharedPrefsHelper {
 
     private SharedPreferences mSharedPreferences;
-    private static SharedPrefsHelper sInstance;
+
+    //private static SharedPrefsHelper sInstance;
 
     public static String PREF_KEY_ACCESS_TOKEN = "access-token";
     private static final String PREF_KEY_USER_LOGGED_IN_MODE = "PREF_KEY_USER_LOGGED_IN_MODE";
@@ -19,24 +20,17 @@ public class SharedPrefsHelper {
     private static final String PREF_KEY_CURRENT_USER_NAME = "PREF_KEY_CURRENT_USER_NAME";
     private static final String PREF_KEY_CURRENT_USER_EMAIL = "PREF_KEY_CURRENT_USER_EMAIL";
 
-    public static synchronized SharedPrefsHelper getInstance(Context context) {
-        if (sInstance == null) {
-            //TODO use app.getContext
-            sInstance = new SharedPrefsHelper(context.getApplicationContext());
-        }
-
-        return sInstance;
-    }
-
+//    public static synchronized SharedPrefsHelper getInstance(Context context) {
+//        if (sInstance == null) {
+//            sInstance = new SharedPrefsHelper(App.getContext());
+//        }
+//
+//        return sInstance;
+//    }
     @Inject
-    public SharedPrefsHelper( SharedPreferences sharedPreferences) {
+    public SharedPrefsHelper(SharedPreferences sharedPreferences) {
         mSharedPreferences = sharedPreferences;
-    }
-
-
-
-    public SharedPrefsHelper(Context context) {
-        mSharedPreferences = context.getSharedPreferences("latrans-prefs", Context.MODE_PRIVATE);
+        //mSharedPreferences = context.getSharedPreferences("latrans-prefs", Context.MODE_PRIVATE);
     }
 
 

@@ -19,17 +19,20 @@ public interface TripDao {
     LiveData<List<Trip>> getAllTrips();
 
     @Query("select * from trip where id = :id")
-    LiveData<Trip> findAtripById(int id);
+    LiveData<Trip> findAtripById(long id);
 
     @Query("select * from trip where traveling_from_city = :traveling_from_city")
     LiveData<List<Trip>> findAtripByTravelingFromCity(String traveling_from_city);
 
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insertTrips(Trip... trips);
+    public void saveTrips(Trip... trips);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     public void insertTrip(Trip trip);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+     void insertTrips(List<Trip> repositories);
 
 
 

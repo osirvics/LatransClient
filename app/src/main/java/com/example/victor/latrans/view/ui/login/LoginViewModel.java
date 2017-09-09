@@ -1,34 +1,39 @@
 package com.example.victor.latrans.view.ui.login;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 
-import com.example.victor.latrans.repocitory.LoginRepository;
-import com.example.victor.latrans.repocitory.remote.api.APIService;
-import com.example.victor.latrans.repocitory.remote.api.ApiResponse;
-import com.example.victor.latrans.repocitory.remote.api.ServiceGenerator;
-import com.example.victor.latrans.util.SharedPrefsHelper;
+import com.example.victor.latrans.dependency.AppComponent;
+import com.example.victor.latrans.google.Resource;
+import com.example.victor.latrans.repocitory.local.model.Login;
+import com.example.victor.latrans.repocitory.local.model.NewUser;
+import com.example.victor.latrans.repocitory.SignupRepository;
+
+import javax.inject.Inject;
 
 
-/**
- * Created by Victor on 29/08/2017.
- */
-
-public class LoginViewModel extends AndroidViewModel {
+public class LoginViewModel extends ViewModel implements AppComponent.Injectable{
 
     private String mEmailOrPassword;
     private String mPassword;
 
-    private LoginRepository mLoginRepository;
-
-    private LiveData<ApiResponse> mTokenLiveData;
-
-
-    public LoginViewModel(Application application) {
-        super(application);
+    @Override
+    public void inject(AppComponent countdownComponent) {
+        countdownComponent.inject(this);
     }
+
+
+
+    public LoginViewModel() {
+        Login.setPassword("victorr");
+        Login.setUsername("chemistryy");
+    }
+
+    @Inject
+    SignupRepository mSignupRepository;
+
+    private LiveData<Resource<NewUser>> mTokenLiveData;
 
 
 
@@ -41,13 +46,7 @@ public class LoginViewModel extends AndroidViewModel {
         mPassword = pass;
     }
 
-//    public void setIsloginValueChanged(boolean flag){
-//        mIsloginValueChanged.setValue(flag);
-//    }
-//
-//    LiveData<Boolean> isDataLoginChanged(){
-//        return mIsloginValueChanged;
-//    }
+
     String getPassword(){
         return mPassword;
     }
@@ -56,15 +55,14 @@ public class LoginViewModel extends AndroidViewModel {
     }
 
     public void login(){
-        mLoginRepository = null;
+        mSignupRepository = null;
         mTokenLiveData = null;
-       LoginRepository.killInstatnce();
     }
 
     private void loadToken(){
-        onLoginReady(getEmailOrPassword(), getPassword());
+      //  onLoginReady(getEmailOrPassword(), getPassword());
 
-        mTokenLiveData =   mLoginRepository.getToken();
+        mTokenLiveData =   mSignupRepository.getToken(getEmailOrPassword(), getPassword());
 //        mTokenLiveData = Transformations.switchMap(isDataLoginChanged(), new Function<Boolean, LiveData<ApiResponse>>() {
 //            @Override
 //            public LiveData<ApiResponse> apply(Boolean input) {
@@ -77,7 +75,7 @@ public class LoginViewModel extends AndroidViewModel {
 //        });
     }
 
-    public LiveData<ApiResponse> getToken(){
+    public LiveData<Resource<NewUser>> getToken(){
         if (mTokenLiveData == null){
             mTokenLiveData = new MutableLiveData<>();
             loadToken();
@@ -85,11 +83,11 @@ public class LoginViewModel extends AndroidViewModel {
         return mTokenLiveData;
     }
 
-    private void onLoginReady(String usernameorEmail, String password){
-        if (mLoginRepository == null){
-            mLoginRepository = LoginRepository.getInstance(ServiceGenerator.createService(APIService.class,
-                    usernameorEmail, password), SharedPrefsHelper.getInstance(this.getApplication()));
-        }
-    }
+
+//    private void onLoginReady(String usernameorEmail, String password){
+//            Login.setPassword(usernameorEmail);
+//            Login.setUsername(password);
+//
+//    }
 
 }

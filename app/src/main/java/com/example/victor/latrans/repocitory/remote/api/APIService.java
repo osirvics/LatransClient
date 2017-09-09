@@ -1,12 +1,16 @@
 package com.example.victor.latrans.repocitory.remote.api;
 
 
+import android.arch.lifecycle.LiveData;
+
+import com.example.victor.latrans.google.ApiResponse;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
-import com.example.victor.latrans.repocitory.local.db.entity.Trip;
+import com.example.victor.latrans.repocitory.local.model.ConversationResponse;
 import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.repocitory.local.model.Oauth;
 import com.example.victor.latrans.repocitory.local.model.Registration;
 import com.example.victor.latrans.repocitory.local.model.Token;
+import com.example.victor.latrans.repocitory.local.model.TripResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -21,10 +25,14 @@ import retrofit2.http.Path;
 
 public interface APIService {
     @GET("login")
-    Call<Token> getLogInToken();
+    Call<NewUser> getLogInCredentials();
 
-    @GET("items")
-    Call<Trip> getItems();
+    @GET("trips")
+    LiveData<ApiResponse<TripResponse>> getTrips();
+
+    @GET("users/{user_id}/conversations")
+    LiveData<ApiResponse<ConversationResponse>> getConversations(@Path("user_id") long user_id);
+
 
     @POST("items")
     Call<Message> postItems(@Body Message item);

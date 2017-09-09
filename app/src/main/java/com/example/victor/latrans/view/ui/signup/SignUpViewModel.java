@@ -1,33 +1,35 @@
 package com.example.victor.latrans.view.ui.signup;
 
-import android.app.Application;
-import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.lifecycle.ViewModel;
 
-import com.example.victor.latrans.repocitory.local.db.DatabaseManager;
+import com.example.victor.latrans.dependency.AppComponent;
+import com.example.victor.latrans.google.Resource;
+import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.repocitory.local.model.Registration;
-import com.example.victor.latrans.repocitory.remote.api.APIService;
-import com.example.victor.latrans.repocitory.remote.api.ServiceGenerator;
 import com.example.victor.latrans.repocitory.SignupRepository;
-import com.example.victor.latrans.repocitory.remote.api.response.NewUserResponse;
-import com.example.victor.latrans.util.SharedPrefsHelper;
+
+import javax.inject.Inject;
 
 /**
  * Created by Victor on 31/08/2017.
  */
 
-public class SignUpViewModel extends AndroidViewModel {
-    public SignUpViewModel(Application application) {
-        super(application);
-        init();
-    }
+public class SignUpViewModel extends ViewModel implements AppComponent.Injectable{
+
+
+
+    @Inject
+    SignupRepository mSignupRepository;
+
+
 
     private String username;
     private String password;
     private String email;
 
-    private SignupRepository mSignupRepository;
+
 
     public String getUsername() {
         return username;
@@ -53,9 +55,9 @@ public class SignUpViewModel extends AndroidViewModel {
         this.password = password;
     }
 
-    private LiveData<NewUserResponse> mLiveData;
+    private LiveData<Resource<NewUser>> mLiveData;
 
-     LiveData<NewUserResponse> getResponse(){
+     LiveData<Resource<NewUser>> getResponse(){
         mLiveData = new MutableLiveData<>();
         queryResponse();
         return  mLiveData;
@@ -63,15 +65,7 @@ public class SignUpViewModel extends AndroidViewModel {
     }
 
     private void queryResponse(){
-        mLiveData = mSignupRepository.getUserCredential(buildCredentials());
-    }
-
-    private void init(){
-        if (mSignupRepository == null){
-            mSignupRepository = SignupRepository.getInstance(ServiceGenerator.createService(APIService.class,"", ""),
-                    SharedPrefsHelper.getInstance(this.getApplication()), DatabaseManager.getInstance(this.getApplication())
-            .getDatabase().userDao());
-        }
+        mLiveData = mSignupRepository.createUser(buildCredentials());
     }
 
     private Registration buildCredentials(){
@@ -82,4 +76,8 @@ public class SignUpViewModel extends AndroidViewModel {
         return registration;
     }
 
+    @Override
+    public void inject(AppComponent countdownComponent) {
+        countdownComponent.inject(this);
+    }
 }

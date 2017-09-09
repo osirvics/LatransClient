@@ -15,13 +15,14 @@ import android.arch.persistence.room.Ignore;
 @SuppressWarnings("all")
 public class Message {
 
-    public int id;
-    public int sender_id;
-    public int recipient_id;
+    public long id;
+    public long sender_id;
+    public long recipient_id;
     public String sender_username;
     public String message;
+    public String sender_picture;
     public long time_sent;
-    public int conversation_id;
+    public long conversation_id;
 
     /**
      * No args constructor for use in serialization
@@ -41,7 +42,7 @@ public class Message {
      * @param time_sent
      * @param sender_username
      */
-    public Message(int id, int sender_id, int recipient_id, String sender_username, String message, long time_sent, int conversation_id) {
+    public Message(long id, long sender_id, long recipient_id, String sender_username, String message, long time_sent, long conversation_id, String sender_picture) {
         super();
         this.id = id;
         this.sender_id = sender_id;
@@ -50,25 +51,26 @@ public class Message {
         this.message = message;
         this.time_sent = time_sent;
         this.conversation_id = conversation_id;
+        this.sender_picture = sender_picture;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public int getSenderId() {
+    public long getSenderId() {
         return sender_id;
     }
 
-    public void setSenderId(int senderId) {
+    public void setSenderId(long senderId) {
         this.sender_id = senderId;
     }
 
-    public int getRecipientId() {
+    public long getRecipientId() {
         return recipient_id;
     }
 
@@ -96,15 +98,15 @@ public class Message {
         return time_sent;
     }
 
-    public void setTimeSent(int timeSent) {
+    public void setTimeSent(long timeSent) {
         this.time_sent = timeSent;
     }
 
-    public int getConversationId() {
+    public long getConversationId() {
         return conversation_id;
     }
 
-    public void setConversationId(int conversationId) {
+    public void setConversationId(long conversationId) {
         this.conversation_id = conversationId;
     }
 

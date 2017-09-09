@@ -16,9 +16,20 @@ public interface ConversationDao {
     @Query("select * from conversation")
     LiveData<List<Conversation>> getAllConversation();
 
+    @Query("select * from conversation")
+    List<Conversation> getAllConversationNL();
+
     @Query("select * from conversation where id = :id")
-    LiveData<Conversation> getAConversationByID(int id);
+    LiveData<Conversation> getAConversationByID(long id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    public void insertConversation(Conversation conversation);
+    void insertConversation(Conversation conversation);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertList(List<Conversation> conversations);
+
+    @Query("DELETE FROM conversation")
+    void deleteAll();
+
+
 }
