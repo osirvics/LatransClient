@@ -60,8 +60,6 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
         App app = (App) this.getApplication();
         setUpView();
         initViewModel(app, id);
-
-
     }
 
     private void initViewModel(App app, int id){

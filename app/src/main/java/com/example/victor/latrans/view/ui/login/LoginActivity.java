@@ -26,6 +26,7 @@ import com.example.victor.latrans.dependency.AppFactory;
 import com.example.victor.latrans.google.Resource;
 import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.view.ui.App;
+import com.example.victor.latrans.view.ui.profile.ProfileActivity;
 import com.example.victor.latrans.view.ui.signup.SignupActivity;
 
 import butterknife.BindView;
@@ -96,6 +97,9 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
            case SUCCESS:
                enableRetry();
                Toast.makeText(LoginActivity.this, response.data.getToken(), Toast.LENGTH_SHORT).show();
+               Intent intent = ProfileActivity.newImtent(this);
+               startActivity(intent);
+               overridePendingTransition(R.anim.enter, R.anim.exit);
                break;
            case MESSAGE:
                enableRetry();

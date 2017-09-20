@@ -9,6 +9,7 @@ import com.example.victor.latrans.repocitory.local.model.ConversationResponse;
 import com.example.victor.latrans.repocitory.local.model.MessageResponse;
 import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.repocitory.local.model.Oauth;
+import com.example.victor.latrans.repocitory.local.model.Profile;
 import com.example.victor.latrans.repocitory.local.model.Registration;
 import com.example.victor.latrans.repocitory.local.model.Token;
 import com.example.victor.latrans.repocitory.local.model.TripResponse;
@@ -18,6 +19,7 @@ import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Headers;
 import retrofit2.http.POST;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
 /**
@@ -37,6 +39,9 @@ public interface APIService {
     @GET("users/{user_id}/messages")
     LiveData<ApiResponse<MessageResponse>> getMessages(@Path("user_id") long user_id);
 
+    @Headers({"Accept: application/json"})
+    @PUT("users/{user_id}/modify")
+    LiveData<ApiResponse<NewUser>> updateUser(@Body Profile profile, @Path("user_id") long user_id);
 
     @POST("items")
     Call<Message> postItems(@Body Message item);

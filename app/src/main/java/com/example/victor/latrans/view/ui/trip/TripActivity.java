@@ -21,7 +21,6 @@ import com.example.victor.latrans.util.DividerItemDecoration;
 import com.example.victor.latrans.view.adapter.TripAdapter;
 import com.example.victor.latrans.view.ui.App;
 import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +56,6 @@ public class TripActivity extends BaseActivity  implements LifecycleRegistryOwne
 
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Timber.e("Refreshed token: " + refreshedToken);
-        FirebaseMessaging.getInstance().subscribeToTopic("user1");
        // setContentView(R.layout.activity_trip);
         ButterKnife.bind(this);
         initLoadingAnim();

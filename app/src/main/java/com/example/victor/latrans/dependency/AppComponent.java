@@ -7,6 +7,10 @@ import com.example.victor.latrans.view.ui.message.ConversationActivity;
 import com.example.victor.latrans.view.ui.message.ConversationViewModel;
 import com.example.victor.latrans.view.ui.message.MessageActivity;
 import com.example.victor.latrans.view.ui.message.MessageViewModel;
+import com.example.victor.latrans.view.ui.profile.EditProfileActivity;
+import com.example.victor.latrans.view.ui.profile.EditProfileViewModel;
+import com.example.victor.latrans.view.ui.profile.ProfileActivity;
+import com.example.victor.latrans.view.ui.profile.ProfileViewModel;
 import com.example.victor.latrans.view.ui.signup.SignUpViewModel;
 import com.example.victor.latrans.view.ui.signup.SignupActivity;
 import com.example.victor.latrans.view.ui.trip.TripActivity;
@@ -29,12 +33,16 @@ public interface AppComponent {
     void inject(TripActivity tripActivity);
     void inject(ConversationActivity conversationActivity);
     void inject(MessageActivity messageActivity);
+    void inject(ProfileActivity profileActivity);
+    void inject(EditProfileActivity editProfileActivity);
 
     void inject(SignUpViewModel signUpViewModel);
     void inject(LoginViewModel loginViewModel);
     void inject(TripViewModel tripViewModel);
     void inject(ConversationViewModel conversationViewModel);
     void inject(MessageViewModel messageViewModel);
+    void inject(ProfileViewModel profileViewModel);
+    void inject(EditProfileViewModel editProfileViewModel);
 
     void inject (LatransFirebaseMessagingService messagingService);
 

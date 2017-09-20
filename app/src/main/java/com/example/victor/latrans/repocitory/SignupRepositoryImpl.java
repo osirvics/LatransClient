@@ -24,6 +24,7 @@ import com.example.victor.latrans.repocitory.local.model.TripResponse;
 import com.example.victor.latrans.repocitory.remote.api.APIService;
 import com.example.victor.latrans.repocitory.remote.api.ServiceGenerator;
 import com.example.victor.latrans.util.SharedPrefsHelper;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -70,12 +71,15 @@ public class SignupRepositoryImpl implements SignupRepository{
                if (response.isSuccessful()) {
 
                        mSharedPrefsHelper.setAccessToken(response.body().getToken());
+                       long id = response.body().getUser().getId();
+                       mSharedPrefsHelper.setUserId(id);
+                       String user = "user";
+                       String myTopic = user + String.valueOf(id);
+                       FirebaseMessaging.getInstance().subscribeToTopic(myTopic);
                        data.setValue(Resource.success(response.body()));
                        new MyAsynTask(response.body().getUser(),mAppDatabase.userDao()).execute();
                }
-
                else{
-                   //TODO: remove sensitive debug logs
                    if(response.code() == 302){
                        String message = mContext.getString(R.string.username_exists);
                        data.setValue(Resource.message(message, null));
@@ -84,7 +88,6 @@ public class SignupRepositoryImpl implements SignupRepository{
                    else if(response.code() == 303){
                        data.setValue(Resource.message(mContext.getString(R.string.email_exists), null));
                    }
-
                    else {
                        Timber.e("status code: %s", response.code());
                        Timber.e("body: %s", response.body());

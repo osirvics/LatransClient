@@ -6,9 +6,8 @@ import android.arch.lifecycle.ViewModel;
 
 import com.example.victor.latrans.dependency.AppComponent;
 import com.example.victor.latrans.google.Resource;
-import com.example.victor.latrans.repocitory.local.model.Login;
-import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.repocitory.SignupRepository;
+import com.example.victor.latrans.repocitory.local.model.NewUser;
 
 import javax.inject.Inject;
 
@@ -23,12 +22,6 @@ public class LoginViewModel extends ViewModel implements AppComponent.Injectable
         countdownComponent.inject(this);
     }
 
-
-
-    public LoginViewModel() {
-        Login.setPassword("victorr");
-        Login.setUsername("chemistryy");
-    }
 
     @Inject
     SignupRepository mSignupRepository;

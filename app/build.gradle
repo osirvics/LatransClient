@@ -47,10 +47,10 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:" + rootProject.archTechVersion;
     annotationProcessor "android.arch.persistence.room:compiler:" + rootProject.archTechVersion;
     // Amazon Web Services
-    implementation 'com.amazonaws:aws-android-sdk-core:' + rootProject.amazonServicesVersion;
+    //implementation 'com.amazonaws:aws-android-sdk-core:' + rootProject.amazonServicesVersion;
     implementation 'com.amazonaws:aws-android-sdk-s3:' + rootProject.amazonServicesVersion;
-    implementation 'com.amazonaws:aws-android-sdk-ddb:' + rootProject.amazonServicesVersion;
-    implementation 'com.amazonaws:aws-android-sdk-cognito:' + rootProject.amazonServicesVersion;
+    //implementation 'com.amazonaws:aws-android-sdk-ddb:' + rootProject.amazonServicesVersion;
+   // implementation 'com.amazonaws:aws-android-sdk-cognito:' + rootProject.amazonServicesVersion;
 
     implementation 'com.squareup.retrofit2:retrofit:' + rootProject.retrofitVersion;
     implementation 'com.squareup.retrofit2:converter-gson:' + rootProject.converterGsonVersion;
@@ -70,6 +70,8 @@ dependencies {
     annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:" + rootProject.permissionDispatcherVersion;
 
 
+
+
     implementation 'com.airbnb.android:lottie:2.2.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 
@@ -86,6 +88,8 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 }
+
+
 
 
 

@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#193446</color>
     <color name="colorPrimaryDark">#192e46</color>
-    <color name="colorAccent">#ff9500</color><!-- Global colors -->
+    <color name="colorAccent">#42AFBF</color><!-- Global colors -->
     <!--<color name="colorPrimary">#7d62d9</color>-->
     <!--<color name="colorPrimaryDark">#512DA8</color>-->
     <!--<color name="colorAccent">#26c6da</color>-->
@@ -11,7 +11,7 @@
     <color name="textColorLight">#6f7c92</color>
 
     <color name="window_background">#193446</color>
-
+    <color name="background">#FFF5F5F5</color>
     <color name="black">#000000</color>
     <color name="jet">#222222</color>
     <color name="oil">#333333</color>
@@ -21,6 +21,7 @@
     <color name="base">#AAAAAA</color>
     <color name="iron">#CCCCCC</color>
     <color name="white">#FFFFFF</color>
+    <color name="divider_black">#10000000</color>
 
 
 

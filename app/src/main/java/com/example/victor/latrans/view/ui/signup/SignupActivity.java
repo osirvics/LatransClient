@@ -26,6 +26,7 @@ import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.util.Util;
 import com.example.victor.latrans.view.ui.App;
 import com.example.victor.latrans.view.ui.login.LoginActivity;
+import com.example.victor.latrans.view.ui.profile.ProfileActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -105,6 +106,9 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
             case SUCCESS:
                 stopAnim();
                 Toast.makeText(this, "Username: "+ response.data.getToken(), Toast.LENGTH_SHORT).show();
+                Intent intent = ProfileActivity.newImtent(this);
+                startActivity(intent);
+                overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;
             case MESSAGE:
                 stopAnim();

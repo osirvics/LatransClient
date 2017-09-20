@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.victor.latrans">
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
     <application
         android:name=".view.ui.App"
         android:allowBackup="true"
@@ -14,11 +19,10 @@
             android:name=".view.ui.login.LoginActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.Dark">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-
-            </intent-filter>
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN"/> -->
+            <!-- </intent-filter> -->
         </activity>
         <activity
             android:name=".view.ui.signup.SignupActivity"
@@ -29,7 +33,7 @@
         </activity>
         <activity
             android:name=".view.ui.trip.TripActivity"
-            android:label="@string/title_activity_trip"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -43,7 +47,9 @@
         </activity>
         <activity android:name=".view.ui.message.MessageActivity">
         </activity>
-        <activity android:name=".view.ui.profile.ProfileActivity">
+        <activity
+            android:name=".view.ui.profile.ProfileActivity"
+            android:theme="@style/AppTheme.Light">
         </activity>
 
         <service android:name=".fcm.LatransFirebaseMessagingService">
@@ -58,6 +64,29 @@
         </service>
 
         <activity android:name=".view.ui.message.ConversationActivity">
+        </activity>
+        <activity
+            android:name=".view.ui.profile.EditProfileActivity"
+            android:theme="@style/AppTheme.Light">
+        </activity>
+
+        <service
+            android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
+            android:enabled="true"/>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.victor.latrans.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths_public">
+            </meta-data>
+        </provider>
+
+        <activity android:name=".view.ui.post.AddTripActivity"
+                  android:theme="@style/AppTheme.Light">
         </activity>
     </application>
 

@@ -15,8 +15,9 @@ public class SharedPrefsHelper {
     //private static SharedPrefsHelper sInstance;
 
     public static String PREF_KEY_ACCESS_TOKEN = "access-token";
-    private static final String PREF_KEY_USER_LOGGED_IN_MODE = "PREF_KEY_USER_LOGGED_IN_MODE";
     private static final String PREF_KEY_CURRENT_USER_ID = "PREF_KEY_CURRENT_USER_ID";
+
+    private static final String PREF_KEY_USER_LOGGED_IN_MODE = "PREF_KEY_USER_LOGGED_IN_MODE";
     private static final String PREF_KEY_CURRENT_USER_NAME = "PREF_KEY_CURRENT_USER_NAME";
     private static final String PREF_KEY_CURRENT_USER_EMAIL = "PREF_KEY_CURRENT_USER_EMAIL";
 
@@ -30,7 +31,6 @@ public class SharedPrefsHelper {
     @Inject
     public SharedPrefsHelper(SharedPreferences sharedPreferences) {
         mSharedPreferences = sharedPreferences;
-        //mSharedPreferences = context.getSharedPreferences("latrans-prefs", Context.MODE_PRIVATE);
     }
 
 
@@ -38,15 +38,21 @@ public class SharedPrefsHelper {
         mSharedPreferences.edit().putString(PREF_KEY_ACCESS_TOKEN, accessToken).apply();
     }
 
-
     public String getAccessToken() {
         return mSharedPreferences.getString(PREF_KEY_ACCESS_TOKEN, null);
     }
 
 
-    public void put(String key, String value) {
-        mSharedPreferences.edit().putString(key, value).apply();
+    public void setUserId(long id) {
+        mSharedPreferences.edit().putLong(PREF_KEY_CURRENT_USER_ID, id).apply();
     }
+
+    public long getUserId(){
+        return mSharedPreferences.getLong(PREF_KEY_CURRENT_USER_ID,0);
+    }
+
+
+
 
     public void put(String key, int value) {
         mSharedPreferences.edit().putInt(key, value).apply();

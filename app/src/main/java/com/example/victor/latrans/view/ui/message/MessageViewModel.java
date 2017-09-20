@@ -1,6 +1,5 @@
 package com.example.victor.latrans.view.ui.message;
 
-import android.arch.core.util.Function;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Transformations;
@@ -45,13 +44,8 @@ public class MessageViewModel extends ViewModel implements AppComponent.Injectab
     }
 
     private void processResponse(){
-        //TODO remove hardcoded id
-        mLiveData = Transformations.switchMap(dialogueId, new Function<Integer, LiveData<Resource<List<Message>>>>() {
-            @Override
-            public LiveData<Resource<List<Message>>> apply(Integer input) {
-                return mMessageRepository.getMessages(input);
-            }
-        });
+
+        mLiveData = Transformations.switchMap(dialogueId, input -> mMessageRepository.getMessages(input));
     }
 
 }
