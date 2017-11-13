@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.victor.latrans.view.ui.post.PostActivity">
+    tools:context="com.example.victor.latrans.view.ui.addtrip.PostActivity">
 
     <android.support.v7.widget.CardView
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -24,6 +24,7 @@
 
         <android.support.v7.widget.AppCompatButton
             android:layout_width="wrap_content"
+            android:id="@+id/order_add_button"
             android:layout_gravity="center"
             android:text="@string/title_request"
             tools:text="Make new request"
@@ -47,7 +48,7 @@
 
         <android.support.v7.widget.AppCompatButton
             android:layout_width="wrap_content"
-            android:id="@+id/trip_button"
+            android:id="@+id/trip_add_button"
             android:layout_gravity="center"
             android:text="@string/title_trip"
             tools:text="Add new trip"

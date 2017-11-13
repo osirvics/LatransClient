@@ -13,6 +13,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.ImageView;
@@ -57,8 +58,10 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
     AppCompatButton mBtnUploadImage;
     @BindView(R.id.input_number)
     TextInputEditText mInputNumber;
-    @BindView(R.id.input_name)
-    TextInputEditText mInputName;
+    @BindView(R.id.input_first_name)
+    TextInputEditText mInputFirstName;
+    @BindView(R.id.input_last_name)
+    TextInputEditText mInputLastName;
     EditProfileViewModel mEditProfileViewModel;
     @BindView(R.id.upload_progress)ProgressBar mProgressBar;
     FloatingActionButton fab;
@@ -93,7 +96,6 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
     private void initView(){
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(view -> {
-
             if(validate()){
                 if(mEditProfileViewModel.file != null){
                     fab.setEnabled(false);
@@ -104,8 +106,6 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
                     uploadUserData();
                 }
             }
-
-
         });
     }
 
@@ -116,13 +116,16 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
     private void initUserData(){
         mEditProfileViewModel.getUserData().observe(this, this::populateUserData);
     }
+
     private void populateUserData(Resource<User> user){
         switch (user.status){
             case SUCCESS:
                 if (user.data != null){
-                    mEditProfileViewModel.name = user.data.name;
+                    mEditProfileViewModel.mFirstName = user.data.first_name;
+                    mEditProfileViewModel.mLastName = user.data.last_name;
                     mEditProfileViewModel.phoneNo = user.data.phone_no;
-                    mInputName.setText(user.data.name);
+                    mInputFirstName.setText(user.data.first_name);
+                    mInputLastName.setText(user.data.last_name);
                     mInputNumber.setText(user.data.phone_no);
                     Glide.with(this).load(user.data.picture).centerCrop()
                             .placeholder(R.drawable.ic_person_grey_600_24dp).error(R.drawable.ic_person_grey_600_24dp)
@@ -229,7 +232,7 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
     }
 
     void setEditListners(){
-        mInputName.addTextChangedListener(new TextWatcher() {
+        mInputFirstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             }
@@ -238,10 +241,22 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
             }
             @Override
             public void afterTextChanged(Editable editable) {
-                        mEditProfileViewModel.name = editable.toString();
+                        mEditProfileViewModel.mFirstName = editable.toString();
             }
         });
 
+        mInputLastName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mEditProfileViewModel.mLastName = editable.toString();
+            }
+        });
         mInputNumber.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -265,11 +280,22 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
         EditProfileActivityPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
     }
     private boolean validate(){
-        String name = mEditProfileViewModel.name;
+        String firstName = mEditProfileViewModel.mFirstName;
+        String lastName = mEditProfileViewModel.mLastName;
         String phone_no = mEditProfileViewModel.phoneNo;
 
-        if(name.length() <=2 ){
-            mInputName.setError(getString(R.string.error_name));
+        if(TextUtils.isEmpty(firstName)){
+            mInputFirstName.setError(getString(R.string.error_invalid_name));
+            return false;
+        }
+
+        if(TextUtils.isEmpty(lastName)){
+            mInputLastName.setError(getString(R.string.error_invalid_name));
+            return false;
+        }
+
+        if(phone_no.length() < 11 ){
+            mInputNumber.setError(getString(R.string.error_invalid_number));
             return false;
         }
         String total =  phone_no.toLowerCase();

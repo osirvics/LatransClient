@@ -21,7 +21,8 @@ import javax.inject.Inject;
 
 
 public class EditProfileViewModel extends ViewModel implements AppComponent.Injectable {
-    public String name;
+    public String mFirstName;
+    public String mLastName;
     public String phoneNo;
     public String profile_url;
     public File file;
@@ -48,7 +49,7 @@ public class EditProfileViewModel extends ViewModel implements AppComponent.Inje
     private LiveData<Resource<User>> mUserData;
 
     private LiveData<Resource<UploadResponse>> mStransferState;
-    private LiveData<Resource<Long>> percentage;
+
 
 
     public LiveData<Resource<UploadResponse>> startUpload(){
@@ -74,12 +75,12 @@ public class EditProfileViewModel extends ViewModel implements AppComponent.Inje
             mUserData = mMessageRepository.getUser();
         }
         return mUserData;
-
     }
 
     public Profile buildProfile(){
         Profile profile = new Profile();
-        profile.name = name;
+        profile.first_name = mFirstName;
+        profile.last_name = mLastName;
         profile.phone_no = phoneNo;
         if (file != null ){
             profile.picture = AmazonUtility.getAmazonLink(file);

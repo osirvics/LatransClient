@@ -43,7 +43,7 @@
         </activity>
         <activity android:name=".view.ui.order.OrderActivity">
         </activity>
-        <activity android:name=".view.ui.post.PostActivity">
+        <activity android:name=".view.ui.addtrip.PostActivity">
         </activity>
         <activity android:name=".view.ui.message.MessageActivity">
         </activity>
@@ -85,7 +85,11 @@
             </meta-data>
         </provider>
 
-        <activity android:name=".view.ui.post.AddTripActivity"
+        <activity
+            android:name=".view.ui.addtrip.AddTripActivity"
+            android:theme="@style/AppTheme.Light">
+        </activity>
+        <activity android:name=".view.ui.addorder.AddOrderActivity"
                   android:theme="@style/AppTheme.Light">
         </activity>
     </application>

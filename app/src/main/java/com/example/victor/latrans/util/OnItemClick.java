@@ -6,5 +6,5 @@ package com.example.victor.latrans.util;
 
 public interface OnItemClick {
 
-    void onClick(int position);
+    void onClick(long conversationId, long recipientId);
 }

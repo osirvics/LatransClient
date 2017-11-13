@@ -8,12 +8,15 @@ import android.content.SharedPreferences;
 import com.example.victor.latrans.google.AppExecutors;
 import com.example.victor.latrans.repocitory.MessageRepository;
 import com.example.victor.latrans.repocitory.MessageRepositoryImpl;
+import com.example.victor.latrans.repocitory.OrderRepository;
+import com.example.victor.latrans.repocitory.OrderRepositoryImpl;
+import com.example.victor.latrans.repocitory.PostRepository;
+import com.example.victor.latrans.repocitory.PostRepositoryImpl;
+import com.example.victor.latrans.repocitory.SignupRepository;
 import com.example.victor.latrans.repocitory.SignupRepositoryImpl;
 import com.example.victor.latrans.repocitory.local.db.AppDatabase;
-import com.example.victor.latrans.repocitory.local.model.Login;
 import com.example.victor.latrans.repocitory.remote.api.APIService;
 import com.example.victor.latrans.repocitory.remote.api.ServiceGenerator;
-import com.example.victor.latrans.repocitory.SignupRepository;
 import com.example.victor.latrans.util.SharedPrefsHelper;
 
 import javax.inject.Named;
@@ -29,8 +32,7 @@ public class AppModule {
 
     private final Application mApplication;
 
-    private String username;
-    private String password;
+
 
     public AppModule(Application app) {
         this.mApplication = app;
@@ -41,20 +43,6 @@ public class AppModule {
     Context applicationContext() {
         return mApplication;
     }
-
-    @Provides
-    @Named("username")
-    String providesUsername() {
-        Timber.e("username: " + username);
-        return username = Login.getUsername();
-    }
-    @Named("password")
-    @Provides
-    String providesPassword() {
-        Timber.e("username: " + username + " password: "+ password);
-        return password = Login.getPassword();
-    }
-
 
 
     @Provides
@@ -84,6 +72,20 @@ public class AppModule {
         return new MessageRepositoryImpl(appDatabase, sharedPrefsHelper, context, executors );
     }
 
+    @Provides
+    @Singleton
+    PostRepository providesPostRepository(AppDatabase appDatabase, SharedPrefsHelper sharedPrefsHelper, Context context, AppExecutors executors) {
+
+        return new PostRepositoryImpl(appDatabase, sharedPrefsHelper, context, executors );
+    }
+
+    @Provides
+    @Singleton
+    OrderRepository providesOrderRepository(AppDatabase appDatabase, SharedPrefsHelper sharedPrefsHelper, Context context, AppExecutors executors) {
+
+        return new OrderRepositoryImpl(appDatabase, sharedPrefsHelper, context, executors );
+    }
+
 
     @Provides
     @Singleton
@@ -106,7 +108,8 @@ public class AppModule {
     @Singleton
     AppDatabase providesAppDatabase(Context context) {
         return  Room.databaseBuilder(context.getApplicationContext(),
-                AppDatabase.class, AppDatabase.DATABASE_NAME).build();
+                AppDatabase.class, AppDatabase.DATABASE_NAME)
+                .addMigrations(AppDatabase.MIGRATION_1_2).build();
     }
 
 //    @Provides

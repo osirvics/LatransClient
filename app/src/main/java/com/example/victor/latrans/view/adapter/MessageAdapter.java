@@ -43,7 +43,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 LayoutInflater layoutInflater2 = LayoutInflater.from(parent.getContext());
                 View view2 = layoutInflater2
                         .inflate(R.layout.item_message_recived, parent, false);
-                return new RecievedMessageHolder(view2);
+                return new ReceivedMessageHolder(view2);
         }
         return null;
     }
@@ -56,7 +56,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 ((SendMessageHolder) holder).bind(message);
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
-                ((RecievedMessageHolder)holder).bind(message);
+                ((ReceivedMessageHolder)holder).bind(message);
                 break;
         }
 
@@ -68,9 +68,16 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     public void addMessages(List<Message> trips) {
+        if(trips == null)
+            return;
         mMessages.clear();
         mMessages.addAll(trips);
-        notifyDataSetChanged();
+       // notifyDataSetChanged();
+    }
+
+    public void addAMassage(Message message){
+        mMessages.add(message);
+        notifyItemInserted(mMessages.size() - 1);
     }
 
     public void clearMessages() {
@@ -89,31 +96,37 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class SendMessageHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.text_message_body) TextView mTextViewMessageBody;
         @BindView(R.id.text_message_time) TextView mTextViewSentTime;
+        @BindView(R.id.reply_status) ImageView mImageViewReplyStatus;
         public SendMessageHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
 
         private void bind(Message message){
-            mTextViewMessageBody.setText(message.getMessage());
-            mTextViewSentTime.setText(String.valueOf(DateUtils.formatDateTime(message.getTimeSent())));
+            mTextViewMessageBody.setText(message.message);
+            mTextViewSentTime.setText(String.valueOf(DateUtils.formatDateTime(message.time_sent)));
+            if(null != message.sent_status){
+                if(message.sent_status.contains("sent")){
+                    mImageViewReplyStatus.setImageResource(R.drawable.ic_message_sent);
+                }
+            }
         }
     }
 
-    public class RecievedMessageHolder extends RecyclerView.ViewHolder {
+    public class ReceivedMessageHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.image_message_profile)
         ImageView mImageViewSenderImage;
         @BindView(R.id.text_message_name) TextView mTextViewSenderName;
         @BindView(R.id.text_message_body) TextView mTextViewSenderMessage;
         @BindView(R.id.text_message_time) TextView mTextViewSenderTime;
-        public RecievedMessageHolder(View itemView) {
+        public ReceivedMessageHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
         private void bind(Message message){
-            mTextViewSenderName.setText(message.getSenderUsername());
-            mTextViewSenderMessage.setText(message.getMessage());
-            mTextViewSenderTime.setText(String.valueOf(DateUtils.formatDateTime(message.getTimeSent())));
+            mTextViewSenderName.setText(message.sender_first_name);
+            mTextViewSenderMessage.setText(message.message);
+            mTextViewSenderTime.setText(String.valueOf(DateUtils.formatDateTime(message.time_sent)));
 
 
         }

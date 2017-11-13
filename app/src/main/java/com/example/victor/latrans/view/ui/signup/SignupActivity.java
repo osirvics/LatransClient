@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputFilter;
-import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
@@ -41,16 +40,15 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
 
     @BindView(R.id.btn_signup)
     Button mButtonSignUp;
-    @BindView(R.id.input_name)
-    EditText mEditTextUsername;
+    @BindView(R.id.input_first_name)
+    EditText mEditTextFirstName;
+    @BindView(R.id.input_last_name)
+    EditText mEditTextLastName;
     @BindView(R.id.input_email) EditText mEditTextEmail;
-    @BindView(R.id.input_password) EditText mEditTextPassowrd;
+    @BindView(R.id.input_password) EditText mEditTextPassword;
     @BindView(R.id.login) Button mButtonLogin;
     LottieAnimationView animationView;
     SignUpViewModel mSignUpViewModel;
-
-//    @Inject
-//    ViewModelProvider.Factory mViewModelFactory;
 
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
 
@@ -64,8 +62,7 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-       // ((App) getApplication()).getAppComponent().inject(this);
-
+       ((App) getApplication()).getAppComponent().inject(this);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -105,7 +102,7 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
         switch (response.status){
             case SUCCESS:
                 stopAnim();
-                Toast.makeText(this, "Username: "+ response.data.getToken(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Token: "+ response.data.getToken(), Toast.LENGTH_SHORT).show();
                 Intent intent = ProfileActivity.newImtent(this);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
@@ -151,34 +148,38 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
     }
 
     /* To restrict Space Bar in Keyboard */
-    InputFilter filter = new InputFilter() {
-        public CharSequence filter(CharSequence source, int start, int end,
-                                   Spanned dest, int dstart, int dend) {
-            for (int i = start; i < end; i++) {
-                if (Character.isWhitespace(source.charAt(i))) {
-                    return "";
-                }
+    InputFilter filter = (source, start, end, dest, dstart, dend) -> {
+        for (int i = start; i < end; i++) {
+            if (Character.isWhitespace(source.charAt(i))) {
+                return "";
             }
-            return null;
         }
-
+        return null;
     };
-
 
     public boolean validate() {
         boolean valid = true;
 
-        String username = mSignUpViewModel.getUsername();
-        String email = mSignUpViewModel.getEmail();
-        String password = mSignUpViewModel.getPassword();
+        String userFirstName = mSignUpViewModel.firstName;
+        String userLastName = mSignUpViewModel.lastName;
+        String email = mSignUpViewModel.email;
+        String password = mSignUpViewModel.password;
 
 
-        if (TextUtils.isEmpty(username) || username.length() < 4 || username.length() > 32) {
-            mEditTextUsername.setError(getString(R.string.error_invalid_username));
+        if (TextUtils.isEmpty(userFirstName)) {
+            mEditTextFirstName.setError(getString(R.string.error_invalid_name));
             valid = false;
         } else {
-            mEditTextUsername.setError(null);
+            mEditTextLastName.setError(null);
         }
+
+        if (TextUtils.isEmpty(userLastName)) {
+            mEditTextLastName.setError(getString(R.string.error_invalid_name));
+            valid = false;
+        } else {
+            mEditTextLastName.setError(null);
+        }
+
 
         if (TextUtils.isEmpty(email) || !Util.isEmailValid(email)) {
             mEditTextEmail.setError(getString(R.string.error_invalid_email));
@@ -187,22 +188,21 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
             mEditTextEmail.setError(null);
         }
 
-        if (password.isEmpty() || password.length() < 6 || password.length() > 16) {
-            mEditTextPassowrd.setError(getString(R.string.error_invalid_password));
+        if (TextUtils.isEmpty(password) || password.length() < 6 || password.length() > 16) {
+            mEditTextPassword.setError(getString(R.string.error_invalid_password));
             valid = false;
         } else {
-            mEditTextPassowrd.setError(null);
+            mEditTextPassword.setError(null);
         }
 
         return valid;
     }
 
     private void setClickListeners(){
-        mEditTextPassowrd.setFilters(new InputFilter[] { filter });
-        mEditTextUsername.setFilters(new InputFilter[] { filter });
+        mEditTextPassword.setFilters(new InputFilter[] { filter });
         mEditTextEmail.setFilters(new InputFilter[] { filter });
 
-        mEditTextUsername.addTextChangedListener(new TextWatcher() {
+        mEditTextFirstName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -215,7 +215,7 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mSignUpViewModel.setUsername(editable.toString());
+                mSignUpViewModel.firstName = editable.toString();
             }
         });
         mEditTextEmail.addTextChangedListener(new TextWatcher() {
@@ -231,10 +231,10 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mSignUpViewModel.setEmail(editable.toString());
+                mSignUpViewModel.email = editable.toString();
             }
         });
-        mEditTextPassowrd.addTextChangedListener(new TextWatcher() {
+        mEditTextPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -247,7 +247,23 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mSignUpViewModel.setPassword(editable.toString());
+                mSignUpViewModel.password = editable.toString();
+            }
+        });
+        mEditTextLastName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mSignUpViewModel.lastName = editable.toString();
             }
         });
     }

@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.victor.latrans.view.ui.post.AddTripActivity">
+    tools:context="com.example.victor.latrans.view.ui.addtrip.AddTripActivity">
 
-
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/app_bar"
-        android:layout_width="match_parent"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/animation_view"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5"
+        app:lottie_autoPlay="false"
+        app:lottie_fileName="preloader.json"
+        app:lottie_loop="true"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -23,36 +41,49 @@
                 android:minHeight="?android:attr/actionBarSize"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="match_parent">
 
-        <!--<android.support.v7.widget.CardView-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--app:layout_constraintRight_toRightOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@id/card1"-->
-            <!--tools:layout_editor_absoluteY="165dp">-->
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:paddingBottom="@dimen/padding_small"
-                android:layout_marginTop="@dimen/padding_small"
-                android:gravity="center_vertical"
                 android:orientation="vertical"
+                android:focusableInTouchMode="true"
                 android:layout_height="wrap_content">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_normal"
-                    android:layout_marginStart="@dimen/padding_normal"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/traveling_to_city"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:layout_height="wrap_content"/>
+
+
+                <!--<android.support.v7.widget.CardView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:layout_constraintRight_toRightOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@id/card1"-->
+                <!--tools:layout_editor_absoluteY="165dp">-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:paddingBottom="@dimen/padding_small"
+
+                    android:layout_marginTop="@dimen/padding_small"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_normal"
+                        android:layout_marginStart="@dimen/padding_normal"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/traveling_to_city"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:layout_height="wrap_content"/>
 
                     <android.support.v7.widget.AppCompatSpinner
                         android:layout_width="match_parent"
@@ -84,142 +115,173 @@
 
                 </LinearLayout>
 
-        <!--</android.support.v7.widget.CardView>-->
+                <!--</android.support.v7.widget.CardView>-->
 
 
-        <!--<android.support.v7.widget.CardView-->
-            <!--android:id="@+id/card1"-->
-            <!--android:paddingBottom="@dimen/padding_small"-->
-            <!--android:layout_marginTop="@dimen/padding_micro"-->
-            <!--android:layout_marginBottom="@dimen/padding_small"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
-        <View
-            android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/padding_small"
-            android:layout_marginBottom="@dimen/padding_small"
-            android:layout_marginRight="@dimen/padding_normal"
-            android:layout_marginLeft="@dimen/padding_normal"
-            android:layout_height="1dp"
-            android:background="@color/divider_black" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:gravity="center_vertical"
-                android:paddingBottom="@dimen/padding_small"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_normal"
-                    android:layout_marginStart="@dimen/padding_normal"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/traveling_from"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:layout_height="wrap_content"/>
-
-                <android.support.v7.widget.AppCompatSpinner
+                <!--<android.support.v7.widget.CardView-->
+                <!--android:id="@+id/card1"-->
+                <!--android:paddingBottom="@dimen/padding_small"-->
+                <!--android:layout_marginTop="@dimen/padding_micro"-->
+                <!--android:layout_marginBottom="@dimen/padding_small"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
+                <View
                     android:layout_width="match_parent"
-                    android:paddingBottom="@dimen/padding_small"
-                    android:paddingTop="@dimen/padding_small"
-                    android:layout_marginLeft="@dimen/padding_normal"
+                    android:layout_marginTop="@dimen/padding_small"
+                    android:layout_marginBottom="@dimen/padding_small"
                     android:layout_marginRight="@dimen/padding_normal"
-                    android:layout_marginTop="@dimen/padding_mini"
-                    android:spinnerMode="dropdown"
-                    android:background="@drawable/button_background"
-                    android:id="@+id/country_spinner_from"
-                    android:layout_height="wrap_content">
-                </android.support.v7.widget.AppCompatSpinner>
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:layout_width="match_parent"
-                    android:paddingBottom="@dimen/padding_small"
-                    android:paddingTop="@dimen/padding_small"
                     android:layout_marginLeft="@dimen/padding_normal"
-                    android:layout_marginRight="@dimen/padding_normal"
-                    android:background="@drawable/button_background"
-                    android:layout_marginTop="@dimen/padding_mini"
-                    android:id="@+id/local_spinner_from"
-                    android:layout_height="wrap_content">
-
-                </android.support.v7.widget.AppCompatSpinner>
-
-            </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_marginRight="@dimen/padding_normal"
-            android:layout_marginLeft="@dimen/padding_normal"
-            android:layout_marginTop="@dimen/padding_small"
-            android:layout_marginBottom="@dimen/padding_small"
-            android:layout_height="1dp"
-            android:background="@color/divider_black" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:id="@+id/date_linearlayout"
-                android:layout_marginRight="@dimen/padding_normal"
-                android:layout_marginStart="@dimen/padding_normal"
-                android:layout_marginLeft="@dimen/padding_normal"
-                android:layout_marginEnd="@dimen/padding_normal"
-                android:orientation="vertical"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/date_of_travelling"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="1dp"
+                    android:background="@color/divider_black" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:orientation="horizontal"
-                    android:gravity="center"
+                    android:gravity="center_vertical"
+                    android:paddingBottom="@dimen/padding_small"
+                    android:orientation="vertical"
                     android:layout_height="wrap_content">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/date_text"
-                        android:focusable="false"
-                        android:layout_width="0dp"
-                        android:clickable="false"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:inputType="date"
-                        android:hint="@string/date_format" />
-
-                    <ImageView
-                        android:layout_width="24dp"
-                        app:srcCompat="@drawable/ic_date_range_custom_24dp"
-                        android:layout_height="24dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:textColor="@color/colorAccent"
-                        android:text="@string/date_travel"
+                        android:layout_marginLeft="@dimen/padding_normal"
+                        android:layout_marginStart="@dimen/padding_normal"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/traveling_from"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:layout_height="wrap_content"/>
+
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:layout_width="match_parent"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:paddingTop="@dimen/padding_small"
+                        android:layout_marginLeft="@dimen/padding_normal"
+                        android:layout_marginRight="@dimen/padding_normal"
+                        android:layout_marginTop="@dimen/padding_mini"
+                        android:spinnerMode="dropdown"
+                        android:background="@drawable/button_background"
+                        android:id="@+id/country_spinner_from"
+                        android:layout_height="wrap_content">
+                    </android.support.v7.widget.AppCompatSpinner>
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:layout_width="match_parent"
+                        android:paddingBottom="@dimen/padding_small"
+                        android:paddingTop="@dimen/padding_small"
+                        android:layout_marginLeft="@dimen/padding_normal"
+                        android:layout_marginRight="@dimen/padding_normal"
+                        android:background="@drawable/button_background"
+                        android:layout_marginTop="@dimen/padding_mini"
+                        android:id="@+id/local_spinner_from"
+                        android:layout_height="wrap_content">
+
+                    </android.support.v7.widget.AppCompatSpinner>
 
                 </LinearLayout>
 
-            </LinearLayout>
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/add_trip_button"
-            android:layout_marginLeft="@dimen/padding_normal"
-            android:layout_marginRight="@dimen/padding_normal"
-            android:layout_width="match_parent"
-            android:textColor="@color/white"
-            android:visibility="visible"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/padding_normal"
-            android:padding="@dimen/padding_normal"
-            android:text="@string/post_trip" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_marginRight="@dimen/padding_normal"
+                    android:layout_marginLeft="@dimen/padding_normal"
+                    android:layout_marginTop="@dimen/padding_small"
+                    android:layout_marginBottom="@dimen/padding_small"
+                    android:layout_height="1dp"
+                    android:background="@color/divider_black" />
 
-        <!--</android.support.v7.widget.CardView>-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:id="@+id/date_linearlayout"
+                    android:layout_marginRight="@dimen/padding_normal"
+                    android:layout_marginStart="@dimen/padding_normal"
+                    android:layout_marginLeft="@dimen/padding_normal"
+                    android:layout_marginEnd="@dimen/padding_normal"
+                    android:clickable="true"
+
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:clickable="false"
+                        android:text="@string/date_of_travelling"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                        android:layout_height="wrap_content"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="horizontal"
+                        android:clickable="false"
+                        android:gravity="center"
+                        android:layout_height="wrap_content">
+
+                        <android.support.design.widget.TextInputEditText
+                            android:id="@+id/date_text"
+                            android:layout_width="0dp"
+                            android:clickable="false"
+                            android:focusable="false"
+                            android:focusableInTouchMode="false"
+                            android:layout_weight="1"
+                            android:layout_height="wrap_content"
+                            android:inputType="date"
+                            android:hint="@string/date_format" />
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:clickable="false"
+                            app:srcCompat="@drawable/ic_date_range_custom_24dp"
+                            android:layout_height="24dp"/>
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:clickable="false"
+                            android:textColor="@color/colorAccent"
+                            android:text="@string/date_travel"
+                            android:layout_height="wrap_content"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/padding_normal"
+                    android:layout_marginRight="@dimen/padding_normal"
+                    android:layout_marginTop="@dimen/padding_small"
+                    app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
+                    >
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/phone_number"
+
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/contact_phone_hint"
+                        android:inputType="phone"/>
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/add_trip_button"
+                    android:layout_marginLeft="@dimen/padding_normal"
+                    android:layout_marginRight="@dimen/padding_normal"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/white"
+                    android:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/padding_normal"
+                    android:padding="@dimen/padding_normal"
+                    android:text="@string/post_trip" />
+
+                <!--</android.support.v7.widget.CardView>-->
+
+            </LinearLayout>
+
+
+        </ScrollView>
 
     </LinearLayout>
 
 
 
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -39,9 +39,11 @@ import timber.log.Timber;
 
 public class SignupRepositoryImpl implements SignupRepository{
 
-
+    public static String TRIP_TOPIC = "trips_fcm";
+    public static String ORDER_TOPIC = "request_fcm";
+    public static String USER =  "user";
     private RateLimiter<String> repoListRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
-    APIService mAPIService;
+    private APIService mAPIService;
     @Inject
     SharedPrefsHelper mSharedPrefsHelper;
     @Inject
@@ -60,6 +62,10 @@ public class SignupRepositoryImpl implements SignupRepository{
 
     }
 
+    public static String getUser(){
+        return  USER;
+    }
+
 
    public LiveData<Resource<NewUser>> createUser(final Registration registration){
        final MutableLiveData<Resource<NewUser>> data = new MutableLiveData<>();
@@ -71,13 +77,16 @@ public class SignupRepositoryImpl implements SignupRepository{
                if (response.isSuccessful()) {
 
                        mSharedPrefsHelper.setAccessToken(response.body().getToken());
-                       long id = response.body().getUser().getId();
+                       long id = response.body().getUser().id;
                        mSharedPrefsHelper.setUserId(id);
                        String user = "user";
                        String myTopic = user + String.valueOf(id);
                        FirebaseMessaging.getInstance().subscribeToTopic(myTopic);
+                       FirebaseMessaging.getInstance().subscribeToTopic(TRIP_TOPIC);
+                       FirebaseMessaging.getInstance().subscribeToTopic(ORDER_TOPIC);
+                       appExecutors.diskIO().execute(() -> mAppDatabase.userDao().insertUser(response.body().getUser()));
                        data.setValue(Resource.success(response.body()));
-                       new MyAsynTask(response.body().getUser(),mAppDatabase.userDao()).execute();
+                      // new MyAsynTask(response.body().getUser(),mAppDatabase.userDao()).execute();
                }
                else{
                    if(response.code() == 302){
@@ -129,7 +138,13 @@ public class SignupRepositoryImpl implements SignupRepository{
             @Override
             public void onResponse(Call<NewUser> call, Response<NewUser> response) {
                 if (response.isSuccessful()) {
-                    // SharedPrefsHelper.getInstance(App.getContext()).setAccessToken(response.body().getToken());
+                    long id = response.body().getUser().id;
+                    mSharedPrefsHelper.setUserId(id);
+
+                    String myTopic = USER + String.valueOf(id);
+                    FirebaseMessaging.getInstance().subscribeToTopic(myTopic);
+                    FirebaseMessaging.getInstance().subscribeToTopic(TRIP_TOPIC);
+                    FirebaseMessaging.getInstance().subscribeToTopic(ORDER_TOPIC);
                     data.setValue(Resource.success(response.body()));
                     new MyAsynTask(response.body().getUser(),mAppDatabase.userDao()).execute();
 
@@ -162,27 +177,25 @@ public class SignupRepositoryImpl implements SignupRepository{
         return new NetworkBoundResource<List<Trip>, TripResponse>(appExecutors) {
             @Override
             protected void saveCallResult(@NonNull TripResponse item) {
-                Timber.e("Saving data: " );
-                mAppDatabase.tripDao().insertTrips(item.getTrips());
+                mAppDatabase.tripDao().insertAllTrips(item.getTrips());
+
             }
 
             @Override
             protected boolean shouldFetch(@Nullable List<Trip> data) {
-                Timber.e("Should fetch called");
-                return data == null || data.isEmpty() || repoListRateLimit.shouldFetch("data");
+                //return data == null || data.isEmpty() || repoListRateLimit.shouldFetch("data");
+                return true;
             }
 
             @NonNull
             @Override
             protected LiveData<List<Trip>> loadFromDb() {
-                Timber.e("loading form db");
                 return  mAppDatabase.tripDao().getAllTrips();
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<TripResponse>> createCall() {
-                Timber.e("Creating call");
                 return mAPIService.getTrips();
             }
 
@@ -190,16 +203,6 @@ public class SignupRepositoryImpl implements SignupRepository{
             protected void onFetchFailed() {
                 Timber.e("failed to fetch data");
                 repoListRateLimit.reset("data");
-            }
-
-            @Override
-            protected TripResponse processResponse(ApiResponse<TripResponse> response) {
-               // return super.processResponse(response);
-               Timber.e("Process response called");
-               TripResponse body = response.body;
-               //if(body != null)
-               //Timber.e("Size: " + body.getTrips().size() );
-               return body;
             }
         }.asLiveData();
     }

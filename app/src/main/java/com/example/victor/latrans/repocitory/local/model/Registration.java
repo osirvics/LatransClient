@@ -1,40 +1,21 @@
 package com.example.victor.latrans.repocitory.local.model;
 
-/**
- * Created by Victor on 31/08/2017.
- */
 
 public class Registration {
 
-    private String username;
-    private String email;
-    private String password;
+    public String first_name;
+    public String last_name;
+    public String email;
+    public String password;
 
-    public Registration(){
-
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
+    public Registration(String first_name, String last_name, String email, String password) {
+        this.first_name = first_name;
+        this.last_name = last_name;
         this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
         this.password = password;
     }
+
+    public Registration(){
+    }
+
 }

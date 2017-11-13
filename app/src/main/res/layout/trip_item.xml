@@ -36,9 +36,10 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintStart_toEndOf="@+id/imageView2"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/user_name"
+                tools:layout_editor_absoluteX="128dp"
                 tools:text="Port Harcourt, Rivers"/>
 
             <Button
@@ -65,36 +66,37 @@
             <TextView
                 android:id="@+id/travelling_from"
                 android:layout_width="wrap_content"
-                android:layout_height="18dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="Minna, Niger"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Body2"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintStart_toEndOf="@+id/imageView3"
-                app:layout_constraintTop_toBottomOf="@+id/traveling_to"/>
+                app:layout_constraintTop_toBottomOf="@+id/traveling_to"
+                />
 
             <ImageView
                 android:id="@+id/imageView2"
-                android:layout_width="wrap_content"
+                android:layout_width="18dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_location_on_18dp"/>
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/traveling_to"
+                app:layout_constraintStart_toStartOf="@+id/imageView3"
+                app:layout_constraintTop_toBottomOf="@+id/user_name"
+                app:srcCompat="@drawable/ic_location_on_accent_24dp"/>
 
             <ImageView
                 android:id="@+id/imageView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toEndOf="@+id/profile_image"
-                app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                app:srcCompat="@drawable/ic_my_location_18dp"/>
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/travelling_from"
+                app:layout_constraintStart_toEndOf="@+id/trip_from"
+                app:layout_constraintTop_toTopOf="@+id/travelling_from"
+                app:srcCompat="@drawable/ic_my_location_accent_24dp"/>
 
 
             <Button
@@ -143,12 +145,13 @@
                 android:id="@+id/imageView5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="72dp"
-                android:layout_marginStart="72dp"
-                android:layout_marginTop="8dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageView3"
-                app:srcCompat="@drawable/ic_date_range_grey_600_18dp"/>
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/traveling_date"
+                app:layout_constraintStart_toEndOf="@+id/trip_from"
+                app:layout_constraintTop_toTopOf="@+id/traveling_date"
+                app:srcCompat="@drawable/ic_date_range_grey_600_18dp"
+                android:layout_marginLeft="8dp"/>
 
             <TextView
                 android:id="@+id/traveling_date"
@@ -157,8 +160,10 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintStart_toEndOf="@+id/imageView5"
                 app:layout_constraintTop_toBottomOf="@+id/travelling_from"
+                tools:layout_editor_absoluteX="114dp"
                 tools:text="3, September, 2017"/>
 
             <!--<TextView-->
@@ -174,16 +179,68 @@
             <!--tools:text="Posted"/>-->
 
             <TextView
+                android:id="@+id/user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                android:textColor="@color/colorPrimary"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Victor is traveling to:"/>
+
+            <TextView
                 android:id="@+id/time_posted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="3 mins ago"
-                android:layout_marginRight="16dp"/>
+                tools:text="3 mins ago"/>
+
+            <TextView
+                android:id="@+id/trip_to"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/trip_to"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/user_name"
+                tools:layout_editor_absoluteX="64dp"
+                tools:text="to"/>
+
+            <TextView
+                android:id="@+id/trip_from"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/trip_from"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/trip_to"
+                tools:layout_editor_absoluteX="64dp"
+                tools:text="from"/>
+
+            <TextView
+                android:id="@+id/trip_on_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:text="@string/trip_date"
+                app:layout_constraintStart_toEndOf="@+id/profile_image"
+                app:layout_constraintTop_toBottomOf="@+id/trip_from"
+                tools:layout_editor_absoluteX="64dp"
+                tools:text="on"/>
 
 
         </android.support.constraint.ConstraintLayout>

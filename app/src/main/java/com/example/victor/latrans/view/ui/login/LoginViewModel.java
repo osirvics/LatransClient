@@ -14,14 +14,13 @@ import javax.inject.Inject;
 
 public class LoginViewModel extends ViewModel implements AppComponent.Injectable{
 
-    private String mEmailOrPassword;
-    private String mPassword;
+    public String mEmail;
+    public String mPassword;
 
     @Override
     public void inject(AppComponent countdownComponent) {
         countdownComponent.inject(this);
     }
-
 
     @Inject
     SignupRepository mSignupRepository;
@@ -30,32 +29,13 @@ public class LoginViewModel extends ViewModel implements AppComponent.Injectable
 
 
 
-    void setEmailOrPassword(String emailOrPass){
-        mEmailOrPassword = emailOrPass;
-
-    }
-
-    void setPassword(String pass){
-        mPassword = pass;
-    }
-
-
-    String getPassword(){
-        return mPassword;
-    }
-    String getEmailOrPassword(){
-        return mEmailOrPassword;
-    }
-
     public void login(){
         mSignupRepository = null;
         mTokenLiveData = null;
     }
 
     private void loadToken(){
-      //  onLoginReady(getEmailOrPassword(), getPassword());
-
-        mTokenLiveData =   mSignupRepository.getToken(getEmailOrPassword(), getPassword());
+        mTokenLiveData =   mSignupRepository.getToken(mEmail, mPassword);
 //        mTokenLiveData = Transformations.switchMap(isDataLoginChanged(), new Function<Boolean, LiveData<ApiResponse>>() {
 //            @Override
 //            public LiveData<ApiResponse> apply(Boolean input) {
@@ -69,18 +49,9 @@ public class LoginViewModel extends ViewModel implements AppComponent.Injectable
     }
 
     public LiveData<Resource<NewUser>> getToken(){
-        if (mTokenLiveData == null){
             mTokenLiveData = new MutableLiveData<>();
             loadToken();
-        }
         return mTokenLiveData;
     }
-
-
-//    private void onLoginReady(String usernameorEmail, String password){
-//            Login.setPassword(usernameorEmail);
-//            Login.setUsername(password);
-//
-//    }
 
 }

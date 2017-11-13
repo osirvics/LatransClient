@@ -23,11 +23,11 @@ public interface UserDao {
     @Query("select * from user where id = :id")
     LiveData<User> loadUserById(int id);
 
-    @Query("select * from user where username = :username")
-    User loadUserByUsename(String username);
-
-    @Query("select * from user where name = :name and surname = :surname")
-    List<User> findByNameAndLastName(String name, String surname);
+//    @Query("select * from user where username = :username")
+//    User loadUserByUsename(String username);
+//
+//    @Query("select * from user where name = :name and surname = :surname")
+//    List<User> findByNameAndLastName(String name, String surname);
 
     @Insert(onConflict = REPLACE)
     void insertUser(User user);
@@ -35,7 +35,7 @@ public interface UserDao {
     @Delete
     void deleteUser(User user);
 
-    @Query("DELETE FROM User")
+    @Query("DELETE FROM user")
     void deleteAll();
 
     @Insert(onConflict = REPLACE)

@@ -6,7 +6,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 
-import com.example.victor.latrans.repocitory.local.model.ConversationAndMessage;
+import com.example.victor.latrans.repocitory.local.db.entity.ConversationAndMessage;
 
 import java.util.List;
 

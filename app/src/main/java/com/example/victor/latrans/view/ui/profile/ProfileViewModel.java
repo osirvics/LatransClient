@@ -28,13 +28,14 @@ public class ProfileViewModel extends ViewModel implements AppComponent.Injectab
 
 
     public LiveData<Resource<User>> getResponse(){
-        mLiveData = new MutableLiveData<>();
-        queryResponse();
+        if(mLiveData == null){
+            mLiveData = new MutableLiveData<>();
+            queryResponse();
+        }
         return mLiveData;
     }
 
     private void queryResponse(){
-        //TODO remove hardcoded id here
         mLiveData = mMessageRepository.getUser();
     }
 }

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,46 +15,55 @@ import com.bumptech.glide.Glide;
 import com.example.victor.latrans.BaseActivity;
 import com.example.victor.latrans.R;
 import com.example.victor.latrans.dependency.AppFactory;
+import com.example.victor.latrans.google.AppExecutors;
 import com.example.victor.latrans.google.Resource;
+import com.example.victor.latrans.repocitory.SignupRepositoryImpl;
+import com.example.victor.latrans.repocitory.local.db.AppDatabase;
 import com.example.victor.latrans.repocitory.local.db.entity.User;
 import com.example.victor.latrans.util.SharedPrefsHelper;
 import com.example.victor.latrans.view.ui.App;
 import com.example.victor.latrans.view.ui.login.LoginActivity;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ProfileActivity extends BaseActivity  implements LifecycleRegistryOwner {
-
-
+public class ProfileActivity extends BaseActivity implements LifecycleRegistryOwner {
 
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-    public static Intent newImtent(Context context) {
-        Intent mIntent = new Intent(context, ProfileActivity.class);
-        return mIntent;
-    }
 
+    public static Intent newImtent(Context context) {
+        return new Intent(context, ProfileActivity.class);
+    }
 
     @Override
     public LifecycleRegistry getLifecycle() {
         return lifecycleRegistry;
     }
+
     FloatingActionButton mFloatingActionButton;
     @BindView(R.id.profile_image)
     ImageView mProfileImage;
-    @BindView(R.id.profile_name)
-    TextView mProfileName;
+    @BindView(R.id.profile_first_name)
+    TextView mProfileFirstName;
+    @BindView(R.id.profile_last_name)
+    TextView mProfileLatsName;
     @BindView(R.id.mobile_no)
     TextView mMobileNo;
     @BindView(R.id.profile_email)
     TextView mProfileEmail;
     ProfileViewModel mProfileViewModel;
-
-    //TODO remove this here!!!
+    @BindView(R.id.logout_button)
+    Button mButtonLogout;
     @Inject
     SharedPrefsHelper mSharedPrefsHelper;
+    @Inject
+    AppDatabase mAppDatabase;
+    @Inject
+    AppExecutors mAppExecutors;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,26 +74,25 @@ public class ProfileActivity extends BaseActivity  implements LifecycleRegistryO
         App app = (App) this.getApplication();
         initView();
         initViewModel(app);
-
-
     }
-    private void initViewModel(App app){
+
+    private void initViewModel(App app) {
         mProfileViewModel = ViewModelProviders.of(this, new AppFactory(app)).get(ProfileViewModel.class);
-       subscribeToDataStreams(mProfileViewModel);
+        subscribeToDataStreams(mProfileViewModel);
     }
 
-    void subscribeToDataStreams(ProfileViewModel profileViewModel){
+    void subscribeToDataStreams(ProfileViewModel profileViewModel) {
         profileViewModel.getResponse().observe(this, this::handleResponse);
     }
 
-    private void handleResponse(Resource<User> user){
+    private void handleResponse(Resource<User> user) {
         switch (user.status){
             case SUCCESS:
                 if (user.data != null){
-                    //mSharedPrefsHelper.setUserId(user.data.id);
                     String url = user.data.picture;
                     mMobileNo.setText(user.data.phone_no);
-                    mProfileName.setText(user.data.name);
+                    mProfileFirstName.setText(user.data.first_name);
+                    mProfileLatsName.setText(user.data.last_name);
                     Glide.with(this).load(url).centerCrop().placeholder(R.drawable.ic_person_grey_600_24dp).error(R.drawable.ic_person_grey_600_24dp).into(mProfileImage);
                     mProfileEmail.setText(user.data.email);
                 }
@@ -95,12 +104,12 @@ public class ProfileActivity extends BaseActivity  implements LifecycleRegistryO
                 openLoginActivity();
                 break;
         }
-
     }
 
     void initView() {
         mFloatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
         mFloatingActionButton.setOnClickListener(view -> openEditActivity());
+        mButtonLogout.setOnClickListener(view -> logout());
     }
 
     void openEditActivity() {
@@ -109,7 +118,31 @@ public class ProfileActivity extends BaseActivity  implements LifecycleRegistryO
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
-    void openLoginActivity(){
+    void logout(){
+
+        long id = mSharedPrefsHelper.getUserId();
+        String myTopic = SignupRepositoryImpl.getUser() + String.valueOf(id);
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(myTopic);
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(SignupRepositoryImpl.TRIP_TOPIC);
+        FirebaseMessaging.getInstance().unsubscribeFromTopic(SignupRepositoryImpl.ORDER_TOPIC);
+        mAppExecutors.diskIO().execute(() -> {
+        deleteData();
+            mAppExecutors.mainThread().execute(this::openLoginActivity);
+        });
+
+    }
+
+    void deleteData(){
+        mAppDatabase.tripDao().deleteAll();
+        mAppDatabase.messageDao().deleteAll();
+        mAppDatabase.userDao().deleteAll();
+        mAppDatabase.dialogueDao().deleteAll();
+        mAppDatabase.orderDao().deleteAll();
+        mAppDatabase.conversationDao().deleteAll();
+        mSharedPrefsHelper.deleteSavedData(SharedPrefsHelper.PREF_KEY_CURRENT_USER_ID);
+    }
+
+    void openLoginActivity() {
         Intent intent = LoginActivity.newIntent(this);
         startActivity(intent);
         overridePendingTransition(R.anim.enter, R.anim.exit);
@@ -128,6 +161,7 @@ public class ProfileActivity extends BaseActivity  implements LifecycleRegistryO
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 }

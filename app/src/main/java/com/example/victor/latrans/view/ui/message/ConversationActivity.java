@@ -16,14 +16,17 @@ import com.example.victor.latrans.BaseActivity;
 import com.example.victor.latrans.R;
 import com.example.victor.latrans.dependency.AppFactory;
 import com.example.victor.latrans.google.Resource;
-import com.example.victor.latrans.repocitory.local.model.ConversationAndMessage;
+import com.example.victor.latrans.repocitory.local.db.entity.ConversationAndMessage;
 import com.example.victor.latrans.util.DividerItemDecoration;
 import com.example.victor.latrans.util.OnItemClick;
+import com.example.victor.latrans.util.SharedPrefsHelper;
 import com.example.victor.latrans.view.adapter.ConversationAdapter;
 import com.example.victor.latrans.view.ui.App;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +40,8 @@ public class ConversationActivity extends BaseActivity implements LifecycleRegis
     ConversationViewModel mConversationViewModel;
     ConversationAdapter mConversationAdapter;
     LottieAnimationView animationView;
+    @Inject
+    SharedPrefsHelper mSharedPrefsHelper;
 
 
     @Override
@@ -65,7 +70,7 @@ public class ConversationActivity extends BaseActivity implements LifecycleRegis
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerViewConverstaion.setLayoutManager(mLayoutManager);
         mRecyclerViewConverstaion.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        mConversationAdapter  = new ConversationAdapter(new ArrayList<>(), this);
+        mConversationAdapter  = new ConversationAdapter(new ArrayList<>(), this, mSharedPrefsHelper.getUserId());
         mRecyclerViewConverstaion.setAdapter(mConversationAdapter);
         startAnim();
     }
@@ -77,20 +82,21 @@ public class ConversationActivity extends BaseActivity implements LifecycleRegis
     }
 
     private void handleResponse(Resource<List<ConversationAndMessage>> listResource){
-        switch (listResource.status){
-            case SUCCESS:
+//        switch (listResource.status){
+//            case SUCCESS:
                 stopAnim();
-                if (listResource != null && listResource.data != null){
+                if (listResource.data != null){
                     Timber.e("Size of conversation: "+ listResource.data.size());
                     mConversationAdapter.addConversation(listResource.data);
+
                 }
                 else   Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
-                break;
-            case MESSAGE:
-                stopAnim();
-                Toast.makeText(this, listResource.message, Toast.LENGTH_SHORT).show();
-                break;
-        }
+//                break;
+//            case MESSAGE:
+//                stopAnim();
+//                Toast.makeText(this, listResource.message, Toast.LENGTH_SHORT).show();
+//                break;
+//        }
 
     }
 
@@ -124,10 +130,9 @@ public class ConversationActivity extends BaseActivity implements LifecycleRegis
         return R.id.navigation_message;
     }
 
-
     @Override
-    public void onClick(int position) {
-        Intent intent = MessageActivity.newIntent(this, position);
+    public void onClick(long conversationId, long recipientId) {
+        Intent intent = MessageActivity.newIntent(this, conversationId, recipientId);
         startActivity(intent);
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }

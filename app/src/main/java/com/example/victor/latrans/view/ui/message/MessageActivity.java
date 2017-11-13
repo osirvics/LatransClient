@@ -10,7 +10,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
@@ -18,92 +23,202 @@ import com.example.victor.latrans.R;
 import com.example.victor.latrans.dependency.AppFactory;
 import com.example.victor.latrans.google.Resource;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
+import com.example.victor.latrans.repocitory.local.db.entity.User;
+import com.example.victor.latrans.util.SharedPrefsHelper;
 import com.example.victor.latrans.view.adapter.MessageAdapter;
 import com.example.victor.latrans.view.ui.App;
+import com.example.victor.latrans.view.ui.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
+import butterknife.OnClick;
 
-public class MessageActivity extends AppCompatActivity implements LifecycleRegistryOwner{
+public class MessageActivity extends AppCompatActivity implements LifecycleRegistryOwner {
     public static final String DIALOGUE_KEY = "key";
-    public static Intent newIntent(Context packageContext, int conversaionId) {
+    public static final String RECIPIENT_ID = "recipient_id";
+
+    public static Intent newIntent(Context packageContext, long conversationId, long senderId) {
         Intent i = new Intent(packageContext, MessageActivity.class);
-        i.putExtra(DIALOGUE_KEY, conversaionId);
+        i.putExtra(DIALOGUE_KEY, conversationId);
+        i.putExtra(RECIPIENT_ID, senderId);
+        return i;
+    }
+
+    public static Intent newMessageIntent(Context packageContext, long recipientId) {
+        Intent i = new Intent(packageContext, MessageActivity.class);
+        i.putExtra(RECIPIENT_ID, recipientId);
         return i;
     }
 
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     @BindView(R.id.reyclerview_message_list)
     RecyclerView mRecyclerView;
+    @BindView(R.id.edittext_chatbox)
+    EditText mEdittextChatbox;
+    @BindView(R.id.button_chatbox_send)
+    ImageButton mButtonChatboxSend;
     MessageViewModel mMessageViewModel;
     MessageAdapter mMessageAdapter;
     LottieAnimationView animationView;
-
-
+    long mConversationId = -1; //new message initialisation
+    long mRecipeintId = -1; // existing conversation initialisation
+    @Inject
+    SharedPrefsHelper mSharedPrefsHelper;
 
     @Override
     public LifecycleRegistry getLifecycle() {
         return lifecycleRegistry;
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         ((App) getApplication()).getAppComponent().inject(this);
-        int id = getIntent().getIntExtra(DIALOGUE_KEY,0);
+        Intent intent = getIntent();
+        processIntent(intent);
         ButterKnife.bind(this);
         initLoadingAnim();
         App app = (App) this.getApplication();
         setUpView();
-        initViewModel(app, id);
+        initViewModel(app, mConversationId, mRecipeintId);
+
+    }
+    void processIntent(Intent intent){
+        if(intent.hasExtra(RECIPIENT_ID)){
+            mRecipeintId = getIntent().getLongExtra(RECIPIENT_ID, 0);
+        }
+        if (intent.hasExtra(DIALOGUE_KEY) && intent.hasExtra(RECIPIENT_ID)){
+            mConversationId = intent.getLongExtra(DIALOGUE_KEY, 0);
+            mRecipeintId = intent.getLongExtra(RECIPIENT_ID,0);
+        }
     }
 
-    private void initViewModel(App app, int id){
+    private void initViewModel(App app, long conversationId, long recipientId) {
         mMessageViewModel = ViewModelProviders.of(this, new AppFactory(app)).get(MessageViewModel.class);
-        mMessageViewModel.setDialogueId(id);
+        mMessageViewModel.setDialogueId(conversationId);
+        mMessageViewModel.recipientId = recipientId;
+        getUserStreams(mMessageViewModel);
         subscribeToDataStreams(mMessageViewModel);
     }
-
-    private void setUpView(){
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mLayoutManager.setStackFromEnd(true);
-        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        mMessageAdapter  = new MessageAdapter(new ArrayList<>(), this, 1);
-        mRecyclerView.setAdapter(mMessageAdapter);
-        startAnim();
+    private void getUserStreams(MessageViewModel messageViewModel){
+        mMessageViewModel.recipientId = mRecipeintId;
+        messageViewModel.getUserData().observe(this, this::handleUserResponse);
     }
 
-    private void subscribeToDataStreams(MessageViewModel messageViewModel){
-        LiveData<Resource<List<Message>>> resource = messageViewModel.getResponse();
-        resource.observe(this, this::handleResponse);
-
-    }
-
-    private void handleResponse(Resource<List<Message>> listResource){
-        switch (listResource.status){
+    private void handleUserResponse(Resource<User> user){
+        switch (user.status){
             case SUCCESS:
-                stopAnim();
-                if (listResource != null && listResource.data != null){
-                    Timber.e("Size of conversation: "+ listResource.data.size());
-                    mMessageAdapter.addMessages(listResource.data);
+                if (user.data != null){
+                    mMessageViewModel.senderId = user.data.id;
                 }
-                else   Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+                else  {
+                    openLoginActivity();
+                }
                 break;
             case MESSAGE:
-                stopAnim();
-                Toast.makeText(this, listResource.message, Toast.LENGTH_SHORT).show();
+                openLoginActivity();
                 break;
         }
 
     }
 
+    private void setUpView() {
+        setListeners();
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        mLayoutManager.setStackFromEnd(true);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
-    void initLoadingAnim(){
+        //mRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
+        mMessageAdapter = new MessageAdapter(new ArrayList<>(), this, mSharedPrefsHelper.getUserId());
+        mRecyclerView.setAdapter(mMessageAdapter);
+        startAnim();
+    }
+
+    private void subscribeToDataStreams(MessageViewModel messageViewModel) {
+        LiveData<Resource<List<Message>>> resource = messageViewModel.getResponse();
+        resource.observe(this, this::handleResponse);
+    }
+
+    private void handleResponse(Resource<List<Message>> listResource) {
+//        switch (listResource.status) {
+//            case SUCCESS:
+                stopAnim();
+                if (listResource.data != null) {
+                    mMessageAdapter.addMessages(listResource.data);
+                    mRecyclerView.smoothScrollToPosition(mMessageAdapter.getItemCount()-1);
+                    mMessageAdapter.notifyDataSetChanged();
+//                    if (mAdapter.getItemCount() > 1) {
+//                        recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
+//                    }
+                } else Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+//                break;
+//            case MESSAGE:
+//                stopAnim();
+//                Toast.makeText(this, listResource.message, Toast.LENGTH_SHORT).show();
+//                break;
+//        }
+    }
+
+
+    @OnClick(R.id.button_chatbox_send)
+    void sendMessage(){
+        addMessageToUI();
+        mMessageViewModel.sendMessage().observe(this, this::handleMessageResponse);
+        mMessageViewModel.mMessage = "";
+        mEdittextChatbox.setText("");
+    }
+
+    private void addMessageToUI(){
+        hideKeypad();
+        Message message = mMessageViewModel.buildMessage();
+        mMessageAdapter.addAMassage(message);
+        mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, mMessageAdapter.getItemCount() - 1);
+    }
+
+
+    void openLoginActivity() {
+        Intent intent = LoginActivity.newIntent(this);
+        startActivity(intent);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
+
+    private void handleMessageResponse(Resource<Message> messageResource){
+        switch (messageResource.status){
+            case SUCCESS:
+                Toast.makeText(this, "Message sent", Toast.LENGTH_SHORT).show();
+                break;
+            case MESSAGE:
+                Toast.makeText(this, "Error, failed to send message", Toast.LENGTH_SHORT).show();
+                break;
+        }
+    }
+
+    private void setListeners(){
+        mEdittextChatbox.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                mMessageViewModel.mMessage = editable.toString();
+            }
+        });
+    }
+
+    void initLoadingAnim() {
         animationView = (LottieAnimationView) findViewById(R.id.animation_view);
         animationView.setAnimation("preloader.json");
         animationView.loop(true);
@@ -112,14 +227,22 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
 
     }
 
-    void startAnim(){
+    void startAnim() {
         animationView.setVisibility(View.VISIBLE);
         animationView.playAnimation();
     }
 
-    void stopAnim(){
+    void stopAnim() {
         animationView.cancelAnimation();
         animationView.setVisibility(View.GONE);
+    }
+
+    private void hideKeypad(){
+        try {
+            InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        } catch (Exception e) {
+        }
     }
 
     @Override
@@ -127,7 +250,6 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
         super.onBackPressed();
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
-
 
 
 }

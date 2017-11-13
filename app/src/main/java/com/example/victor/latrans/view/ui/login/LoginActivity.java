@@ -28,6 +28,7 @@ import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.view.ui.App;
 import com.example.victor.latrans.view.ui.profile.ProfileActivity;
 import com.example.victor.latrans.view.ui.signup.SignupActivity;
+import com.example.victor.latrans.view.ui.trip.TripActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -161,16 +162,16 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
 
     public boolean validate() {
         boolean valid = true;
-        String email = mLoginViewModel.getEmailOrPassword();
-        String password = mLoginViewModel.getPassword();
+        String email = mLoginViewModel.mEmail;
+        String password = mLoginViewModel.mPassword;
         //|| !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
-        if (email ==null || email.isEmpty() ) {
+        if (TextUtils.isEmpty(email)|| email == null) {
             mEmailText.setError(getString(R.string.invalid_email));
             valid = false;
         } else {
             mEmailText.setError(null);
         }
-        if (password == null || TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(password) || password == null) {
             mPasswordText.setError(getString(R.string.empty_password));
             valid = false;
         } else {
@@ -218,7 +219,7 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mLoginViewModel.setEmailOrPassword(editable.toString());
+                mLoginViewModel.mEmail = editable.toString();
             }
         });
 
@@ -235,10 +236,16 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
 
             @Override
             public void afterTextChanged(Editable editable) {
-                mLoginViewModel.setPassword(editable.toString());
+                mLoginViewModel.mPassword =  editable.toString();
             }
         });
     }
 
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = TripActivity.newIntent(this);
+        startActivity(intent);
+        overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
+    }
 }

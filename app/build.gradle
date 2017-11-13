@@ -1,8 +1,11 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.example.victor.latrans"
         minSdkVersion 16
@@ -25,55 +28,64 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
 }
 
 dependencies {
 
-
-    implementation 'com.android.support:support-vector-drawable:26.0.1'
+    implementation 'com.android.support:support-vector-drawable:26.1.0'
+    api 'com.android.support:support-v4:26.1.0'
+    api 'com.android.support:support-v13:26.1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:' + rootProject.espressoCoreVersion, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion;
-    implementation 'com.android.support.constraint:constraint-layout:' + rootProject.constraintLayoutVersion;
-    implementation 'com.android.support:design:' + rootProject.supportLibVersion;
-    implementation 'com.android.support:cardview-v7:' + rootProject.supportLibVersion;
-    implementation 'com.android.support:recyclerview-v7:' + rootProject.supportLibVersion;
+    implementation 'com.android.support:appcompat-v7:' + rootProject.supportLibVersion
+    implementation 'com.android.support.constraint:constraint-layout:' + rootProject.constraintLayoutVersion
+    implementation 'com.android.support:design:' + rootProject.supportLibVersion
+    implementation 'com.android.support:cardview-v7:' + rootProject.supportLibVersion
+    implementation 'com.android.support:recyclerview-v7:' + rootProject.supportLibVersion
     //Architecture Components
-    implementation "android.arch.lifecycle:runtime:" + rootProject.archTechVersion;
-    implementation "android.arch.lifecycle:extensions:" + rootProject.archTechVersion;
-    annotationProcessor "android.arch.lifecycle:compiler:" + rootProject.archTechVersion;
-    implementation "android.arch.persistence.room:runtime:" + rootProject.archTechVersion;
-    annotationProcessor "android.arch.persistence.room:compiler:" + rootProject.archTechVersion;
+    implementation "android.arch.lifecycle:extensions:" + rootProject.archTechVersion
+    annotationProcessor "android.arch.lifecycle:compiler:" + rootProject.archTechVersion
+    implementation "android.arch.persistence.room:runtime:" + rootProject.archTechVersion
+    annotationProcessor "android.arch.persistence.room:compiler:" + rootProject.archTechVersion
+    testImplementation "android.arch.core:core-testing:" + rootProject.archTechVersion
+    implementation "android.arch.paging:runtime:1.0.0-alpha3"
     // Amazon Web Services
-    //implementation 'com.amazonaws:aws-android-sdk-core:' + rootProject.amazonServicesVersion;
+    //implementation 'com.amazonaws:aws-android-sdk-core:' + rootProject.amazonServicesVersion
     implementation 'com.amazonaws:aws-android-sdk-s3:' + rootProject.amazonServicesVersion;
     //implementation 'com.amazonaws:aws-android-sdk-ddb:' + rootProject.amazonServicesVersion;
-   // implementation 'com.amazonaws:aws-android-sdk-cognito:' + rootProject.amazonServicesVersion;
+    // implementation 'com.amazonaws:aws-android-sdk-cognito:' + rootProject.amazonServicesVersion;
 
-    implementation 'com.squareup.retrofit2:retrofit:' + rootProject.retrofitVersion;
-    implementation 'com.squareup.retrofit2:converter-gson:' + rootProject.converterGsonVersion;
-    implementation 'com.github.bumptech.glide:glide:' + rootProject.glideVersion;
-    implementation 'com.squareup.okhttp3:logging-interceptor:' + rootProject.logginInterceptorVersion;
-    implementation 'com.google.code.gson:gson:' + rootProject.gsonVersion;
-    implementation 'com.jakewharton:butterknife:' + rootProject.butterKnifeVersion;
-    annotationProcessor 'com.jakewharton:butterknife-compiler:' + rootProject.butterKnifeVersion;
-    implementation 'com.jakewharton.timber:timber:' + rootProject.timberVersion;
+    implementation 'com.squareup.retrofit2:retrofit:' + rootProject.retrofitVersion
+    implementation 'com.squareup.retrofit2:converter-gson:' + rootProject.converterGsonVersion
+    implementation 'com.github.bumptech.glide:glide:' + rootProject.glideVersion
+    implementation 'com.squareup.okhttp3:logging-interceptor:' + rootProject.logginInterceptorVersion
+    implementation 'com.google.code.gson:gson:' + rootProject.gsonVersion
+    implementation 'com.jakewharton:butterknife:' + rootProject.butterKnifeVersion
+    annotationProcessor 'com.jakewharton:butterknife-compiler:' + rootProject.butterKnifeVersion
+    implementation 'com.jakewharton.timber:timber:' + rootProject.timberVersion
 
 
-    implementation 'com.zhihu.android:matisse:' + rootProject.matisseVersion;
+    implementation 'com.zhihu.android:matisse:' + rootProject.matisseVersion
     implementation("com.github.hotchemi:permissionsdispatcher:" + rootProject.permissionDispatcherVersion) {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"
     }
-    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:" + rootProject.permissionDispatcherVersion;
-
-
+    annotationProcessor "com.github.hotchemi:permissionsdispatcher-processor:" + rootProject.permissionDispatcherVersion
 
 
     implementation 'com.airbnb.android:lottie:2.2.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.github.ganfra:material-spinner:2.0.0'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.4.7'
+
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jre7:' + rootProject.kotlinVersion
+    // Anko Commons
+    implementation 'org.jetbrains.anko:anko-commons:'+ rootProject.ankoVersion
 
     // Firebase dependency
     implementation 'com.google.firebase:firebase-messaging:11.2.2'
@@ -88,6 +100,7 @@ dependencies {
 
     testImplementation 'junit:junit:4.12'
 }
+
 
 
 

@@ -15,5 +15,4 @@ public class MessageResponse {
         this.messages = messages;
     }
 
-
 }

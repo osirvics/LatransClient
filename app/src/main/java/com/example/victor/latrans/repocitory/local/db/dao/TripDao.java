@@ -15,8 +15,11 @@ import java.util.List;
 public interface TripDao {
 
 
-    @Query("select * from trip ORDER BY id DESC LIMIT 20")
+    @Query("select * from trip ORDER BY id DESC")
     LiveData<List<Trip>> getAllTrips();
+
+    @Query("select * from trip ORDER BY id ASC LIMIT 1")
+    LiveData<Trip> getATrip();
 
     @Query("select * from trip where id = :id")
     LiveData<Trip> findAtripById(long id);
@@ -32,7 +35,10 @@ public interface TripDao {
     public void insertTrip(Trip trip);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-     void insertTrips(List<Trip> repositories);
+     void insertAllTrips(List<Trip> trips);
+
+    @Query("DELETE FROM trip")
+    void deleteAll();
 
 
 

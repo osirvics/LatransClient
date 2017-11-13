@@ -4,14 +4,16 @@
 
 
     <!-- login -->
-    <string name="username">Username or email</string>
+    <string name="firstName">Username or email</string>
     <string name="create_account">Create Account</string>
     <string name="login">Login</string>
     <string name="password_hint">Password</string>
     <string name="text_create_account">No account yet?</string>
     <string name="registration_email">Email</string>
-    <string name="registration_username">Username</string>
+    <string name="registration_first_name">First name</string>
+    <string name="registration_last_name">Last name</string>
     <string name="text_already_member">Already a member? </string>
+
 
 
     <!--Login Validation-->
@@ -20,7 +22,7 @@
     <string name="empty_password">Please provide a non empty password.</string>
 
     <!--SignUp Validation-->
-    <string name="error_invalid_username">Enter between 4 and 32 characters</string>
+    <string name="error_invalid_name">It seems this field is empty</string>
     <string name="username_exists">Username already exists</string>
     <string name="email_exists">Email address already exists</string>
     <string name="error_invalid_email">Enter a valid email address</string>
@@ -36,6 +38,10 @@
     <!--Trip Item-->
     <string name="action_call">Call</string>
     <string name="action_send_message">Message</string>
+    <string name="trip_to">to</string>
+    <string name="trip_from">from</string>
+    <string name="trip_date">on</string>
+    <string name="trip_travelling">%1$s is travelling:</string>
 
     <!--Message Notification Strings-->
     <string name="notification_message">"New message from %1$s"</string>
@@ -43,7 +49,8 @@
     <!--Profile Strings-->
     <string name="helper_text">Providing your basic information can help someone contact you, and feel more comfortable entrusting their items with you. You\'re required to also provide a profile picture, this is so people can know who they\'re contacting to transport their belongings.
     </string>
-    <string name="edit_text_name_hint">Enter your name </string>
+    <string name="edit_text_first_name_hint">Enter your first name </string>
+    <string name="edit_text_last_name_hint">Enter your last name </string>
     <string name="edit_text_phone_hint">Enter your phone number</string>
     <string name="upload_profile_image">Upload image</string>
     <string name="error_unknown">Unable to process file, low memory? </string>
@@ -51,8 +58,9 @@
     <string name="profile_updated_error">Failed to update profile, please try again later</string>
     <string name="error_invalid_number">Nice try, it seems that isn\'t a valid phone number</string>
     <string name="error_name">"Is that really your full name? yeah thought so"</string>
+    <string name="button_logout">Logout</string>
 
-    <!--Post Activity-->
+    <!--Post trip Activity-->
     <string name="title_trip">Add new trip</string>
     <string name="title_request">Make order request</string>
     <string name="traveling_to_state">Traveling to state</string>
@@ -60,9 +68,22 @@
     <string name="traveling_from_state">Traveling from state</string>
     <string name="traveling_from">Traveling from city </string>
     <string name="date_travel">Date</string>
-    <string name="date_format">DD/MM/YY</string>
+    <string name="date_format">DD-MM-YY</string>
     <string name="date_of_travelling"> Travelling date</string>
     <string name="post_trip">Post</string>
+    <string name="contact_phone_hint">Contact phone number</string>
+    <string name="post_success">Trip added successfully</string>
+
+
+    <!--Add order activity-->
+    <string name="order_item_name">Item name </string>
+    <string name="order_reward_price">Starting reward amount</string>
+    <string name="input_hint">Enter amount</string>
+
+
+    <!-- Message Activity-->
+    <string name="hint_enter_message">Enter message</string>
+    <string name="message_send">Send</string>
 
     <string-array name="planets_array">
         <item>Mercury</item>
@@ -74,8 +95,6 @@
         <item>Uranus</item>
         <item>Neptune</item>
     </string-array>
-
-
 
 
 </resources>

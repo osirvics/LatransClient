@@ -22,10 +22,11 @@ import com.example.victor.latrans.repocitory.local.db.AppDatabase;
 import com.example.victor.latrans.repocitory.local.db.entity.Conversation;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
 import com.example.victor.latrans.repocitory.local.db.entity.User;
-import com.example.victor.latrans.repocitory.local.model.ConversationAndMessage;
+import com.example.victor.latrans.repocitory.local.db.entity.ConversationAndMessage;
 import com.example.victor.latrans.repocitory.local.model.MessageResponse;
 import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.repocitory.local.model.Profile;
+import com.example.victor.latrans.repocitory.local.model.SingleMessageResponse;
 import com.example.victor.latrans.repocitory.local.model.UploadResponse;
 import com.example.victor.latrans.repocitory.remote.api.APIService;
 import com.example.victor.latrans.repocitory.remote.api.ServiceGenerator;
@@ -43,7 +44,7 @@ import timber.log.Timber;
 public class MessageRepositoryImpl implements MessageRepository {
 
     private RateLimiter<String> repoListRateLimit = new RateLimiter<>(10, TimeUnit.MINUTES);
-    APIService mAPIService;
+    private APIService mAPIService;
     @Inject
     SharedPrefsHelper mSharedPrefsHelper;
     @Inject
@@ -52,8 +53,6 @@ public class MessageRepositoryImpl implements MessageRepository {
     Context mContext;
     @Inject
     AppExecutors appExecutors;
-    TransferUtility transferUtility;
-    TransferObserver observer;
 
     @Inject
     public MessageRepositoryImpl(AppDatabase appDatabase,SharedPrefsHelper sharedPrefsHelper, Context context,AppExecutors executors){
@@ -64,7 +63,7 @@ public class MessageRepositoryImpl implements MessageRepository {
     }
 
     @Override
-    public LiveData<Resource<List<ConversationAndMessage>>>  getMessagesAndConversation(long id) {
+    public LiveData<Resource<List<ConversationAndMessage>>>  getMessagesAndConversation(long userId) {
         mAPIService = ServiceGenerator.createService(APIService.class,"", "");
         return new NetworkBoundResource<List<ConversationAndMessage>, MessageResponse>(appExecutors) {
             @Override
@@ -88,12 +87,12 @@ public class MessageRepositoryImpl implements MessageRepository {
             @NonNull
             @Override
             protected LiveData<ApiResponse<MessageResponse>> createCall() {
-                return mAPIService.getMessages(id);
+                return mAPIService.getMessages(userId);
             }
 
             @Override
             protected void onFetchFailed() {
-               repoListRateLimit.reset(String.valueOf(id));
+               repoListRateLimit.reset(String.valueOf(userId));
 
             }
         }.asLiveData();
@@ -101,7 +100,7 @@ public class MessageRepositoryImpl implements MessageRepository {
 
 
     @Override
-    public LiveData<Resource<List<Message>>> getMessages(long id) {
+    public LiveData<Resource<List<Message>>>  getMessagesInConversation(long conversationId) {
         mAPIService = ServiceGenerator.createService(APIService.class,"", "");
         return new NetworkBoundResource<List<Message>, MessageResponse>(appExecutors) {
             @Override
@@ -119,18 +118,18 @@ public class MessageRepositoryImpl implements MessageRepository {
             @NonNull
             @Override
             protected LiveData<List<Message>> loadFromDb() {
-                return mAppDatabase.messageDao().getAllConversation(id);
+                return mAppDatabase.messageDao().getAllMessagesInConversation(conversationId);
             }
 
             @NonNull
             @Override
             protected LiveData<ApiResponse<MessageResponse>> createCall() {
-                return mAPIService.getMessages(id);
+                return mAPIService.getMessagesInConversation(conversationId);
             }
 
             @Override
             protected void onFetchFailed() {
-                repoListRateLimit.reset(String.valueOf(id));
+                repoListRateLimit.reset(String.valueOf(conversationId));
             }
         }.asLiveData();
     }
@@ -197,9 +196,9 @@ public class MessageRepositoryImpl implements MessageRepository {
 
     @Override
     public LiveData<Resource<UploadResponse>> beginUpload(File file){
-        transferUtility = AmazonUtility.getTransferUtility(mContext);
+        TransferUtility transferUtility = AmazonUtility.getTransferUtility(mContext);
         String key = file.getName();
-        observer = transferUtility.upload(
+        TransferObserver observer = transferUtility.upload(
                 Constants.BUCKET_NAME,     /* The bucket to upload to */
                 key,    /* The key for the uploaded object */
                 file       /* The file where the data to upload exists */
@@ -207,7 +206,44 @@ public class MessageRepositoryImpl implements MessageRepository {
              return   transferObserverListener(observer);
     }
 
-    public  LiveData<Resource<UploadResponse>> transferObserverListener(TransferObserver transferObserver){
+    @Override
+    public LiveData<Resource<Message>> postMessage(Message message) {
+        mAPIService = ServiceGenerator.createService(APIService.class,"", "");
+        return new NetworkBoundResource<Message, SingleMessageResponse>(appExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull SingleMessageResponse messageResponse) {
+                //TODO create converstion, dialogue, before inserting message;
+                   // mAppDatabase.messageDao().insertMesaage(messageResponse.getMessage());
+                    List<Message> messages = new ArrayList<>(1);
+                    messages.add(messageResponse.getMessage());
+                    persistConversationAndMesaages(messages);
+
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable Message data) {
+                return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Message> loadFromDb() {
+                return mAppDatabase.messageDao().getAMessageBySender(mSharedPrefsHelper.getUserId());
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<SingleMessageResponse>> createCall() {
+                return mAPIService.postMessage(message);
+            }
+
+
+        }.asLiveData();
+    }
+
+
+
+    private   LiveData<Resource<UploadResponse>> transferObserverListener(TransferObserver transferObserver){
         MutableLiveData<Resource<UploadResponse>> mStrasferState = new MutableLiveData<>();
         transferObserver.setTransferListener(new TransferListener(){
             @Override
@@ -226,7 +262,7 @@ public class MessageRepositoryImpl implements MessageRepository {
                 mStrasferState.setValue(Resource.success(UploadResponse.progress((long)percentage)));
             }
             @Override
-            public void onError(int id, Exception ex) {;
+            public void onError(int id, Exception ex) {
                 Timber.e("failed to upload" + ex);
                 ex.printStackTrace();
                 mStrasferState.setValue(Resource.success(UploadResponse.error((ex))));
@@ -250,7 +286,10 @@ public class MessageRepositoryImpl implements MessageRepository {
 
             ConversationAndMessage conversationAndMessage = new ConversationAndMessage();
             conversationAndMessage.id = message.conversation_id;
-            conversationAndMessage.sender_username = message.sender_username;
+            conversationAndMessage.sender_id = message.sender_id;
+            conversationAndMessage.recipient_id = message.recipient_id;
+            conversationAndMessage.sender_first_name = message.sender_first_name;
+            conversationAndMessage.sender_last_name = message.sender_last_name;
             conversationAndMessage.sender_picture = message.sender_picture;
             conversationAndMessage.time_sent = message.time_sent;
             conversationAndMessage.message = message.message;

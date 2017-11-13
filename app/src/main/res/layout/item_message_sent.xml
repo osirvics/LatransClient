@@ -4,33 +4,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:paddingBottom="8dp"
     android:layout_height="wrap_content"
+    android:paddingBottom="8dp"
     android:paddingTop="8dp">
 
     <TextView
         android:id="@+id/text_message_body"
-        tools:text="hello, how are you!"
-        android:background="@drawable/rounded_rectangle_sent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginRight="24dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/rounded_rectangle_sent"
         android:maxWidth="240dp"
         android:padding="8dp"
         android:textColor="#ffffff"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toRightOf="@id/reply_status"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginEnd="8dp"/>
+        tools:text="hello, how are you!"/>
 
     <TextView
         android:id="@+id/text_message_time"
-        tools:text="11:40"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:layout_marginEnd="4dp"
         android:layout_marginRight="4dp"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/text_message_body"
         app:layout_constraintRight_toLeftOf="@+id/text_message_body"
-        android:layout_marginEnd="4dp"/>
+        tools:text="11:40"/>
+
+    <ImageView
+        android:id="@+id/reply_status"
+        android:layout_width="16dp"
+        android:layout_height="16dp"
+        android:layout_marginLeft="@dimen/padding_small"
+        android:layout_marginStart="@dimen/padding_small"
+        app:layout_constraintBottom_toBottomOf="@+id/text_message_body"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/ic_message_delivery_waiting_18dp"/>
 
 </android.support.constraint.ConstraintLayout>

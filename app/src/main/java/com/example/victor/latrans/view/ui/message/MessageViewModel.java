@@ -9,33 +9,35 @@ import com.example.victor.latrans.dependency.AppComponent;
 import com.example.victor.latrans.google.Resource;
 import com.example.victor.latrans.repocitory.MessageRepository;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
+import com.example.victor.latrans.repocitory.local.db.entity.User;
+import com.example.victor.latrans.util.Util;
 
 import java.util.List;
 
 import javax.inject.Inject;
-
-/**
- * Created by Victor on 9/9/2017.
- */
 
 public class MessageViewModel extends ViewModel implements AppComponent.Injectable {
 
     @Inject
     MessageRepository mMessageRepository;
 
+    long senderId;
+    long recipientId;
+    String mMessage;
+
     @Override
     public void inject(AppComponent appComponent) {
         appComponent.inject(this);
     }
 
-    LiveData<Resource<List<Message>>> mLiveData;
-     MutableLiveData<Integer> dialogueId = new MutableLiveData<>();
+    private LiveData<Resource<List<Message>>> mLiveData;
+    private MutableLiveData<Long> dialogueId = new MutableLiveData<>();
+    private LiveData<Resource<User>> mUserData;
+    private LiveData<Resource<Message>> mSendMessage;
 
-     public void setDialogueId(int id){
+     public void setDialogueId(long id){
          dialogueId.setValue(id);
     }
-
-
 
     public LiveData<Resource<List<Message>>> getResponse(){
         mLiveData = new MutableLiveData<>();
@@ -44,8 +46,34 @@ public class MessageViewModel extends ViewModel implements AppComponent.Injectab
     }
 
     private void processResponse(){
+        mLiveData = Transformations.switchMap(dialogueId, input -> {
+//            if (input == -1){
+//                return AbsentLiveData.create();
+//            }
+            return  mMessageRepository.getMessagesInConversation(input);
+        });
+    }
 
-        mLiveData = Transformations.switchMap(dialogueId, input -> mMessageRepository.getMessages(input));
+    public LiveData<Resource<User>> getUserData(){
+            mUserData = new MutableLiveData<>();
+            mUserData = mMessageRepository.getUser();
+        return mUserData;
+    }
+
+    public LiveData<Resource<Message>> sendMessage(){
+        mSendMessage = new MutableLiveData<>();
+        mSendMessage = mMessageRepository.postMessage(buildMessage());
+        return mSendMessage;
+    }
+
+    public Message buildMessage(){
+        Message message = new Message();
+        message.sender_id = senderId;
+        message.recipient_id = recipientId;
+        message.time_sent = System.currentTimeMillis();
+        message.sent_status = Util.MESSAGE_PENDING;
+        message.message = mMessage.trim();
+        return  message;
     }
 
 }

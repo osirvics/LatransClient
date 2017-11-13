@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import com.example.victor.latrans.util.Util;
 import com.example.victor.latrans.view.ui.message.ConversationActivity;
 import com.example.victor.latrans.view.ui.order.OrderActivity;
-import com.example.victor.latrans.view.ui.post.PostActivity;
+import com.example.victor.latrans.view.ui.addtrip.PostActivity;
 import com.example.victor.latrans.view.ui.profile.ProfileActivity;
 import com.example.victor.latrans.view.ui.trip.TripActivity;
 

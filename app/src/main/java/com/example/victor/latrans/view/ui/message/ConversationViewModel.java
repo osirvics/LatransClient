@@ -7,7 +7,8 @@ import android.arch.lifecycle.ViewModel;
 import com.example.victor.latrans.dependency.AppComponent;
 import com.example.victor.latrans.google.Resource;
 import com.example.victor.latrans.repocitory.MessageRepository;
-import com.example.victor.latrans.repocitory.local.model.ConversationAndMessage;
+import com.example.victor.latrans.repocitory.local.db.entity.ConversationAndMessage;
+import com.example.victor.latrans.util.SharedPrefsHelper;
 
 import java.util.List;
 
@@ -17,6 +18,8 @@ import javax.inject.Inject;
 public class ConversationViewModel extends ViewModel implements AppComponent.Injectable{
     @Inject
     MessageRepository mMessageRepository;
+    @Inject
+    SharedPrefsHelper mSharedPrefsHelper;
 
     private LiveData<Resource<List<ConversationAndMessage>>> mLiveData;
 
@@ -33,7 +36,7 @@ public class ConversationViewModel extends ViewModel implements AppComponent.Inj
     }
 
     private void queryResponse(){
-        //TODO remove hardcoded id here
-        mLiveData = mMessageRepository.getMessagesAndConversation(1);
+        //TODO fix userId
+        mLiveData = mMessageRepository.getMessagesAndConversation(mSharedPrefsHelper.getUserId());
     }
 }

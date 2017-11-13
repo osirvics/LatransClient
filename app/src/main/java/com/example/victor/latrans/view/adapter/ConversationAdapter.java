@@ -9,8 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.victor.latrans.R;
-import com.example.victor.latrans.repocitory.local.model.ConversationAndMessage;
+import com.example.victor.latrans.repocitory.local.db.entity.ConversationAndMessage;
 import com.example.victor.latrans.util.DateUtils;
 import com.example.victor.latrans.util.OnItemClick;
 
@@ -22,12 +23,14 @@ import butterknife.ButterKnife;
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ConversationHolder> {
     private List<ConversationAndMessage> mConversations;
     private Context mContext;
-    OnItemClick mOnItemClick;
+    private OnItemClick mOnItemClick;
+    private long userId;
 
-    public ConversationAdapter(List<ConversationAndMessage> conversations, Context context){
+    public ConversationAdapter(List<ConversationAndMessage> conversations, Context context, long userId){
         this.mConversations = conversations;
         this.mContext = context;
         this.mOnItemClick = ((OnItemClick) context);
+        this.userId = userId;
     }
 
 
@@ -41,9 +44,11 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     @Override
     public void onBindViewHolder(ConversationHolder holder, int position) {
         ConversationAndMessage conversation = mConversations.get(position);
-        holder.mTextViewSenderName.setText(conversation.sender_username);
+        holder.mTextViewSenderName.setText(conversation.sender_first_name);
         holder.mTextViewLastMessage.setText(conversation.message);
         holder.mTextViewMessageTime.setText(String.valueOf(DateUtils.formatDateTime(conversation.time_sent)));
+        Glide.with(mContext).load(conversation.sender_picture).placeholder(R.drawable.ic_person_grey_600_24dp)
+                .error(R.drawable.ic_person_grey_600_24dp).centerCrop().into(holder.mImageViewProfileImage);
     }
 
     @Override
@@ -77,8 +82,12 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         @Override
         public void onClick(View view) {
             long conversationId = mConversations.get(getLayoutPosition()).id;
-            int i = (int) conversationId;
-            mOnItemClick.onClick(i);
+            long senderId = mConversations.get(getLayoutPosition()).sender_id;
+            long recipientId = mConversations.get(getLayoutPosition()).recipient_id;
+            if(userId == senderId)
+                mOnItemClick.onClick(conversationId, recipientId);
+            else
+                mOnItemClick.onClick(conversationId, senderId);
         }
     }
 }

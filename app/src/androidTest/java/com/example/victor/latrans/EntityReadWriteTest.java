@@ -12,7 +12,7 @@ import com.example.victor.latrans.repocitory.local.db.entity.Conversation;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
 import com.example.victor.latrans.repocitory.local.db.entity.Trip;
 import com.example.victor.latrans.repocitory.local.db.entity.User;
-import com.example.victor.latrans.repocitory.local.model.ConversationAndMessage;
+import com.example.victor.latrans.repocitory.local.db.entity.ConversationAndMessage;
 import com.example.victor.latrans.util.Util;
 
 import org.junit.After;

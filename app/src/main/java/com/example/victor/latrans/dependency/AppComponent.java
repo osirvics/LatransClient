@@ -1,12 +1,18 @@
 package com.example.victor.latrans.dependency;
 
 import com.example.victor.latrans.fcm.LatransFirebaseMessagingService;
+import com.example.victor.latrans.view.ui.addorder.AddOrderActivity;
+import com.example.victor.latrans.view.ui.addorder.AddOrderViewModel;
 import com.example.victor.latrans.view.ui.login.LoginActivity;
 import com.example.victor.latrans.view.ui.login.LoginViewModel;
 import com.example.victor.latrans.view.ui.message.ConversationActivity;
 import com.example.victor.latrans.view.ui.message.ConversationViewModel;
 import com.example.victor.latrans.view.ui.message.MessageActivity;
 import com.example.victor.latrans.view.ui.message.MessageViewModel;
+import com.example.victor.latrans.view.ui.order.OrderActivity;
+import com.example.victor.latrans.view.ui.order.OrderViewModel;
+import com.example.victor.latrans.view.ui.addtrip.AddTripActivity;
+import com.example.victor.latrans.view.ui.addtrip.AddTripViewModel;
 import com.example.victor.latrans.view.ui.profile.EditProfileActivity;
 import com.example.victor.latrans.view.ui.profile.EditProfileViewModel;
 import com.example.victor.latrans.view.ui.profile.ProfileActivity;
@@ -35,7 +41,12 @@ public interface AppComponent {
     void inject(MessageActivity messageActivity);
     void inject(ProfileActivity profileActivity);
     void inject(EditProfileActivity editProfileActivity);
+    void inject(AddTripActivity addTripActivity);
+    void inject (OrderActivity orderActivity);
+    void inject (AddOrderActivity addOrderActivity);
 
+    void inject (AddOrderViewModel addOrderViewModel);
+    void inject (OrderViewModel orderViewModel);
     void inject(SignUpViewModel signUpViewModel);
     void inject(LoginViewModel loginViewModel);
     void inject(TripViewModel tripViewModel);
@@ -43,6 +54,8 @@ public interface AppComponent {
     void inject(MessageViewModel messageViewModel);
     void inject(ProfileViewModel profileViewModel);
     void inject(EditProfileViewModel editProfileViewModel);
+    void inject(AddTripViewModel addTripViewModel);
+
 
     void inject (LatransFirebaseMessagingService messagingService);
 
