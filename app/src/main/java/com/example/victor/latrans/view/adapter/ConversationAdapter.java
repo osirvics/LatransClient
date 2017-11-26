@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ConversationHolder> {
     private List<ConversationAndMessage> mConversations;
@@ -44,11 +45,15 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
     @Override
     public void onBindViewHolder(ConversationHolder holder, int position) {
         ConversationAndMessage conversation = mConversations.get(position);
-        holder.mTextViewSenderName.setText(conversation.sender_first_name);
-        holder.mTextViewLastMessage.setText(conversation.message);
-        holder.mTextViewMessageTime.setText(String.valueOf(DateUtils.formatDateTime(conversation.time_sent)));
-        Glide.with(mContext).load(conversation.sender_picture).placeholder(R.drawable.ic_person_grey_600_24dp)
-                .error(R.drawable.ic_person_grey_600_24dp).centerCrop().into(holder.mImageViewProfileImage);
+        if (conversation.getSender_id()!= userId)
+            holder.mTextViewSenderName.setText(conversation.getSender_first_name());
+        else  holder.mTextViewSenderName.setText(conversation.getRecipient_first_name());
+
+        holder.mTextViewLastMessage.setText(conversation.getMessage());
+        holder.mTextViewMessageTime.setText(String.valueOf(DateUtils.formatDateTime(conversation.getTime_sent())));
+        Timber.e("Profile image: " + conversation.getSender_picture() );
+        Glide.with(mContext).load(conversation.getSender_picture()).placeholder(R.drawable.ic_person_grey_600_24dp)
+                .error(R.drawable.ic_person_grey_600_24dp).centerCrop().crossFade().into(holder.mImageViewProfileImage);
     }
 
     @Override
@@ -81,9 +86,9 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
 
         @Override
         public void onClick(View view) {
-            long conversationId = mConversations.get(getLayoutPosition()).id;
-            long senderId = mConversations.get(getLayoutPosition()).sender_id;
-            long recipientId = mConversations.get(getLayoutPosition()).recipient_id;
+            long conversationId = mConversations.get(getLayoutPosition()).getId();
+            long senderId = mConversations.get(getLayoutPosition()).getSender_id();
+            long recipientId = mConversations.get(getLayoutPosition()).getRecipient_id();
             if(userId == senderId)
                 mOnItemClick.onClick(conversationId, recipientId);
             else

@@ -16,6 +16,7 @@ public class SharedPrefsHelper {
 
     public static String PREF_KEY_ACCESS_TOKEN = "access-token";
     public static final String PREF_KEY_CURRENT_USER_ID = "PREF_KEY_CURRENT_USER_ID";
+    public static final String PREF_KEY_USER_PROFILE_URL = "PREF_KEY_USER_PROFILE_URL ";
 
     private static final String PREF_KEY_USER_LOGGED_IN_MODE = "PREF_KEY_USER_LOGGED_IN_MODE";
     private static final String PREF_KEY_CURRENT_USER_NAME = "PREF_KEY_CURRENT_USER_NAME";
@@ -49,6 +50,14 @@ public class SharedPrefsHelper {
 
     public long getUserId(){
         return mSharedPreferences.getLong(PREF_KEY_CURRENT_USER_ID,0);
+    }
+
+    public void setUserProfileUrl(String url){
+        mSharedPreferences.edit().putString(PREF_KEY_USER_PROFILE_URL, url).apply();
+    }
+
+    public String getUserProfileUrl(){
+        return mSharedPreferences.getString(PREF_KEY_USER_PROFILE_URL, "");
     }
 
 

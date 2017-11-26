@@ -99,20 +99,20 @@ public class AddOrderViewModel extends ViewModel implements AppComponent.Injecta
 
     private Request buildRequest(){
         Request request = new Request();
-        request.user_id = userId;
-        request.item_location_state = mItemLocationState;
-        request.item_location_city = mItemLocationCity;
-        request.delivery_state = mDeliveryState;
-        request.delivery_city = mDeliveryCity;
-        request.item_name = mItemName;
+        request.setUser_id(userId);
+        request.setItem_location_state(mItemLocationState);
+        request.setItem_location_city(mItemLocationCity);
+        request.setDelivery_state(mDeliveryState);
+        request.setDelivery_city(mDeliveryCity);
+        request.setItem_name(mItemName);
 
-        request.picture = mItemPictureUrl;
+        request.setPicture(mItemPictureUrl);
 
-        request.offer_amount = mItemStartingRewardAmount;
-        request.deliver_before = mExpectedDelivryDate;
-        request.phone_no = mContactNumber;
-        request.posted_on = System.currentTimeMillis();
-        request.time_updated = System.currentTimeMillis();
+        request.setOffer_amount(mItemStartingRewardAmount);
+        request.setDeliver_before(mExpectedDelivryDate);
+        request.setPhone_no(mContactNumber);
+        request.setPosted_on(System.currentTimeMillis());
+        request.setTime_updated(System.currentTimeMillis());
 
         return request;
 

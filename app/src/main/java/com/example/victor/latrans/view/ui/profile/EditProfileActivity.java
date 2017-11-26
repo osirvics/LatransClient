@@ -121,13 +121,13 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
         switch (user.status){
             case SUCCESS:
                 if (user.data != null){
-                    mEditProfileViewModel.mFirstName = user.data.first_name;
-                    mEditProfileViewModel.mLastName = user.data.last_name;
-                    mEditProfileViewModel.phoneNo = user.data.phone_no;
-                    mInputFirstName.setText(user.data.first_name);
-                    mInputLastName.setText(user.data.last_name);
-                    mInputNumber.setText(user.data.phone_no);
-                    Glide.with(this).load(user.data.picture).centerCrop()
+                    mEditProfileViewModel.mFirstName = user.data.getFirst_name();
+                    mEditProfileViewModel.mLastName = user.data.getLast_name();
+                    mEditProfileViewModel.phoneNo = user.data.getPhone_no();
+                    mInputFirstName.setText(user.data.getFirst_name());
+                    mInputLastName.setText(user.data.getLast_name());
+                    mInputNumber.setText(user.data.getPhone_no());
+                    Glide.with(this).load(user.data.getPicture()).centerCrop()
                             .placeholder(R.drawable.ic_person_grey_600_24dp).error(R.drawable.ic_person_grey_600_24dp)
                             .into(mProfileImage);
                 }
@@ -171,7 +171,7 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
                 fab.setEnabled(true);
                 AmazonUtility.deleteFile(mEditProfileViewModel.file, this);
                 finish();
-                Toast.makeText(this,getString(R.string.profile_update_success), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.profile_update_success), Toast.LENGTH_SHORT).show();
                 overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                 break;
             case MESSAGE:

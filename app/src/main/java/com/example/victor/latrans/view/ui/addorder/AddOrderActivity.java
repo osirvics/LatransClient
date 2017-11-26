@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -86,6 +87,8 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
     TextInputEditText mPhoneNumber;
     @BindView(R.id.add_order_button)
     AppCompatButton mPostButton;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     public static int REQUEST_CODE_CHOOSE = 35;
     private ArrayAdapter<String> adapter;
     AddOrderViewModel mAddOrderViewModel;
@@ -197,8 +200,8 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
         switch (user.status){
             case SUCCESS:
                 if (user.data != null){
-                   mAddOrderViewModel.userId = user.data.id;
-                    mAddOrderViewModel.mContactNumber = user.data.phone_no;
+                   mAddOrderViewModel.userId = user.data.getId();
+                    mAddOrderViewModel.mContactNumber = user.data.getPhone_no();
                     mPhoneNumber.setText(mAddOrderViewModel.mContactNumber);
                 }
                 break;
@@ -231,6 +234,7 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
 
 
     private void initSetup(){
+        mToolbar.setTitle(getString(R.string.add_order_activity_name));
         mSpinnerDeliveryState = findViewById(R.id.spinner_delivery_state);
         mSpinnerDeliveryCity = findViewById(R.id.spinner_delivery_city);
         mSpinnerItemState = findViewById(R.id.spinner_item_location_state);
@@ -492,7 +496,7 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
             return false;
         }
         if(rewardAmount == null || TextUtils.isEmpty(rewardAmount)){
-            mOrderStartingPrice.setError("Enter a reward figuire in ₦");
+            mOrderStartingPrice.setError("Enter a reward amount in ₦");
             return false;
         }
 

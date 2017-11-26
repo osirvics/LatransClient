@@ -106,6 +106,7 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
         getUserStreams(mMessageViewModel);
         subscribeToDataStreams(mMessageViewModel);
     }
+
     private void getUserStreams(MessageViewModel messageViewModel){
         mMessageViewModel.recipientId = mRecipeintId;
         messageViewModel.getUserData().observe(this, this::handleUserResponse);
@@ -115,7 +116,7 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
         switch (user.status){
             case SUCCESS:
                 if (user.data != null){
-                    mMessageViewModel.senderId = user.data.id;
+                    mMessageViewModel.senderId = user.data.getId();
                 }
                 else  {
                     openLoginActivity();
@@ -151,11 +152,12 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
                 stopAnim();
                 if (listResource.data != null) {
                     mMessageAdapter.addMessages(listResource.data);
-                    mRecyclerView.smoothScrollToPosition(mMessageAdapter.getItemCount()-1);
+                  //  mRecyclerView.smoothScrollToPosition(mMessageAdapter.getItemCount()-1);
                     mMessageAdapter.notifyDataSetChanged();
-//                    if (mAdapter.getItemCount() > 1) {
-//                        recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
-//                    }
+                 if (mMessageAdapter.getItemCount() > 1) {
+                      mRecyclerView.smoothScrollToPosition(mMessageAdapter.getItemCount()-1);
+                    // recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
+                  }
                 } else Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
 //                break;
 //            case MESSAGE:
@@ -179,6 +181,7 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
         Message message = mMessageViewModel.buildMessage();
         mMessageAdapter.addAMassage(message);
         mRecyclerView.getLayoutManager().smoothScrollToPosition(mRecyclerView, null, mMessageAdapter.getItemCount() - 1);
+
     }
 
 
@@ -242,6 +245,7 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
             InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

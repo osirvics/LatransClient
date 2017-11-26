@@ -1,13 +1,12 @@
 package com.example.victor.latrans.view.ui.trip;
 
-import android.arch.lifecycle.LifecycleRegistry;
-import android.arch.lifecycle.LifecycleRegistryOwner;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -34,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class TripActivity extends BaseActivity  implements LifecycleRegistryOwner, OnItemClick {
+public class TripActivity extends BaseActivity  implements  OnItemClick {
 
     public static Intent newIntent(Context packageContext) {
         Intent i = new Intent(packageContext, TripActivity.class);
@@ -46,14 +45,10 @@ public class TripActivity extends BaseActivity  implements LifecycleRegistryOwne
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerTripView;
     private TripAdapter mTripAdapter;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     @Inject
     SharedPrefsHelper mSharedPrefsHelper;
-    private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
-
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return lifecycleRegistry;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,11 +65,12 @@ public class TripActivity extends BaseActivity  implements LifecycleRegistryOwne
     }
 
     private void setUpView(){
+        mToolbar.setTitle(getString(R.string.trip_activity_name));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerTripView.setLayoutManager(mLayoutManager);
         //mRecyclerTripView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerTripView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        mTripAdapter  = new TripAdapter(new ArrayList<>(), this, mSharedPrefsHelper.getUserId());
+        mTripAdapter  = new TripAdapter(new ArrayList<>(), this,this, mSharedPrefsHelper.getUserId());
         mRecyclerTripView.setAdapter(mTripAdapter);
         startAnim();
     }
@@ -95,7 +91,7 @@ public class TripActivity extends BaseActivity  implements LifecycleRegistryOwne
                 if (listResource.data != null){
                  mTripAdapter.addTrips(listResource.data);
                  for(Trip trip: listResource.data){
-                     Timber.e("Trip id: " + trip.id);
+                     Timber.e("Trip id: " + trip.getId());
                  }
                 }
                 else   Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();

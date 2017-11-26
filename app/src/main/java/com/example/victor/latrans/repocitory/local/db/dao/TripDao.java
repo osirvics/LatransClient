@@ -21,8 +21,11 @@ public interface TripDao {
     @Query("select * from trip ORDER BY id ASC LIMIT 1")
     LiveData<Trip> getATrip();
 
-    @Query("select * from trip where id = :id")
-    LiveData<Trip> findAtripById(long id);
+    @Query("select * from trip where id = :id ORDER BY id DESC")
+    LiveData<Trip> findATripById(long id);
+
+    @Query("select * from trip where user_id = :user_id ORDER BY id DESC")
+    LiveData<List<Trip>> findTripsForUser(long user_id);
 
     @Query("select * from trip where traveling_from_city = :traveling_from_city")
     LiveData<List<Trip>> findAtripByTravelingFromCity(String traveling_from_city);

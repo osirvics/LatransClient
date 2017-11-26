@@ -3,6 +3,7 @@ package com.example.victor.latrans.view.ui.addtrip;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.Toolbar;
 
 import com.example.victor.latrans.BaseActivity;
 import com.example.victor.latrans.R;
@@ -17,11 +18,14 @@ public class PostActivity extends BaseActivity {
     AppCompatButton mTripButton;
     @BindView(R.id.order_add_button)
     AppCompatButton mOrderButton;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
+        mToolbar.setTitle(getString(R.string.post_activity_name));
         //setContentView(R.layout.activity_post);
 
     }

@@ -59,8 +59,12 @@
     <string name="error_invalid_number">Nice try, it seems that isn\'t a valid phone number</string>
     <string name="error_name">"Is that really your full name? yeah thought so"</string>
     <string name="button_logout">Logout</string>
+    <string name="profile_order_tab">Trip</string>
+    <string name="profile_request_tab">Order</string>
+    <string name="profile_tab">Profile</string>
 
     <!--Post trip Activity-->
+    <string name="trip_activity_name">Trips</string>
     <string name="title_trip">Add new trip</string>
     <string name="title_request">Make order request</string>
     <string name="traveling_to_state">Traveling to state</string>
@@ -75,26 +79,38 @@
     <string name="post_success">Trip added successfully</string>
 
 
+
     <!--Add order activity-->
     <string name="order_item_name">Item name </string>
     <string name="order_reward_price">Starting reward amount</string>
     <string name="input_hint">Enter amount</string>
 
 
+
+
+
     <!-- Message Activity-->
     <string name="hint_enter_message">Enter message</string>
     <string name="message_send">Send</string>
+    <string name="Message_activity_name">Message</string>
 
-    <string-array name="planets_array">
-        <item>Mercury</item>
-        <item>Venus</item>
-        <item>Earth</item>
-        <item>Mars</item>
-        <item>Jupiter</item>
-        <item>Saturn</item>
-        <item>Uranus</item>
-        <item>Neptune</item>
-    </string-array>
+    <!-- Message Activity-->
+    <string name="post_activity_name">Post</string>
+    <string name="order_activity_name">Order</string>
+    <string name="add_order_activity_name">Add Order</string>
+    <string name="add_trip_activity_name">Add Trip</string>
+    <string name="conversation_activity_name">Conversation</string>
+
+    <!--<string-array name="planets_array">-->
+        <!--<item>Mercury</item>-->
+        <!--<item>Venus</item>-->
+        <!--<item>Earth</item>-->
+        <!--<item>Mars</item>-->
+        <!--<item>Jupiter</item>-->
+        <!--<item>Saturn</item>-->
+        <!--<item>Uranus</item>-->
+        <!--<item>Neptune</item>-->
+    <!--</string-array>-->
 
 
 </resources>

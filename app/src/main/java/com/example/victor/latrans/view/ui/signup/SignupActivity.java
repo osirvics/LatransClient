@@ -103,7 +103,7 @@ public class SignupActivity extends AppCompatActivity implements LifecycleRegist
             case SUCCESS:
                 stopAnim();
                 Toast.makeText(this, "Token: "+ response.data.getToken(), Toast.LENGTH_SHORT).show();
-                Intent intent = ProfileActivity.newImtent(this);
+                Intent intent = ProfileActivity.Companion.newImtent(this);
                 startActivity(intent);
                 overridePendingTransition(R.anim.enter, R.anim.exit);
                 break;

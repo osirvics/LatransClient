@@ -68,11 +68,11 @@ public class MessageViewModel extends ViewModel implements AppComponent.Injectab
 
     public Message buildMessage(){
         Message message = new Message();
-        message.sender_id = senderId;
-        message.recipient_id = recipientId;
-        message.time_sent = System.currentTimeMillis();
-        message.sent_status = Util.MESSAGE_PENDING;
-        message.message = mMessage.trim();
+        message.setSender_id(senderId);
+        message.setRecipient_id(recipientId);
+        message.setTime_sent(System.currentTimeMillis());
+        message.setSent_status(Util.MESSAGE_PENDING);
+        message.setMessage(mMessage.trim());
         return  message;
     }
 

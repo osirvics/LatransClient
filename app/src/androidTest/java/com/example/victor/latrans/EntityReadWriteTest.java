@@ -95,7 +95,7 @@ public class EntityReadWriteTest {
 
 
         ConversationAndMessage current = loaded.get(0);
-        assertEquals(current.id, 1);
+        assertEquals(current.getId(), 1);
 //        ConversationAndMessage cuurrent = loaded.get(1);
     }
 
@@ -106,7 +106,7 @@ public class EntityReadWriteTest {
         User loaded = Util.getValue(db.userDao().loadUserById(1));
         assertThat(loaded, notNullValue());
         assertThat(loaded.username, is("victor"));
-        assertThat(loaded.email, is("kedvic@gmail.com"));
+        assertThat(loaded.getEmail(), is("kedvic@gmail.com"));
         assertThat(loaded.name, notNullValue());
         assertThat(loaded.surname, is("Edu"));
     }
@@ -117,8 +117,8 @@ public class EntityReadWriteTest {
         db.conversationDao().insertConversation(conversation);
         Conversation loaded = Util.getValue(db.conversationDao().getAConversationByID(2));
         assertThat(loaded, notNullValue());
-        assertEquals(2, loaded.user_two_id);
-        assertEquals(2, loaded.id);
+        assertEquals(2, loaded.getUserTwoId());
+        assertEquals(2, loaded.getId());
     }
 
 
@@ -173,8 +173,8 @@ public class EntityReadWriteTest {
         db.messageDao().insertMesaage(message);
         Message loaded = Util.getValue(db.messageDao().getAMessageById(1));
         assertThat(loaded, notNullValue());
-        assertEquals(1, loaded.id);
-        assertThat(loaded.message, is("Yeah, way to excel"));
+        assertEquals(1, loaded.getId());
+        assertThat(loaded.getMessage(), is("Yeah, way to excel"));
 
     }
 
@@ -186,7 +186,7 @@ public class EntityReadWriteTest {
         Trip loaded = Util.getValue(db.tripDao().findAtripById(1));
 
         assertThat(loaded, notNullValue());
-        assertThat(loaded.phone_no, is("07034464116"));
+        assertThat(loaded.getPhone_no(), is("07034464116"));
 
 
     }

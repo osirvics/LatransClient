@@ -66,15 +66,15 @@ public class AddTripViewModel extends ViewModel implements AppComponent.Injectab
 
     private Trip buildTrip(){
         Trip trip = new Trip();
-        trip.traveling_to_state = mToState;
-        trip.traveling_to_city = mToLocal;
-        trip.traveling_from_state = mFromState;
-        trip.traveling_from_city = mFromLocal;
-        trip.phone_no = mPhoneNo;
-        trip.posted_on = System.currentTimeMillis();
-        trip.time_updated = System.currentTimeMillis();
-        trip.traveling_date = mTravelDate;
-        trip.user_id = mUserId;
+        trip.setTraveling_to_state(mToState);
+        trip.setTraveling_to_city(mToLocal);
+        trip.setTraveling_from_state(mFromState);
+        trip.setTraveling_from_city(mFromLocal);
+        trip.setPhone_no(mPhoneNo);
+        trip.setPosted_on(System.currentTimeMillis());
+        trip.setTime_updated(System.currentTimeMillis());
+        trip.setTraveling_date(mTravelDate);
+        trip.setUser_id(mUserId);
         return trip;
     }
 }

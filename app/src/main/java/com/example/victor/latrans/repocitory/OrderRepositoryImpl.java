@@ -58,7 +58,8 @@ public class OrderRepositoryImpl implements OrderRepository{
 
             @Override
             protected boolean shouldFetch(@Nullable List<Request> data) {
-                return true;
+                //return true;
+                return data == null || data.isEmpty() || repoListRateLimit.shouldFetch("order");
             }
 
             @NonNull
@@ -100,6 +101,35 @@ public class OrderRepositoryImpl implements OrderRepository{
             @Override
             protected LiveData<ApiResponse<Request>> createCall() {
                 return mAPIService.postResquest(userId, request);
+            }
+        }.asLiveData();
+    }
+
+    @Override
+    public LiveData<Resource<List<Request>>> getRequestForUser(long userId) {
+        mAPIService = ServiceGenerator.createService(APIService.class,"", "");
+        return new NetworkBoundResource<List<Request>, RequestResponse>(appExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull RequestResponse item) {
+                mAppDatabase.orderDao().insertListRequest(item.getRequest());
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable List<Request> data) {
+                return data == null || data.isEmpty() || repoListRateLimit.shouldFetch(String.valueOf(userId));
+               // return true;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Request>> loadFromDb() {
+                return mAppDatabase.orderDao().findRequestForUser(userId);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<RequestResponse>> createCall() {
+                return mAPIService.getRequestForUser(userId);
             }
         }.asLiveData();
     }

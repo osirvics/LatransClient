@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -37,6 +38,8 @@ public class ConversationActivity extends BaseActivity implements LifecycleRegis
     private final LifecycleRegistry lifecycleRegistry = new LifecycleRegistry(this);
     @BindView(R.id.recycler_view_conversation)
     RecyclerView mRecyclerViewConverstaion;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     ConversationViewModel mConversationViewModel;
     ConversationAdapter mConversationAdapter;
     LottieAnimationView animationView;
@@ -67,6 +70,7 @@ public class ConversationActivity extends BaseActivity implements LifecycleRegis
     }
 
     private void setUpView(){
+        mToolbar.setTitle(getString(R.string.conversation_activity_name));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerViewConverstaion.setLayoutManager(mLayoutManager);
         mRecyclerViewConverstaion.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));

@@ -49,6 +49,8 @@ public class LatransFirebaseMessagingService extends FirebaseMessagingService {
     private static final String JSON_KEY_TIME = "time_sent";
     private static final String JSON_KEY_SENDER_FIRST_NAME = "sender_first_name";
     private static final String JSON_KEY_SENDER_LAST_NAME = "sender_last_name";
+    private static final String JSON_KEY_RECIPIENT_FIRST_NAME = "recipient_first_name";
+    private static final String JSON_KEY_RECIPIENT_LAST_NAME = "recipient_last_name";
     private static final String JSON_KEY_SENDER_PICTURE = "sender_picture";
     private static final String JSON_KEY_CONVERSATION_ID = "conversation_id";
     private static final String JSON_KEY_SENT_STATUS = "sent_status";
@@ -128,19 +130,19 @@ public class LatransFirebaseMessagingService extends FirebaseMessagingService {
         long time_updated = Long.parseLong(data.get(JSON_KEY_TRIP_TIME_UPDATED));
 
         Trip trip = new Trip();
-        trip.id = trip_id;
-        trip.user_id = user_id;
-        trip.posted_on = posted_on;
-        trip.time_updated = time_updated;
-        trip.traveling_from_state = data.get(JSON_KEY_TRIP_FROM_STATE);
-        trip.traveling_from_city = data.get(JSON_KEY_TRIP_FROM_CITY);
-        trip.traveling_to_state = data.get(JSON_KEY_TRIP_TO_STATE);
-        trip.traveling_to_city = data.get(JSON_KEY_TRIP_TO_CITY);
-        trip.phone_no = data.get(JSON_KEY_TRIP_PHONE_NO);
-        trip.traveling_date = data.get(JSON_KEY_TRIP_TRAVELLING_DATE);
-        trip.profile_image = data.get(JSON_KEY_TRIP_PROFILE_IMAGE);
-        trip.user_first_name = data.get(JSON_KEY_TRIP_USER_FIRST_NAME);
-        trip.user_last_name = data.get(JSON_KEY_TRIP_USER_LAST_NAME);
+        trip.setId(trip_id);
+        trip.setUser_id(user_id);
+        trip.setPosted_on(posted_on);
+        trip.setTime_updated(time_updated);
+        trip.setTraveling_from_state(data.get(JSON_KEY_TRIP_FROM_STATE));
+        trip.setTraveling_from_city(data.get(JSON_KEY_TRIP_FROM_CITY));
+        trip.setTraveling_to_state(data.get(JSON_KEY_TRIP_TO_STATE));
+        trip.setTraveling_to_city(data.get(JSON_KEY_TRIP_TO_CITY));
+        trip.setPhone_no(data.get(JSON_KEY_TRIP_PHONE_NO));
+        trip.setTraveling_date(data.get(JSON_KEY_TRIP_TRAVELLING_DATE));
+        trip.setProfile_image(data.get(JSON_KEY_TRIP_PROFILE_IMAGE));
+        trip.setUser_first_name(data.get(JSON_KEY_TRIP_USER_FIRST_NAME));
+        trip.setUser_last_name(data.get(JSON_KEY_TRIP_USER_LAST_NAME));
         mAppExecutors.diskIO().execute(() -> mAppDatabase.tripDao().insertTrip(trip));
 
     }
@@ -153,22 +155,22 @@ public class LatransFirebaseMessagingService extends FirebaseMessagingService {
         long time_updated = Long.parseLong(data.get(JSON_KEY_ORDER_TIME_UPDATED));
 
         Request request = new Request();
-        request.id  = order_id;
-        request.user_id = user_id;
-        request.posted_on = posted_on;
-        request.time_updated = time_updated;
-        request.delivery_state = data.get(JSON_KEY_ORDER_DELIVERY_STATE);
-        request.delivery_city = data.get(JSON_KEY_ORDER_DELIVERY_CITY);
-        request.item_location_state = data.get(JSON_KEY_ORDER_ITEM_LOCATION_STATE);
-        request.item_location_city = data.get(JSON_KEY_ORDER_ITEM_LOCATION_CITY);
-        request.offer_amount = data.get(JSON_KEY_ORDER_OFFER_AMOUNT);
-        request.deliver_before = data.get(JSON_KEY_ORDER_DELIVER_BEFORE);
-        request.picture = data.get(JSON_KEY_ORDER_PICTURE);
-        request.item_name = data.get(JSON_KEY_ORDER_ITEM_NAME);
-        request.profile_image = data.get(JSON_KEY_ORDER_PROFILE_IMAGE);
-        request.user_first_name = data.get(JSON_KEY_ORDER_USER_FIRST_NAME);
-        request.user_last_name = data.get(JSON_KEY_ORDER_USER_LAST_NAME);
-        request.phone_no = data.get(JSON_KEY_ORDER_PHONE_NO);
+        request.setId(order_id);
+        request.setUser_id(user_id);
+        request.setPosted_on(posted_on);
+        request.setTime_updated(time_updated);
+        request.setDelivery_state(data.get(JSON_KEY_ORDER_DELIVERY_STATE));
+        request.setDelivery_city(data.get(JSON_KEY_ORDER_DELIVERY_CITY));
+        request.setItem_location_state(data.get(JSON_KEY_ORDER_ITEM_LOCATION_STATE));
+        request.setItem_location_city(data.get(JSON_KEY_ORDER_ITEM_LOCATION_CITY));
+        request.setOffer_amount(data.get(JSON_KEY_ORDER_OFFER_AMOUNT));
+        request.setDeliver_before(data.get(JSON_KEY_ORDER_DELIVER_BEFORE));
+        request.setPicture(data.get(JSON_KEY_ORDER_PICTURE));
+        request.setItem_name(data.get(JSON_KEY_ORDER_ITEM_NAME));
+        request.setProfile_image(data.get(JSON_KEY_ORDER_PROFILE_IMAGE));
+        request.setUser_first_name(data.get(JSON_KEY_ORDER_USER_FIRST_NAME));
+        request.setUser_last_name(data.get(JSON_KEY_ORDER_USER_LAST_NAME));
+        request.setPhone_no(data.get(JSON_KEY_ORDER_PHONE_NO));
         mAppExecutors.diskIO().execute(() -> mAppDatabase.orderDao().insertRequest(request));
 
     }
@@ -184,33 +186,37 @@ public class LatransFirebaseMessagingService extends FirebaseMessagingService {
 
         Conversation conversation = new Conversation();
         conversation.setId(conversation_id);
-        conversation.setUserOneId(userone_id);
-        conversation.setUserTwoId(usertwo_id);
+        conversation.setUser_one_id(userone_id);
+        conversation.setUser_two_id(usertwo_id);
 
         long message_id = Integer.parseInt(data.get(JSON_KEY_MESSAGE_ID));
         long time = Long.parseLong(data.get(JSON_KEY_TIME));
 
         Message message = new Message();
-        message.id = message_id;
-        message.sender_id = userone_id;
-        message.recipient_id = usertwo_id;
-        message.message = data.get(JSON_KEY_MESSAGE);
-        message.time_sent = time;
-        message.sender_first_name = data.get(JSON_KEY_SENDER_FIRST_NAME);
-        message.sender_last_name = data.get(JSON_KEY_SENDER_LAST_NAME);
-        message.sender_picture = data.get(JSON_KEY_SENDER_PICTURE);
-        message.conversation_id = conversation_id;
-        message.sent_status = data.get(JSON_KEY_SENT_STATUS);
+        message.setId(message_id);
+        message.setSender_id(userone_id);
+        message.setRecipient_id(usertwo_id);
+        message.setMessage(data.get(JSON_KEY_MESSAGE));
+        message.setTime_sent(time);
+        message.setSender_first_name(data.get(JSON_KEY_SENDER_FIRST_NAME));
+        message.setSender_last_name(data.get(JSON_KEY_SENDER_LAST_NAME));
+        message.setSender_picture(data.get(JSON_KEY_SENDER_PICTURE));
+        message.setRecipient_first_name(data.get(JSON_KEY_RECIPIENT_FIRST_NAME));
+        message.setRecipient_last_name(data.get(JSON_KEY_RECIPIENT_LAST_NAME));
+        message.setConversation_id(conversation_id);
+        message.setSent_status(data.get(JSON_KEY_SENT_STATUS));
 
         ConversationAndMessage conversationAndMessage = new ConversationAndMessage();
-        conversationAndMessage.id = conversation_id;
-        conversationAndMessage.sender_id = userone_id;
-        conversationAndMessage.recipient_id = usertwo_id;
-        conversationAndMessage.message = data.get(JSON_KEY_MESSAGE);
-        conversationAndMessage.sender_first_name = data.get(JSON_KEY_SENDER_FIRST_NAME);
-        conversationAndMessage.sender_last_name = data.get(JSON_KEY_SENDER_LAST_NAME);
-        conversationAndMessage.sender_picture =  data.get(JSON_KEY_SENDER_PICTURE);
-        conversationAndMessage.time_sent = time;
+        conversationAndMessage.setId(conversation_id);
+        conversationAndMessage.setSender_id(userone_id);
+        conversationAndMessage.setRecipient_id(usertwo_id);
+        conversationAndMessage.setMessage(data.get(JSON_KEY_MESSAGE));
+        conversationAndMessage.setSender_first_name(data.get(JSON_KEY_SENDER_FIRST_NAME));
+        conversationAndMessage.setSender_last_name(data.get(JSON_KEY_SENDER_LAST_NAME));
+        conversationAndMessage.setRecipient_first_name(data.get(JSON_KEY_RECIPIENT_FIRST_NAME));
+        conversationAndMessage.setRecipient_last_name(data.get(JSON_KEY_RECIPIENT_LAST_NAME));
+        conversationAndMessage.setSender_picture(data.get(JSON_KEY_SENDER_PICTURE));
+        conversationAndMessage.setTime_sent(time);
 
 
         mAppExecutors.diskIO().execute(() -> {

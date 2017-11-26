@@ -77,7 +77,7 @@ public class SignupRepositoryImpl implements SignupRepository{
                if (response.isSuccessful()) {
 
                        mSharedPrefsHelper.setAccessToken(response.body().getToken());
-                       long id = response.body().getUser().id;
+                       long id = response.body().getUser().getId();
                        mSharedPrefsHelper.setUserId(id);
                        String user = "user";
                        String myTopic = user + String.valueOf(id);
@@ -138,7 +138,7 @@ public class SignupRepositoryImpl implements SignupRepository{
             @Override
             public void onResponse(Call<NewUser> call, Response<NewUser> response) {
                 if (response.isSuccessful()) {
-                    long id = response.body().getUser().id;
+                    long id = response.body().getUser().getId();
                     mSharedPrefsHelper.setUserId(id);
 
                     String myTopic = USER + String.valueOf(id);
@@ -183,8 +183,8 @@ public class SignupRepositoryImpl implements SignupRepository{
 
             @Override
             protected boolean shouldFetch(@Nullable List<Trip> data) {
-                //return data == null || data.isEmpty() || repoListRateLimit.shouldFetch("data");
-                return true;
+                return data == null || data.isEmpty() || repoListRateLimit.shouldFetch("data");
+
             }
 
             @NonNull
@@ -207,7 +207,33 @@ public class SignupRepositoryImpl implements SignupRepository{
         }.asLiveData();
     }
 
+    @Override
+    public LiveData<Resource<List<Trip>>> getTripsForUser(long user_id) {
+        mAPIService = ServiceGenerator.createService(APIService.class,"", "");
+        return new NetworkBoundResource<List<Trip>, TripResponse>(appExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull TripResponse item) {
+                mAppDatabase.tripDao().insertAllTrips(item.getTrips());
+            }
 
+            @Override
+            protected boolean shouldFetch(@Nullable List<Trip> data) {
+                return data == null || data.isEmpty() || repoListRateLimit.shouldFetch(String.valueOf(user_id));
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<List<Trip>> loadFromDb() {
+                return  mAppDatabase.tripDao().findTripsForUser(user_id);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<TripResponse>> createCall() {
+                return mAPIService.getTripsForUser(user_id);
+            }
+        }.asLiveData();
+    }
 
 
     public static class MyAsynTask extends AsyncTask<Void, Void, Void>{

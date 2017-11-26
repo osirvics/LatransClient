@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
     @BindView(R.id.link_signup)
     Button mSignupButton;
     @BindView(R.id.empty)ProgressBar mProgressBar;
-    @BindView(R.id.tem_logout)Button mTempLogout;
     LottieAnimationView animationView;
     private LoginViewModel mLoginViewModel;
 
@@ -98,7 +97,7 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
            case SUCCESS:
                enableRetry();
                Toast.makeText(LoginActivity.this, response.data.getToken(), Toast.LENGTH_SHORT).show();
-               Intent intent = ProfileActivity.newImtent(this);
+               Intent intent = ProfileActivity.Companion.newImtent(this);
                startActivity(intent);
                overridePendingTransition(R.anim.enter, R.anim.exit);
                break;

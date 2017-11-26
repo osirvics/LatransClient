@@ -44,21 +44,21 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
     @Override
     public void onBindViewHolder(OrderHolder holder, int position) {
         Request request = mRequests.get(position);
-        if (request.user_id == userId)
+        if (request.getUser_id() == userId)
             holder.mButtonDeliverItem.setVisibility(View.GONE);
-        Glide.with(mContext).load(request.profile_image).placeholder(R.drawable.ic_person_grey_600_24dp)
+        Glide.with(mContext).load(request.getProfile_image()).placeholder(R.drawable.ic_person_grey_600_24dp)
                 .crossFade().into(holder.mProfileImage);
-        Glide.with(mContext).load(request.picture).placeholder(R.drawable.nike)
+        Glide.with(mContext).load(request.getPicture()).placeholder(R.drawable.nike)
                 .crossFade().into(holder.mItemImage);
-        String deliveryLocation = request.delivery_city + ", " +  request.delivery_state;
+        String deliveryLocation = request.getDelivery_city() + ", " + request.getDelivery_state();
         holder.mDeliveryStateCity.setText(deliveryLocation);
-        String itemLocation = request.item_location_city + ", " + request.item_location_state;
+        String itemLocation = request.getItem_location_city() + ", " + request.getItem_location_state();
         holder.mItemLocationStateCity.setText(itemLocation);
-        holder.mDeliveryTime.setText(request.deliver_before);
-        holder.mTimePosted.setText(DateUtils.formatDateTime(request.posted_on));
-        holder.mItemName.setText(request.item_name);
-        holder.mRewardStartingAmount.setText(request.offer_amount);
-        holder.mUserName.setText(request.user_first_name);
+        holder.mDeliveryTime.setText(request.getDeliver_before());
+        holder.mTimePosted.setText(DateUtils.formatDateTime(request.getPosted_on()));
+        holder.mItemName.setText(request.getItem_name());
+        holder.mRewardStartingAmount.setText(request.getOffer_amount());
+        holder.mUserName.setText(request.getUser_first_name());
 
 
     }

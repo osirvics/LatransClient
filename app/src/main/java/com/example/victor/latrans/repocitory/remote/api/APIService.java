@@ -26,9 +26,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 
-/**
- * Created by Victor on 09/08/2017.
- */
+
 
 public interface APIService {
     @GET("login")
@@ -40,6 +38,10 @@ public interface APIService {
     @Headers({"Accept: application/json"})
     @POST("trips/{user_id}/new")
     LiveData<ApiResponse<Trip>> postTrips(@Body Trip trip, @Path("user_id") long user_id);
+
+    @GET("trips/{user_id}/users'")
+    LiveData<ApiResponse<TripResponse>> getTripsForUser(@Path("user_id") long user_id);
+
 
     @GET("conversations/{conversation_id}/messages")
     LiveData<ApiResponse<MessageResponse>> getMessagesInConversation(@Path("conversation_id") long conversation_id);
@@ -68,6 +70,9 @@ public interface APIService {
     @Headers({"Accept: application/json"})
     @POST("requests/{user_id}/new")
     LiveData<ApiResponse<Request>> postResquest(@Path("user_id") long user_id, @Body Request request);
+
+    @GET("requests/{user_id}/users")
+    LiveData<ApiResponse<RequestResponse>> getRequestForUser(@Path("user_id") long user_id);
 
     @POST("oauth/{provider}")
     Call<Token> postOauthCode(@Body Oauth oauth, @Path("provider") String user);

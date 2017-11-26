@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -61,6 +62,8 @@ public class AddTripActivity extends AppCompatActivity implements DatePickerDial
     @BindView(R.id.add_trip_button)
     Button mButtonPost;
     @BindView(R.id.phone_number) EditText mEditTextPhoneNumber;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     AddTripViewModel mAddTripViewModel;
     CustomSpinnerAdapter mCustomSpinnerAdapter;
     CustomSpinnerAdapter mLocalAdapter;
@@ -95,8 +98,8 @@ public class AddTripActivity extends AppCompatActivity implements DatePickerDial
         switch (user.status){
             case SUCCESS:
                 if (user.data != null){
-                    mAddTripViewModel.mPhoneNo = user.data.phone_no;
-                    mAddTripViewModel.mUserId = user.data.id;
+                    mAddTripViewModel.mPhoneNo = user.data.getPhone_no();
+                    mAddTripViewModel.mUserId = user.data.getId();
                     mEditTextPhoneNumber.setText(mAddTripViewModel.mPhoneNo);
                 }
                 break;
@@ -184,6 +187,7 @@ public class AddTripActivity extends AppCompatActivity implements DatePickerDial
         mSpinnerStateFrom.setAdapter( mStateSpinnerAdapterFrom);
     }
     private void setListener(){
+        mToolbar.setTitle(getString(R.string.add_trip_activity_name));
         mSpinnerStateTo.setOnItemSelectedListener(this);
         mSpinnerLocalTo.setOnItemSelectedListener(this);
         mSpinnerStateFrom.setOnItemSelectedListener(this);

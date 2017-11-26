@@ -26,6 +26,9 @@ public interface OrderDao {
     @Query("select * from request where id = :id")
     LiveData<Request> findARequestById(long id);
 
+    @Query("select * from request where user_id = :user_id ORDER BY id DESC")
+    LiveData<List<Request>> findRequestForUser(long user_id);
+
     @Query("select * from request where deliver_before = :deliver_before")
     LiveData<List<Request>> findARequestByDeliveryDate(String deliver_before);
 

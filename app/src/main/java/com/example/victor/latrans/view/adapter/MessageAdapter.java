@@ -88,7 +88,7 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public int getItemViewType(int position) {
         Message message = mMessages.get(position);
-        if(message.sender_id == mSenderId) return VIEW_TYPE_MESSAGE_SENT;
+        if(message.getSender_id() == mSenderId) return VIEW_TYPE_MESSAGE_SENT;
         else return VIEW_TYPE_MESSAGE_RECEIVED;
     }
 
@@ -103,11 +103,12 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
 
         private void bind(Message message){
-            mTextViewMessageBody.setText(message.message);
-            mTextViewSentTime.setText(String.valueOf(DateUtils.formatDateTime(message.time_sent)));
-            if(null != message.sent_status){
-                if(message.sent_status.contains("sent")){
-                    mImageViewReplyStatus.setImageResource(R.drawable.ic_message_sent);
+            mTextViewMessageBody.setText(message.getMessage());
+            mTextViewSentTime.setText(String.valueOf(DateUtils.formatDateTime(message.getTime_sent())));
+            if(null != message.getSent_status()){
+                String status = message.getSent_status();
+                if(status.contains("pending_delivery")){
+                    mImageViewReplyStatus.setImageResource(R.drawable.ic_message_delivery_waiting_18dp);
                 }
             }
         }
@@ -124,9 +125,9 @@ public class MessageAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ButterKnife.bind(this, itemView);
         }
         private void bind(Message message){
-            mTextViewSenderName.setText(message.sender_first_name);
-            mTextViewSenderMessage.setText(message.message);
-            mTextViewSenderTime.setText(String.valueOf(DateUtils.formatDateTime(message.time_sent)));
+            mTextViewSenderName.setText(message.getSender_first_name());
+            mTextViewSenderMessage.setText(message.getMessage());
+            mTextViewSenderTime.setText(String.valueOf(DateUtils.formatDateTime(message.getTime_sent())));
 
 
         }

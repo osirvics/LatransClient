@@ -34,18 +34,21 @@
         <activity
             android:name=".view.ui.trip.TripActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".view.ui.order.OrderActivity">
+        <activity android:name=".view.ui.order.OrderActivity"
+                  android:theme="@style/AppTheme.Light">
         </activity>
-        <activity android:name=".view.ui.addtrip.PostActivity">
+        <activity android:name=".view.ui.addtrip.PostActivity"
+                  android:theme="@style/AppTheme.Light">
         </activity>
-        <activity android:name=".view.ui.message.MessageActivity">
+        <activity android:name=".view.ui.message.MessageActivity"
+                  android:theme="@style/AppTheme.Light">
         </activity>
         <activity
             android:name=".view.ui.profile.ProfileActivity"
@@ -63,7 +66,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".view.ui.message.ConversationActivity">
+        <activity android:name=".view.ui.message.ConversationActivity"
+                  android:theme="@style/AppTheme.Light">
         </activity>
         <activity
             android:name=".view.ui.profile.EditProfileActivity"

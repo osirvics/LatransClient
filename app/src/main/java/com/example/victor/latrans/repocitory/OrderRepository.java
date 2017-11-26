@@ -12,6 +12,8 @@ public interface OrderRepository {
 
     LiveData<Resource<List<Request>>> getRequest();
     LiveData<Resource<Request>> addOrderRequest(long userId, Request request);
+    LiveData<Resource<List<Request>>> getRequestForUser(long userId);
+
 
 
 }

@@ -170,6 +170,7 @@ public class MessageRepositoryImpl implements MessageRepository {
             protected void saveCallResult(@NonNull NewUser item) {
                 Timber.e("save called here");
                 mAppDatabase.userDao().insertUser(item.getUser());
+                mSharedPrefsHelper.setUserProfileUrl(item.getUser().getPicture());
             }
 
             @Override
@@ -279,20 +280,22 @@ public class MessageRepositoryImpl implements MessageRepository {
 
         for (Message message: messages){
             Conversation conversation = new Conversation();
-            conversation.id = message.conversation_id;
-            conversation.user_one_id = message.sender_id;
-            conversation.user_two_id = message.recipient_id;
+            conversation.setId(message.getConversation_id());
+            conversation.setUser_one_id(message.getSender_id());
+            conversation.setUser_two_id(message.getRecipient_id());
             conversationList.add(conversation);
 
             ConversationAndMessage conversationAndMessage = new ConversationAndMessage();
-            conversationAndMessage.id = message.conversation_id;
-            conversationAndMessage.sender_id = message.sender_id;
-            conversationAndMessage.recipient_id = message.recipient_id;
-            conversationAndMessage.sender_first_name = message.sender_first_name;
-            conversationAndMessage.sender_last_name = message.sender_last_name;
-            conversationAndMessage.sender_picture = message.sender_picture;
-            conversationAndMessage.time_sent = message.time_sent;
-            conversationAndMessage.message = message.message;
+            conversationAndMessage.setId(message.getConversation_id());
+            conversationAndMessage.setSender_id(message.getSender_id());
+            conversationAndMessage.setRecipient_id(message.getRecipient_id());
+            conversationAndMessage.setSender_first_name(message.getSender_first_name());
+            conversationAndMessage.setSender_last_name(message.getSender_last_name());
+            conversationAndMessage.setRecipient_first_name(message.getRecipient_first_name());
+            conversationAndMessage.setRecipient_last_name(message.getRecipient_last_name());
+            conversationAndMessage.setSender_picture(message.getSender_picture());
+            conversationAndMessage.setTime_sent(message.getTime_sent());
+            conversationAndMessage.setMessage(message.getMessage());
             messageLis.add(conversationAndMessage);
 
         }

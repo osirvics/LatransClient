@@ -1,12 +1,12 @@
 package com.example.victor.latrans.view.ui.order;
 
-import android.arch.lifecycle.LifecycleRegistry;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -36,11 +36,13 @@ public class OrderActivity extends BaseActivity  {
         return mIntent;
     }
 
-    private final LifecycleRegistry mLifecycleRegistry = new LifecycleRegistry(this);
+
     private OrderViewModel mOrderViewModel;
     private LottieAnimationView animationView;
     @BindView(R.id.recycler_view)
-     RecyclerView mRecyclerOrderView;
+    RecyclerView mRecyclerOrderView;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     private OrderAdapter mOrderAdapter;
     @Inject
     SharedPrefsHelper mSharedPrefsHelper;
@@ -58,6 +60,7 @@ public class OrderActivity extends BaseActivity  {
     }
 
     private void setUpView(){
+        mToolbar.setTitle(getString(R.string.order_activity_name));
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerOrderView.setLayoutManager(mLayoutManager);
         mRecyclerOrderView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
@@ -120,9 +123,6 @@ public class OrderActivity extends BaseActivity  {
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 
-    @Override
-    public LifecycleRegistry getLifecycle() {
-        return mLifecycleRegistry;
-    }
+
 
 }

@@ -17,5 +17,7 @@ public interface SignupRepository {
     LiveData<Resource<NewUser>> createUser(Registration registration);
     LiveData<Resource<NewUser>> getToken(String username, String password);
     LiveData<Resource<List<Trip>>> getTrips();
+    LiveData<Resource<List<Trip>>> getTripsForUser(long user_id);
+
 
 }
