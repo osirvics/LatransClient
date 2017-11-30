@@ -28,6 +28,9 @@ public interface ConversationDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertList(List<Conversation> conversations);
 
+    @Query("select * from conversation where user_one_id = :userId OR user_two_id = :userId  ")
+    LiveData<Conversation> getAConversationByUserId(long userId);
+
     @Query("DELETE FROM conversation")
     void deleteAll();
 

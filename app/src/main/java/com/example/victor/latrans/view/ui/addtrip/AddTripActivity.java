@@ -9,6 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -27,8 +29,10 @@ import com.example.victor.latrans.repocitory.local.db.entity.User;
 import com.example.victor.latrans.repocitory.local.model.Local;
 import com.example.victor.latrans.repocitory.local.model.Region;
 import com.example.victor.latrans.repocitory.local.model.State;
+import com.example.victor.latrans.util.SharedPrefsHelper;
 import com.example.victor.latrans.view.adapter.CustomSpinnerAdapter;
 import com.example.victor.latrans.view.ui.App;
+import com.example.victor.latrans.view.ui.login.LoginActivity;
 import com.example.victor.latrans.view.ui.trip.TripActivity;
 
 import java.text.SimpleDateFormat;
@@ -37,11 +41,14 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AddTripActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, AdapterView.OnItemSelectedListener {
+public class AddTripActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
+        AdapterView.OnItemSelectedListener {
 
     public static Intent newIntent(Context context) {
         Intent mIntent = new Intent(context, AddTripActivity.class);
@@ -72,6 +79,8 @@ public class AddTripActivity extends AppCompatActivity implements DatePickerDial
     private LottieAnimationView animationView;
     private List<State> states;
     private List<Local> mLocals;
+    @Inject
+    SharedPrefsHelper mSharedPrefsHelper;
 
 
     @Override
@@ -79,14 +88,30 @@ public class AddTripActivity extends AppCompatActivity implements DatePickerDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_trip);
         ButterKnife.bind(this);
-        setListener();
+        ((App) getApplication()).getAppComponent().inject(this);
+         checkLoginStatus();
+    }
+
+    void checkLoginStatus(){
+        if(mSharedPrefsHelper.getUserId() == -1){
+            Intent intent = LoginActivity.newIntent(this);
+            startActivity(intent);
+        }
+        else {
+           populateView();
+        }
+    }
+
+    void populateView(){
         initLoadingAnim();
+        setListener();
         App app = (App) this.getApplication();
         initViewModel(app);
     }
 
     private void initViewModel(App app){
-        mAddTripViewModel = ViewModelProviders.of(this, new AppFactory(app)).get(AddTripViewModel.class);
+        mAddTripViewModel = ViewModelProviders.of(this, new AppFactory(app))
+                .get(AddTripViewModel.class);
         subscribeToRegionStreams(mAddTripViewModel);
         initUserData(mAddTripViewModel);
     }
@@ -111,28 +136,41 @@ public class AddTripActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void subscribeToTripResponse(){
+        mButtonPost.setEnabled(false);
         mAddTripViewModel.getResponse().observe(this, this::handelTripResponse);
     }
 
     private void handelTripResponse(Resource<Trip> tripResource){
-        stopAnim();
         switch (tripResource.status){
             case SUCCESS:
                 //if(tripResource.data!= null){
                     navigateToTripActivity();
-                    Toast.makeText(this, getString(R.string.post_success), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.post_success), Toast.LENGTH_SHORT)
+                            .show();
                // }
                 break;
             case MESSAGE:
+                Toast.makeText(this, getString(R.string.post_error), Toast.LENGTH_SHORT)
+                        .show();
+                break;
+            case ERROR:
+                Toast.makeText(this, getString(R.string.post_error), Toast.LENGTH_SHORT)
+                        .show();
                 break;
 
         }
+        mButtonPost.setEnabled(true);
+        stopAnim();
+
     }
 
     @OnClick(R.id.add_trip_button)
     void postTrip(){
-        startAnim();
-        subscribeToTripResponse();
+        if(validate()){
+            startAnim();
+            subscribeToTripResponse();
+        }
+
     }
 
     @OnClick(R.id.date_linearlayout)
@@ -187,7 +225,9 @@ public class AddTripActivity extends AppCompatActivity implements DatePickerDial
         mSpinnerStateFrom.setAdapter( mStateSpinnerAdapterFrom);
     }
     private void setListener(){
-        mToolbar.setTitle(getString(R.string.add_trip_activity_name));
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.add_trip_activity_name));
         mSpinnerStateTo.setOnItemSelectedListener(this);
         mSpinnerLocalTo.setOnItemSelectedListener(this);
         mSpinnerStateFrom.setOnItemSelectedListener(this);
@@ -239,7 +279,7 @@ public class AddTripActivity extends AppCompatActivity implements DatePickerDial
                 mSpinnerLocalFrom.setAdapter(mLocalAdapterFrom);
                 break;
             case R.id.local_spinner_from:
-                mAddTripViewModel.mFromLocal =mLocals.get(i).getName();
+                mAddTripViewModel.mFromLocal = mLocals.get(i).getName();
                 break;
         }
     }
@@ -265,5 +305,29 @@ public class AddTripActivity extends AppCompatActivity implements DatePickerDial
     void stopAnim(){
         animationView.cancelAnimation();
         animationView.setVisibility(View.GONE);
+    }
+    private boolean validate(){
+        String travelDate = mAddTripViewModel.mTravelDate;
+        if(travelDate == null || travelDate.length() == 0){
+            mEditTextDate.setError(getString(R.string.error_travel_date));
+            Toast.makeText(this, getString(R.string.error_travel_date), Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

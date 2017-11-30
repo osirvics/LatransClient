@@ -95,6 +95,7 @@ dependencies {
     implementation 'com.github.ganfra:material-spinner:2.0.0'
     implementation 'com.afollestad.material-dialogs:commons:0.9.4.7'
     implementation 'de.hdodenhof:circleimageview:2.1.0'
+    implementation 'me.grantland:autofittextview:0.2.+'
     implementation("com.github.hotchemi:permissionsdispatcher:" + rootProject.permissionDispatcherVersion) {
         // if you don't use android.app.Fragment you can exclude support for them
         exclude module: "support-v13"

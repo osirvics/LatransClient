@@ -15,6 +15,8 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -38,7 +40,9 @@ import com.example.victor.latrans.repocitory.local.model.Local;
 import com.example.victor.latrans.repocitory.local.model.Region;
 import com.example.victor.latrans.repocitory.local.model.State;
 import com.example.victor.latrans.repocitory.local.model.UploadResponse;
+import com.example.victor.latrans.util.SharedPrefsHelper;
 import com.example.victor.latrans.view.ui.App;
+import com.example.victor.latrans.view.ui.login.LoginActivity;
 import com.example.victor.latrans.view.ui.order.OrderActivity;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
@@ -52,6 +56,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,21 +103,38 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
     private LottieAnimationView animationView;
     MaterialDialog dialog;
     MaterialDialog.Builder builder;
-
+    @Inject
+    SharedPrefsHelper mSharedPrefsHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_order);
         ButterKnife.bind(this);
+        ((App) getApplication()).getAppComponent().inject(this);
+        checkLoginStatus();
+
+    }
+
+    void checkLoginStatus(){
+        if(mSharedPrefsHelper.getUserId() == -1){
+            Intent intent = LoginActivity.newIntent(this);
+            startActivity(intent);
+        }
+        else {
+            populateView();
+        }
+    }
+
+    void populateView(){
         App app = (App) this.getApplication();
         initSetup();
         initLoadingAnim();
         initProgressDialog();
         initViewModel(app);
         initListner();
-
     }
+
 
 
     private void initViewModel(App app){
@@ -141,10 +164,10 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
     }
 
     private void handleUploadResponse(Resource<UploadResponse> responseResource){
+        mPostButton.setEnabled(true);
         if(responseResource!= null){
             if(null != responseResource.data.getLong()){
                 Integer progress =  (int) (long) responseResource.data.getLong();
-                startAnim();
             }
             if(null != responseResource.data.mState){
                 TransferState state = responseResource.data.mState;
@@ -153,7 +176,6 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
                       postOrder();
                       break;
                   case FAILED:
-                      stopAnim();
                       Toast.makeText(this,getString(R.string.profile_updated_error), Toast.LENGTH_SHORT).show();
                       break;
 
@@ -161,8 +183,6 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
               }
             }
             if(null != responseResource.data.mException){
-              mPostButton.setEnabled(true);
-              stopAnim();
                 Toast.makeText(this,getString(R.string.profile_updated_error), Toast.LENGTH_SHORT).show();
             }
 
@@ -185,7 +205,11 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
                 overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
                 break;
             case MESSAGE:
-                Toast.makeText(this, getString(R.string.profile_updated_error), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.post_error), Toast.LENGTH_SHORT).show();
+                break;
+            case ERROR:
+                Toast.makeText(this, getString(R.string.post_error), Toast.LENGTH_SHORT)
+                        .show();
                 break;
 
         }
@@ -234,7 +258,9 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
 
 
     private void initSetup(){
-        mToolbar.setTitle(getString(R.string.add_order_activity_name));
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTitle(getString(R.string.add_order_activity_name));
         mSpinnerDeliveryState = findViewById(R.id.spinner_delivery_state);
         mSpinnerDeliveryCity = findViewById(R.id.spinner_delivery_city);
         mSpinnerItemState = findViewById(R.id.spinner_item_location_state);
@@ -521,4 +547,21 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
         animationView.cancelAnimation();
         animationView.setVisibility(View.GONE);
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
 }

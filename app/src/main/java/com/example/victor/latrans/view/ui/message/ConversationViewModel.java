@@ -7,6 +7,7 @@ import android.arch.lifecycle.ViewModel;
 import com.example.victor.latrans.dependency.AppComponent;
 import com.example.victor.latrans.google.Resource;
 import com.example.victor.latrans.repocitory.MessageRepository;
+import com.example.victor.latrans.repocitory.SignupRepository;
 import com.example.victor.latrans.repocitory.local.db.entity.ConversationAndMessage;
 import com.example.victor.latrans.util.SharedPrefsHelper;
 
@@ -18,6 +19,8 @@ import javax.inject.Inject;
 public class ConversationViewModel extends ViewModel implements AppComponent.Injectable{
     @Inject
     MessageRepository mMessageRepository;
+    @Inject
+    SignupRepository mSignupRepository;
     @Inject
     SharedPrefsHelper mSharedPrefsHelper;
 
@@ -39,4 +42,11 @@ public class ConversationViewModel extends ViewModel implements AppComponent.Inj
         //TODO fix userId
         mLiveData = mMessageRepository.getMessagesAndConversation(mSharedPrefsHelper.getUserId());
     }
+
+    public long getUserId(){
+        return mSignupRepository.getUserId();
+    }
+
+
+
 }

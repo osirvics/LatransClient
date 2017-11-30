@@ -11,9 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.victor.latrans.R;
 import com.example.victor.latrans.repocitory.local.db.entity.Request;
 import com.example.victor.latrans.util.DateUtils;
+import com.example.victor.latrans.util.OnItemClick;
 
 import java.util.List;
 
@@ -26,12 +31,14 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
     private List<Request> mRequests;
     private Context mContext;
     private long userId;
+    private OnItemClick mOnItemClick;
 
 
-    public OrderAdapter(List<Request> requests, Context context, long userId) {
+    public OrderAdapter(List<Request> requests, Context context, long userId, OnItemClick onItemClick) {
         this.mRequests = requests;
         this.mContext = context;
         this.userId = userId;
+        this.mOnItemClick = onItemClick;
     }
 
     @Override
@@ -46,10 +53,12 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
         Request request = mRequests.get(position);
         if (request.getUser_id() == userId)
             holder.mButtonDeliverItem.setVisibility(View.GONE);
-        Glide.with(mContext).load(request.getProfile_image()).placeholder(R.drawable.ic_person_grey_600_24dp)
-                .crossFade().into(holder.mProfileImage);
-        Glide.with(mContext).load(request.getPicture()).placeholder(R.drawable.nike)
-                .crossFade().into(holder.mItemImage);
+//        Glide.with(mContext).load(request.getProfile_image()).placeholder(R.drawable.ic_person_grey_600_24dp)
+//                .crossFade().into(holder.mProfileImage);
+//        Glide.with(mContext).load(request.getPicture()).placeholder(R.drawable.nike)
+//                .crossFade().into(holder.mItemImage);
+        loadItemImage(request.getPicture(), holder);
+        loadImage(request.getProfile_image(), holder);
         String deliveryLocation = request.getDelivery_city() + ", " + request.getDelivery_state();
         holder.mDeliveryStateCity.setText(deliveryLocation);
         String itemLocation = request.getItem_location_city() + ", " + request.getItem_location_state();
@@ -57,7 +66,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
         holder.mDeliveryTime.setText(request.getDeliver_before());
         holder.mTimePosted.setText(DateUtils.formatDateTime(request.getPosted_on()));
         holder.mItemName.setText(request.getItem_name());
-        holder.mRewardStartingAmount.setText(request.getOffer_amount());
+        holder.mRewardStartingAmount.setText(mContext.getString(R.string.reward_amount,request.getOffer_amount()) );
         holder.mUserName.setText(request.getUser_first_name());
 
 
@@ -76,7 +85,7 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
         notifyDataSetChanged();
     }
 
-    public class OrderHolder extends RecyclerView.ViewHolder {
+    public class OrderHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @BindView(R.id.user_name) TextView mUserName;
         @BindView(R.id.profile_image)
         CircleImageView mProfileImage;
@@ -92,13 +101,72 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.OrderHolder>
         TextView mItemName;
         @BindView(R.id.dleivery_time)
         TextView mDeliveryTime;
+        //RatingView amount;
         @BindView(R.id.button_deliver_item)
         Button mButtonDeliverItem;
         @BindView(R.id.reward_starting_amount)
         TextView mRewardStartingAmount;
+
         public OrderHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+          //  amount = (RatingView)itemView.findViewById(R.id.floatingActionButton);
+            itemView.setOnClickListener(this);
+            mButtonDeliverItem.setOnClickListener(this);
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.button_deliver_item:
+                    final long user_id = mRequests.get(getLayoutPosition()).getUser_id();
+                        //passing -1 here because we can't tell if a conversation exists between the users
+                        mOnItemClick.onClick(-1, user_id);
+                        break;
+
+            }
         }
     }
+    void loadItemImage(String url, OrderHolder holder){
+                Glide.with(mContext).load(url)
+                .placeholder(R.color.placeholder_grey_20)
+                .fitCenter()
+                        .crossFade()
+                        .animate(android.R.anim.fade_in)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .into(holder.mItemImage);
+    }
+    void loadImage(String url, OrderHolder holder) {
+        Glide.with(mContext).load(url)
+                .placeholder(R.color.placeholder_grey_20)
+                .fitCenter()
+                .crossFade()
+                .animate(android.R.anim.fade_in)
+                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
+                .listener(new RequestListener<String, GlideDrawable>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        return false;
+                    }
+                })
+                .into(holder.mProfileImage);
+    }
+
 }

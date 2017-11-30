@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.victor.latrans.BaseActivity;
@@ -17,9 +16,11 @@ import com.example.victor.latrans.dependency.AppFactory;
 import com.example.victor.latrans.google.Resource;
 import com.example.victor.latrans.repocitory.local.db.entity.Request;
 import com.example.victor.latrans.util.DividerItemDecoration;
+import com.example.victor.latrans.util.OnItemClick;
 import com.example.victor.latrans.util.SharedPrefsHelper;
 import com.example.victor.latrans.view.adapter.OrderAdapter;
 import com.example.victor.latrans.view.ui.App;
+import com.example.victor.latrans.view.ui.message.MessageActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OrderActivity extends BaseActivity  {
+public class OrderActivity extends BaseActivity implements OnItemClick {
 
     public static Intent newIntent(Context context) {
         Intent mIntent = new Intent(context, OrderActivity.class);
@@ -64,7 +65,7 @@ public class OrderActivity extends BaseActivity  {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerOrderView.setLayoutManager(mLayoutManager);
         mRecyclerOrderView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-        mOrderAdapter  = new OrderAdapter(new ArrayList<>(), this, mSharedPrefsHelper.getUserId());
+        mOrderAdapter  = new OrderAdapter(new ArrayList<>(), this, mSharedPrefsHelper.getUserId(), this);
         mRecyclerOrderView.setAdapter(mOrderAdapter);
 
     }
@@ -84,7 +85,7 @@ public class OrderActivity extends BaseActivity  {
             mOrderAdapter.addOrder(resource.data);
         }
         else {
-            Toast.makeText(this, "No orders found this time", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(this, "No orders found this time", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -124,5 +125,10 @@ public class OrderActivity extends BaseActivity  {
     }
 
 
-
+    @Override
+    public void onClick(long conversationId, long recipientId) {
+        Intent intent = MessageActivity.newMessageIntent(this, recipientId);
+        startActivity(intent);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
+    }
 }

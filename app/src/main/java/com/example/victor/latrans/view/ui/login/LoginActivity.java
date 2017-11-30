@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements LifecycleRegistr
        switch (response.status){
            case SUCCESS:
                enableRetry();
-               Toast.makeText(LoginActivity.this, response.data.getToken(), Toast.LENGTH_SHORT).show();
+              // Toast.makeText(LoginActivity.this, response.data.getToken(), Toast.LENGTH_SHORT).show();
                Intent intent = ProfileActivity.Companion.newImtent(this);
                startActivity(intent);
                overridePendingTransition(R.anim.enter, R.anim.exit);

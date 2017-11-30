@@ -77,13 +77,18 @@
     <string name="post_trip">Post</string>
     <string name="contact_phone_hint">Contact phone number</string>
     <string name="post_success">Trip added successfully</string>
+    <string name="post_error">Failed to complete post, please try again later</string>
+    <string name="error_travel_date">Please enter traveling date</string>
+    <string name="error_travel_date_short">Enter date</string>
 
 
 
     <!--Add order activity-->
-    <string name="order_item_name">Item name </string>
-    <string name="order_reward_price">Starting reward amount</string>
+    <string name="order_item_name">Enter item name </string>
+    <string name="order_reward_price">Enter reward amount</string>
     <string name="input_hint">Enter amount</string>
+    <string name="Message">Contact</string>
+    <string name="reward_amount">₦%1$s</string>
 
 
 

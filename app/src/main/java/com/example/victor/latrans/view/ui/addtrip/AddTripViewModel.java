@@ -14,6 +14,7 @@ import com.example.victor.latrans.util.SharedPrefsHelper;
 
 import javax.inject.Inject;
 
+import timber.log.Timber;
 
 
 public class AddTripViewModel extends ViewModel implements AppComponent.Injectable {
@@ -62,6 +63,7 @@ public class AddTripViewModel extends ViewModel implements AppComponent.Injectab
 
     private void postTrip(){
      mTripData = mPostRepository.postTrip(mSharedPrefsHelper.getUserId(), buildTrip());
+
     }
 
     private Trip buildTrip(){
@@ -70,6 +72,7 @@ public class AddTripViewModel extends ViewModel implements AppComponent.Injectab
         trip.setTraveling_to_city(mToLocal);
         trip.setTraveling_from_state(mFromState);
         trip.setTraveling_from_city(mFromLocal);
+        Timber.e("Traveling from city " + mFromLocal);
         trip.setPhone_no(mPhoneNo);
         trip.setPosted_on(System.currentTimeMillis());
         trip.setTime_updated(System.currentTimeMillis());

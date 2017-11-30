@@ -49,7 +49,7 @@ public class SharedPrefsHelper {
     }
 
     public long getUserId(){
-        return mSharedPreferences.getLong(PREF_KEY_CURRENT_USER_ID,0);
+        return mSharedPreferences.getLong(PREF_KEY_CURRENT_USER_ID,-1);
     }
 
     public void setUserProfileUrl(String url){

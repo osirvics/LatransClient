@@ -16,6 +16,7 @@ import com.example.victor.latrans.R
 import com.example.victor.latrans.dependency.AppFactory
 import com.example.victor.latrans.google.Resource
 import com.example.victor.latrans.repocitory.local.db.entity.Trip
+import com.example.victor.latrans.util.ActionDial
 import com.example.victor.latrans.util.DividerItemDecoration
 import com.example.victor.latrans.util.OnItemClick
 import com.example.victor.latrans.util.SharedPrefsHelper
@@ -26,7 +27,11 @@ import java.util.*
 import javax.inject.Inject
 
 
-class ProfileTripFragment : Fragment(), OnItemClick {
+class ProfileTripFragment : Fragment(), OnItemClick , ActionDial{
+    override fun dial(number: String, name: String) {
+        //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun onClick(conversationId: Long, recipientId: Long) {
         //TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
@@ -55,7 +60,7 @@ class ProfileTripFragment : Fragment(), OnItemClick {
         mRecyclerView.layoutManager = mLayoutManager
         //mRecyclerTripView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
-        mTripAdapter = TripAdapter(ArrayList(), activity,this, mSharedPrefsHelper.userId)
+        mTripAdapter = TripAdapter(ArrayList(), activity,this, this,mSharedPrefsHelper.userId)
         mRecyclerView.adapter = mTripAdapter
         startAnim()
     }

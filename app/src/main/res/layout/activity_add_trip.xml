@@ -6,7 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="@dimen/padding_normal"
     tools:context="com.example.victor.latrans.view.ui.addtrip.AddTripActivity">
+
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_view"
@@ -37,6 +39,8 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                app:titleTextColor="@color/black"
+                style="@style/ToolbarTheme"
                 android:layout_height="?android:attr/actionBarSize"
                 android:minHeight="?android:attr/actionBarSize"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
@@ -75,15 +79,14 @@
                     android:layout_height="wrap_content">
 
 
-
                     <TextView
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/padding_normal"
                         android:layout_marginStart="@dimen/padding_normal"
-                        android:layout_gravity="center_vertical"
                         android:text="@string/traveling_to_city"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:layout_height="wrap_content"/>
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
 
                     <android.support.v7.widget.AppCompatSpinner
                         android:layout_width="match_parent"
@@ -143,12 +146,12 @@
 
                     <TextView
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/padding_normal"
                         android:layout_marginStart="@dimen/padding_normal"
-                        android:layout_gravity="center_vertical"
                         android:text="@string/traveling_from"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:layout_height="wrap_content"/>
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
 
 
                     <android.support.v7.widget.AppCompatSpinner
@@ -202,11 +205,11 @@
 
                     <TextView
                         android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:clickable="false"
                         android:text="@string/date_of_travelling"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                        android:layout_height="wrap_content"/>
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body2"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"

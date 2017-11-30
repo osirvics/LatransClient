@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
 import com.example.victor.latrans.BaseActivity;
@@ -23,6 +22,7 @@ import com.example.victor.latrans.util.OnItemClick;
 import com.example.victor.latrans.util.SharedPrefsHelper;
 import com.example.victor.latrans.view.adapter.ConversationAdapter;
 import com.example.victor.latrans.view.ui.App;
+import com.example.victor.latrans.view.ui.login.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,16 +57,27 @@ public class ConversationActivity extends BaseActivity implements LifecycleRegis
         super.onCreate(savedInstanceState);
        // setContentView(R.layout.activity_conversation);
         ((App) getApplication()).getAppComponent().inject(this);
+        App app = (App) this.getApplication();
+        initViewModel(app);
         ButterKnife.bind(this);
         initLoadingAnim();
-        App app = (App) this.getApplication();
         setUpView();
-        initViewModel(app);
+        populateView();
+
     }
 
     private void initViewModel(App app){
         mConversationViewModel = ViewModelProviders.of(this, new AppFactory(app)).get(ConversationViewModel.class);
-        subscribeToDataStreams(mConversationViewModel);
+    }
+
+    private void populateView(){
+        if(mConversationViewModel.getUserId()== -1){
+            Intent intent = LoginActivity.newIntent(this);
+            startActivity(intent);
+        }
+        else {
+            subscribeToDataStreams(mConversationViewModel);
+        }
     }
 
     private void setUpView(){
@@ -94,7 +105,9 @@ public class ConversationActivity extends BaseActivity implements LifecycleRegis
                     mConversationAdapter.addConversation(listResource.data);
 
                 }
-                else   Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+                else  {
+                    //Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+                }
 //                break;
 //            case MESSAGE:
 //                stopAnim();

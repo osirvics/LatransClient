@@ -16,6 +16,7 @@ import com.example.victor.latrans.dependency.AppFactory
 import com.example.victor.latrans.google.Resource
 import com.example.victor.latrans.repocitory.local.db.entity.Request
 import com.example.victor.latrans.util.DividerItemDecoration
+import com.example.victor.latrans.util.OnItemClick
 import com.example.victor.latrans.util.SharedPrefsHelper
 import com.example.victor.latrans.view.adapter.OrderAdapter
 import com.example.victor.latrans.view.ui.App
@@ -25,7 +26,10 @@ import javax.inject.Inject
 
 
 
-class ProfileOrderFragment : Fragment() {
+class ProfileOrderFragment : Fragment(),OnItemClick {
+    override fun onClick(conversationId: Long, recipientId: Long) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     private lateinit var mOrderViewModel: ProfileOrderViewModel
     private lateinit var animationView: LottieAnimationView
@@ -52,7 +56,7 @@ class ProfileOrderFragment : Fragment() {
         val mLayoutManager = LinearLayoutManager(activity)
         recycler_view.layoutManager = mLayoutManager
         recycler_view.addItemDecoration(DividerItemDecoration(activity, LinearLayoutManager.VERTICAL))
-        mOrderAdapter = OrderAdapter(ArrayList(), activity, mSharedPrefsHelper.getUserId())
+        mOrderAdapter = OrderAdapter(ArrayList(), activity, mSharedPrefsHelper.getUserId(), this)
         recycler_view.adapter = mOrderAdapter
 
     }

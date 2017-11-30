@@ -2,21 +2,25 @@ package com.example.victor.latrans.util;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-
-
-
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.util.Log;
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.example.victor.latrans.R;
+
 import java.lang.reflect.Field;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Victor on 27/08/2017.
@@ -71,5 +75,30 @@ public class Util {
         } catch (IllegalAccessException e) {
             Log.e("ERROR ILLEGAL ALG", "Unable to change value of shift mode");
         }
+    }
+    public static void dialPhoneNumber(String phoneNumber, Context ctx) {
+        Intent intent = new Intent(Intent.ACTION_CALL);
+        intent.setData(Uri.parse("tel:" + phoneNumber));
+        if (intent.resolveActivity(ctx.getPackageManager()) != null) {
+            ctx.startActivity(intent);
+        }
+    }
+
+    public static void showCallDialogue(Context ctx, String fullname, String number){
+        new MaterialDialog.Builder(ctx)
+                .title(fullname)
+                .content("Call " + number +" ?")
+                .positiveText("CALL")
+                .negativeText("CANCEL")
+                .onAny((dialog, which) -> {
+                    switch (which){
+                        case POSITIVE:
+                            dialPhoneNumber(number, ctx);
+                            break;
+                        case NEGATIVE:
+                            break;
+                    }
+                }).show();
+
     }
 }

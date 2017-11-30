@@ -12,6 +12,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -22,6 +24,7 @@ import com.airbnb.lottie.LottieAnimationView;
 import com.example.victor.latrans.R;
 import com.example.victor.latrans.dependency.AppFactory;
 import com.example.victor.latrans.google.Resource;
+import com.example.victor.latrans.repocitory.local.db.entity.Conversation;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
 import com.example.victor.latrans.repocitory.local.db.entity.User;
 import com.example.victor.latrans.util.SharedPrefsHelper;
@@ -37,6 +40,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class MessageActivity extends AppCompatActivity implements LifecycleRegistryOwner {
     public static final String DIALOGUE_KEY = "key";
@@ -65,10 +69,13 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
     MessageViewModel mMessageViewModel;
     MessageAdapter mMessageAdapter;
     LottieAnimationView animationView;
+    @BindView(R.id.toolbar)
+    android.support.v7.widget.Toolbar mToolbar;
     long mConversationId = -1; //new message initialisation
     long mRecipeintId = -1; // existing conversation initialisation
     @Inject
     SharedPrefsHelper mSharedPrefsHelper;
+    LiveData<Resource<Conversation>> observer;
 
     @Override
     public LifecycleRegistry getLifecycle() {
@@ -80,29 +87,55 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
         ((App) getApplication()).getAppComponent().inject(this);
+        ButterKnife.bind(this);
+        App app = (App) this.getApplication();
+        initViewModel(app);
         Intent intent = getIntent();
         processIntent(intent);
-        ButterKnife.bind(this);
         initLoadingAnim();
-        App app = (App) this.getApplication();
         setUpView();
-        initViewModel(app, mConversationId, mRecipeintId);
+        getMessagesInConversation();
+
 
     }
     void processIntent(Intent intent){
-        if(intent.hasExtra(RECIPIENT_ID)){
+        if(intent.hasExtra(RECIPIENT_ID) && !intent.hasExtra(DIALOGUE_KEY)){
             mRecipeintId = getIntent().getLongExtra(RECIPIENT_ID, 0);
+            mMessageViewModel.recipientId = mRecipeintId;
+            Timber.e("Called Called");
+            // Required to check and get conversation if it exist between users
+            observer = mMessageViewModel.getConversation();
+            observer.observe(this, this::handleConversationResponse);
         }
         if (intent.hasExtra(DIALOGUE_KEY) && intent.hasExtra(RECIPIENT_ID)){
             mConversationId = intent.getLongExtra(DIALOGUE_KEY, 0);
             mRecipeintId = intent.getLongExtra(RECIPIENT_ID,0);
+            mMessageViewModel.recipientId = mRecipeintId;
         }
     }
 
-    private void initViewModel(App app, long conversationId, long recipientId) {
+
+
+    private void initViewModel(App app) {
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mMessageViewModel = ViewModelProviders.of(this, new AppFactory(app)).get(MessageViewModel.class);
-        mMessageViewModel.setDialogueId(conversationId);
-        mMessageViewModel.recipientId = recipientId;
+    }
+
+    private void handleConversationResponse(Resource<Conversation> conversationResource){
+        Timber.e("Handling Response");
+        if(conversationResource.data != null){
+            mConversationId = conversationResource.data.getId();
+           // getMessagesInConversation();
+            mMessageViewModel.setDialogueId(mConversationId);
+
+        }
+
+    }
+
+    private void getMessagesInConversation(){
+        mMessageViewModel.setDialogueId(mConversationId);
+        mMessageViewModel.recipientId = mRecipeintId;
         getUserStreams(mMessageViewModel);
         subscribeToDataStreams(mMessageViewModel);
     }
@@ -154,11 +187,16 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
                     mMessageAdapter.addMessages(listResource.data);
                   //  mRecyclerView.smoothScrollToPosition(mMessageAdapter.getItemCount()-1);
                     mMessageAdapter.notifyDataSetChanged();
+
                  if (mMessageAdapter.getItemCount() > 1) {
                       mRecyclerView.smoothScrollToPosition(mMessageAdapter.getItemCount()-1);
                     // recyclerView.getLayoutManager().smoothScrollToPosition(recyclerView, null, mAdapter.getItemCount() - 1);
                   }
-                } else Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+                  if(observer!=null) observer.removeObservers(this);
+
+                } else {
+                    //Toast.makeText(this, "No data found", Toast.LENGTH_SHORT).show();
+                }
 //                break;
 //            case MESSAGE:
 //                stopAnim();
@@ -194,7 +232,7 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
     private void handleMessageResponse(Resource<Message> messageResource){
         switch (messageResource.status){
             case SUCCESS:
-                Toast.makeText(this, "Message sent", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "Message sent", Toast.LENGTH_SHORT).show();
                 break;
             case MESSAGE:
                 Toast.makeText(this, "Error, failed to send message", Toast.LENGTH_SHORT).show();
@@ -255,5 +293,17 @@ public class MessageActivity extends AppCompatActivity implements LifecycleRegis
         overridePendingTransition(R.anim.left_to_right, R.anim.right_to_left);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return super.onCreateOptionsMenu(menu);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

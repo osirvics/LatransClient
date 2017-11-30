@@ -8,6 +8,7 @@ import android.arch.lifecycle.ViewModel;
 import com.example.victor.latrans.dependency.AppComponent;
 import com.example.victor.latrans.google.Resource;
 import com.example.victor.latrans.repocitory.MessageRepository;
+import com.example.victor.latrans.repocitory.local.db.entity.Conversation;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
 import com.example.victor.latrans.repocitory.local.db.entity.User;
 import com.example.victor.latrans.util.Util;
@@ -15,6 +16,8 @@ import com.example.victor.latrans.util.Util;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 public class MessageViewModel extends ViewModel implements AppComponent.Injectable {
 
@@ -34,9 +37,11 @@ public class MessageViewModel extends ViewModel implements AppComponent.Injectab
     private MutableLiveData<Long> dialogueId = new MutableLiveData<>();
     private LiveData<Resource<User>> mUserData;
     private LiveData<Resource<Message>> mSendMessage;
+    private LiveData<Resource<Conversation>> mConversation;
 
      public void setDialogueId(long id){
          dialogueId.setValue(id);
+         Timber.e("conversation id set to: " + String.valueOf(id) );
     }
 
     public LiveData<Resource<List<Message>>> getResponse(){
@@ -48,8 +53,9 @@ public class MessageViewModel extends ViewModel implements AppComponent.Injectab
     private void processResponse(){
         mLiveData = Transformations.switchMap(dialogueId, input -> {
 //            if (input == -1){
-//                return AbsentLiveData.create();
+//                return
 //            }
+            Timber.e("Recursion ocuring");
             return  mMessageRepository.getMessagesInConversation(input);
         });
     }
@@ -60,10 +66,22 @@ public class MessageViewModel extends ViewModel implements AppComponent.Injectab
         return mUserData;
     }
 
+
     public LiveData<Resource<Message>> sendMessage(){
         mSendMessage = new MutableLiveData<>();
         mSendMessage = mMessageRepository.postMessage(buildMessage());
         return mSendMessage;
+    }
+
+    public LiveData<Resource<Conversation>> getConversation(){
+        mConversation = new MutableLiveData<>();
+        Timber.e("recipient Id " + recipientId);
+        //if(mConversation == null){
+            return mConversation = mMessageRepository.getConversation(recipientId);
+
+        //}
+       // return mConversation;
+
     }
 
     public Message buildMessage(){

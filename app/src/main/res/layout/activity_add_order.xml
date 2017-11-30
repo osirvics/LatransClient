@@ -39,8 +39,9 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                app:titleTextColor="@color/black"
+                style="@style/ToolbarTheme"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.AppBarLayout>
@@ -71,28 +72,52 @@
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
-                        <ImageView
-                            android:id="@+id/photo_thumbnail"
-                            android:scaleType="centerCrop"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            app:srcCompat="@drawable/ic_photo_camera"
+
+                        <FrameLayout
+                            android:layout_width="116dp"
+                            android:layout_height="116dp"
+                            android:id="@+id/photo_thumb"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginBottom="8dp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintEnd_toStartOf="@+id/order_add_photo"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintHorizontal_chainStyle="spread"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginBottom="8dp"/>
+                           >
+
+
+                            <ImageView
+                                android:id="@+id/photo"
+                                android:scaleType="centerCrop"
+                                android:layout_width="116dp"
+                                android:layout_height="116dp"
+                                app:srcCompat="@drawable/ic_add_image1"
+
+                                />
+
+                            <ImageView
+                                android:id="@+id/photo_thumbnail"
+                                android:layout_gravity="center_horizontal|center_vertical"
+                                android:scaleType="centerCrop"
+                                android:layout_width="95dp"
+                                android:layout_height="95dp"
+                                app:srcCompat="@drawable/ic_photo_camera"
+
+                                />
+
+                        </FrameLayout>
+
 
 
                         <ImageView
                             android:id="@+id/order_add_photo"
                             android:layout_width="50dp"
+                            android:background="@android:color/transparent"
                             android:layout_height="50dp"
-                            app:srcCompat="@drawable/ic_add_plus"
-                            app:layout_constraintStart_toEndOf="@+id/photo_thumbnail"
+                            app:srcCompat="@drawable/ic_image_add_button"
+                            app:layout_constraintStart_toEndOf="@+id/photo_thumb"
                             app:layout_constraintHorizontal_bias="0.5"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintBottom_toBottomOf="parent"

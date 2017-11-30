@@ -2,16 +2,20 @@ package com.example.victor.latrans.view.ui.profile
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.view.View
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.example.victor.latrans.BaseActivity
 import com.example.victor.latrans.R
 import com.example.victor.latrans.util.SharedPrefsHelper
 import com.example.victor.latrans.view.adapter.PagerAdapter
 import com.example.victor.latrans.view.ui.App
+import com.example.victor.latrans.view.ui.login.LoginActivity
 import kotlinx.android.synthetic.main.activity_profile.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class ProfileActivity : BaseActivity(){
@@ -22,15 +26,19 @@ lateinit var mSharedPrefsHelper : SharedPrefsHelper
         super.onCreate(savedInstanceState)
         //setContentView(R.layout.activity_profile);
        (this.application as App).appComponent.inject(this)
-        initTabedViewpager()
+
         initView()
-        //initViewModel(app)
     }
 
     fun initView(): Unit{
-         Glide.with(this).load(mSharedPrefsHelper.userProfileUrl).centerCrop().placeholder(R.drawable.ic_person_grey_600_24dp)
-        .error(R.drawable.ic_person_grey_600_24dp).crossFade().into(profile_image)
-         fab.setOnClickListener { _ -> openEditActivity() }
+        if(mSharedPrefsHelper.userId == ((-1).toLong())){
+            val intent = LoginActivity.newIntent(this)
+            startActivity(intent)
+        }
+        else{
+            initTabedViewpager()
+            loadImage()
+        }
 
     }
 
@@ -38,6 +46,12 @@ lateinit var mSharedPrefsHelper : SharedPrefsHelper
         val intent = EditProfileActivity.newINtent(this)
         startActivity(intent)
         overridePendingTransition(R.anim.enter, R.anim.exit)
+    }
+    private fun loadImage() : Unit{
+        Glide.with(this).load(mSharedPrefsHelper.userProfileUrl).centerCrop().diskCacheStrategy(DiskCacheStrategy.ALL).placeholder(R.drawable.ic_person_grey_600_24dp)
+                .error(R.drawable.ic_person_grey_600_24dp).crossFade().into(profile_image)
+        fab.setOnClickListener { _ -> openEditActivity() }
+
     }
 
 
@@ -61,7 +75,6 @@ lateinit var mSharedPrefsHelper : SharedPrefsHelper
             return Intent(context, ProfileActivity::class.java)
         }
     }
-
 
     private fun initTabedViewpager() {
         tab_layout.addTab(tab_layout.newTab().setText(getString(R.string.profile_order_tab)))
@@ -93,5 +106,13 @@ lateinit var mSharedPrefsHelper : SharedPrefsHelper
         pager.offscreenPageLimit = 3
 
 
+    }
+
+    fun dialPhoneNumber(phoneNumber: String ) {
+        val intent = Intent(Intent.ACTION_DIAL)
+        intent.data = Uri.parse("tel:" + phoneNumber)
+        if (intent.resolveActivity(packageManager) != null) {
+            startActivity(intent)
+        }
     }
 }

@@ -4,6 +4,7 @@ package com.example.victor.latrans.repocitory;
 import android.arch.lifecycle.LiveData;
 
 import com.example.victor.latrans.google.Resource;
+import com.example.victor.latrans.repocitory.local.db.entity.Conversation;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
 import com.example.victor.latrans.repocitory.local.db.entity.User;
 import com.example.victor.latrans.repocitory.local.db.entity.ConversationAndMessage;
@@ -26,4 +27,7 @@ public interface MessageRepository {
     LiveData<Resource<UploadResponse>> beginUpload(File file);
     // Send message to server
     LiveData<Resource<Message>> postMessage(Message message);
+    LiveData<Resource<Conversation>> getConversation(long recipient_id);
+
+
 }

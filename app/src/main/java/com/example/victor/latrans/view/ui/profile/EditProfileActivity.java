@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.victor.latrans.R;
 import com.example.victor.latrans.amazon.AmazonUtility;
 import com.example.victor.latrans.dependency.AppFactory;
@@ -127,7 +128,7 @@ public class EditProfileActivity extends AppCompatActivity implements LifecycleR
                     mInputFirstName.setText(user.data.getFirst_name());
                     mInputLastName.setText(user.data.getLast_name());
                     mInputNumber.setText(user.data.getPhone_no());
-                    Glide.with(this).load(user.data.getPicture()).centerCrop()
+                    Glide.with(this).load(user.data.getPicture()).centerCrop().crossFade().diskCacheStrategy(DiskCacheStrategy.ALL)
                             .placeholder(R.drawable.ic_person_grey_600_24dp).error(R.drawable.ic_person_grey_600_24dp)
                             .into(mProfileImage);
                 }

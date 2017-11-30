@@ -23,6 +23,7 @@ import com.example.victor.latrans.repocitory.local.db.entity.Conversation;
 import com.example.victor.latrans.repocitory.local.db.entity.Message;
 import com.example.victor.latrans.repocitory.local.db.entity.User;
 import com.example.victor.latrans.repocitory.local.db.entity.ConversationAndMessage;
+import com.example.victor.latrans.repocitory.local.model.ConversationResponse;
 import com.example.victor.latrans.repocitory.local.model.MessageResponse;
 import com.example.victor.latrans.repocitory.local.model.NewUser;
 import com.example.victor.latrans.repocitory.local.model.Profile;
@@ -81,6 +82,7 @@ public class MessageRepositoryImpl implements MessageRepository {
             @NonNull
             @Override
             protected LiveData<List<ConversationAndMessage>> loadFromDb() {
+
                 return mAppDatabase.dialogueDao().getAllDialogue();
             }
 
@@ -242,6 +244,33 @@ public class MessageRepositoryImpl implements MessageRepository {
         }.asLiveData();
     }
 
+    @Override
+    public LiveData<Resource<Conversation>> getConversation(long recipient_id) {
+        return new NetworkBoundResource<Conversation, ConversationResponse>(appExecutors) {
+            @Override
+            protected void saveCallResult(@NonNull ConversationResponse item) {
+
+            }
+
+            @Override
+            protected boolean shouldFetch(@Nullable Conversation data) {
+                return false;
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<Conversation> loadFromDb() {
+                Timber.e("Attempting loading of conversation from db");
+                return mAppDatabase.conversationDao().getAConversationByUserId(recipient_id);
+            }
+
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<ConversationResponse>> createCall() {
+                return null;
+            }
+        }.asLiveData();
+    }
 
 
     private   LiveData<Resource<UploadResponse>> transferObserverListener(TransferObserver transferObserver){

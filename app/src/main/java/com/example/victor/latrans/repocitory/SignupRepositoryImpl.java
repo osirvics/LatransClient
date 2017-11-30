@@ -235,6 +235,11 @@ public class SignupRepositoryImpl implements SignupRepository{
         }.asLiveData();
     }
 
+    @Override
+    public long getUserId() {
+        return mSharedPrefsHelper.getUserId();
+    }
+
 
     public static class MyAsynTask extends AsyncTask<Void, Void, Void>{
        private User mUser;

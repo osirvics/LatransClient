@@ -3,13 +3,12 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
+              android:paddingBottom="6dp"
               android:layout_height="wrap_content"
               android:orientation="vertical">
 
     <android.support.v7.widget.CardView
     android:layout_width="match_parent"
-    android:layout_marginTop="@dimen/padding_small"
-    android:layout_marginBottom="@dimen/padding_small"
     android:layout_height="wrap_content"
     >
 
@@ -34,12 +33,12 @@
                 android:id="@+id/time_posted"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                app:layout_constraintEnd_toEndOf="@+id/reward_starting_amount"
-                app:layout_constraintStart_toStartOf="@+id/reward_starting_amount"
-                app:layout_constraintTop_toBottomOf="@+id/reward_starting_amount"
+                android:layout_marginStart="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/button_deliver_item"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_deliver_item"
                 tools:text="just now"
-                />
+                android:layout_marginLeft="8dp"/>
 
             <TextView
                 android:id="@+id/textView"
@@ -60,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -73,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="From:"
                 app:layout_constraintStart_toEndOf="@+id/imageView"
                 app:layout_constraintTop_toBottomOf="@+id/item_location_state_city"
@@ -101,7 +100,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/item_location_state_city"
                 app:layout_constraintStart_toStartOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/item_location_state_city"
-                app:srcCompat="@drawable/ic_location_city_accent_24dp"
+                app:srcCompat="@drawable/ic_location_city_accent1_24dp"
                 android:layout_marginLeft="8dp"/>
 
             <ImageView
@@ -114,7 +113,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="@+id/item_location_state_city"
                 app:layout_constraintTop_toBottomOf="@+id/delivery_state_city"
-                app:srcCompat="@drawable/ic_my_location_accent_24dp"
+                app:srcCompat="@drawable/ic_my_location_accent1_24dp"
                 android:layout_marginRight="8dp"/>
 
             <ImageView
@@ -127,7 +126,7 @@
                 app:layout_constraintEnd_toStartOf="@+id/imageView4"
                 app:layout_constraintStart_toEndOf="@+id/imageView4"
                 app:layout_constraintTop_toBottomOf="@+id/dleivery_time"
-                app:srcCompat="@drawable/ic_date_range_accent_24dp"/>
+                app:srcCompat="@drawable/ic_date_range_accent1_24dp"/>
 
             <ImageView
                 android:id="@+id/item_image"
@@ -142,11 +141,11 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline2"
                 app:layout_constraintTop_toBottomOf="@id/item_name"
-                app:srcCompat="@drawable/nike"/>
-
+                />
+            <!--app:srcCompat="@drawable/nike"-->
             <TextView
                 android:id="@+id/item_name"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -154,13 +153,13 @@
                 app:layout_constraintHorizontal_bias="0.49"
                 app:layout_constraintStart_toStartOf="@+id/item_image"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Men's classic Nike"/>
+                tools:text="Men's classic"/>
 
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="Before:"
                 app:layout_constraintStart_toStartOf="@+id/delivery_state_city"
                 app:layout_constraintTop_toBottomOf="@+id/delivery_state_city"
@@ -171,7 +170,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 app:layout_constraintStart_toEndOf="@+id/imageView5"
                 app:layout_constraintTop_toBottomOf="@+id/textView6"
@@ -184,16 +183,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:drawableLeft="@drawable/ic_message_white_18dp"
+                android:drawablePadding="@dimen/padding_small"
+                android:drawableStart="@drawable/ic_message_white_18dp"
+                android:minHeight="0dp"
+                android:text="@string/action_send_message"
                 android:layout_marginTop="16dp"
-                android:text="Deliver"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/dleivery_time"
-                tools:text="Deliver"/>
+                tools:text="Contact"/>
 
             <TextView
                 android:id="@+id/reward_starting_amount"
                 android:layout_width="wrap_content"
+                android:background="@drawable/button_background"
+                android:padding="4dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                 app:layout_constraintEnd_toEndOf="@+id/textView9"
@@ -206,9 +212,7 @@
                 android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="0dp"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="4dp"
                 android:text="Reward"
                 app:layout_constraintEnd_toEndOf="@+id/item_image"
                 app:layout_constraintStart_toStartOf="@+id/item_image"
@@ -229,10 +233,23 @@
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline2"
+
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
                 app:layout_constraintGuide_begin="240dp"/>
+
+            <!--<com.example.victor.latrans.view.RatingView-->
+                <!--android:id="@+id/floatingActionButton"-->
+                <!--android:layout_width="56dp"-->
+                <!--android:layout_height="56dp"-->
+                <!--android:clickable="true"-->
+                <!--android:focusable="true"-->
+                <!--app:rating="N2,000"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/textView9"-->
+                <!--app:layout_constraintStart_toStartOf="@+id/textView9"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/textView9"-->
+                <!--app:srcCompat="@drawable/polygon"/>-->
 
         </android.support.constraint.ConstraintLayout>
 

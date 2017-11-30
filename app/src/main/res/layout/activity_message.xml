@@ -3,10 +3,26 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/social"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.victor.latrans.view.ui.message.MessageActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            app:titleTextColor="@color/black"
+            style="@style/ToolbarTheme"
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/AppTheme.PopupOverlay"/>
+
+    </android.support.design.widget.AppBarLayout>
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/animation_view"
@@ -36,7 +52,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/view2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/app_bar">
     </android.support.v7.widget.RecyclerView>
 
     <!-- A horizontal line between the chatbox and RecyclerView -->

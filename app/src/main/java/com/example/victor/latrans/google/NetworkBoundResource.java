@@ -57,7 +57,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         result.addSource(dbSource, newData -> result.setValue(Resource.loading(newData)));
         //TODO Remove db data loading here
         //result.addSource(loadFromDb(),
-               // newData -> result.setValue(Resource.success(newData)));
+              // newData -> result.setValue(Resource.success(newData)));
         result.addSource(apiResponse, response -> {
             result.removeSource(apiResponse);
             result.removeSource(dbSource);
@@ -94,6 +94,8 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
 
         return response.body;
     }
+
+
 
     @WorkerThread
     protected abstract void saveCallResult(@NonNull RequestType item);

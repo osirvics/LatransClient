@@ -1,14 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#193446</color>
-    <color name="colorPrimaryDark">#192e46</color>
-    <color name="colorAccent">#42AFBF</color><!-- Global colors -->
-    <!--<color name="colorPrimary">#7d62d9</color>-->
-    <!--<color name="colorPrimaryDark">#512DA8</color>-->
-    <!--<color name="colorAccent">#26c6da</color>-->
+    <color name="colorPrimary">#2c3e50</color>
+    <color name="colorPrimaryDark">#bdc3c7</color>
+    <color name="colorPrimaryDarkTheme">#192e46</color>
+
+    <color name="statusBar">#9E9E9E</color>
+
+    <color name="colorAccent">#1da1f2</color><!-- Global colors new color prim #2c3e50 -->
+    <!--<color name="colorPrimary">#7d62d9, 193446</color> former accent color 42afbf,colorPrimary">#193446 , colorPrimaryDark">#192e46</color> -->
+    <color name="colorMessageRecieved">#E6ECF0</color>
+    <color name="colorMessageSent">#1da1f2</color>
 
     <color name="textColorPrimary">#3a414d</color>
     <color name="textColorLight">#6f7c92</color>
+    <color name="window_background_light">#f5f5f5</color>
+
     <color name="window_background">#193446</color>
     <color name="background">#FFF5F5F5</color>
     <color name="black">#000000</color>
@@ -19,11 +25,13 @@
     <color name="aluminum">#999999</color>
     <color name="base">#AAAAAA</color>
     <color name="iron">#CCCCCC</color>
+    <color name="tab_unselected">#757575</color>
+    <color name="tab_selected">#212121</color>
     <color name="white">#FFFFFF</color>
     <color name="divider_black">#10000000</color>
 
 
-
+    <color name="placeholder_grey_20">#33AAADC4</color>
     <color name="gray">#7e7e7e</color>
     <color name="semi_gray">#979797</color>
     <color name="dark_gray">#696969</color>

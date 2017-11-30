@@ -8,50 +8,53 @@
     android:layout_height="match_parent"
     >
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/coordinator"
-            android:layout_height="0dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinator"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/app_bar"
             android:layout_width="match_parent"
-            app:layout_constraintBottom_toTopOf="@id/navigation"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/app_bar"
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:theme="@style/AppTheme.AppBarOverlay">
+                android:layout_height="?attr/actionBarSize"
+                app:titleTextColor="@color/black"
+                style="@style/ToolbarTheme"
+                app:contentInsetStart="@dimen/content_start"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/AppTheme.PopupOverlay"/>
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimary"
-                    app:layout_scrollFlags="scroll|enterAlways"
-                    app:popupTheme="@style/AppTheme.PopupOverlay"/>
-
-            </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.AppBarLayout>
 
 
-            <com.airbnb.lottie.LottieAnimationView
-                android:id="@+id/animation_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                app:layout_anchorGravity="center"
-                app:lottie_autoPlay="false"
-                app:lottie_fileName="preloader.json"
-                app:lottie_loop="true"/>
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            app:layout_anchorGravity="center"
+            app:lottie_autoPlay="false"
+            app:lottie_fileName="preloader.json"
+            app:lottie_loop="true"/>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-        </android.support.design.widget.CoordinatorLayout>
+    </android.support.design.widget.CoordinatorLayout>
 
 
 

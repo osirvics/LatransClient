@@ -38,10 +38,10 @@ public class DateUtils {
     }
 
     /**
-     * Formats timestamp to 'date month' format (e.g. 'February 3').
+     * Formats timestamp to 'date month' format (e.g. 'Feb 3').
      */
     public static String formatDate(long timeInMillis) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd", Locale.getDefault());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM dd", Locale.getDefault());
         return dateFormat.format(timeInMillis);
     }
 
