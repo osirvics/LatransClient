@@ -182,8 +182,9 @@ public class SignupRepositoryImpl implements SignupRepository{
             }
 
             @Override
-            protected boolean shouldFetch(@Nullable List<Trip> data) {
-                return data == null || data.isEmpty() || repoListRateLimit.shouldFetch("data");
+            protected boolean shouldFetch(@Nullable List<Trip> data) {;
+                //return data == null || data.isEmpty() || repoListRateLimit.shouldFetch("data");
+                return true;
 
             }
 
@@ -218,7 +219,8 @@ public class SignupRepositoryImpl implements SignupRepository{
 
             @Override
             protected boolean shouldFetch(@Nullable List<Trip> data) {
-                return data == null || data.isEmpty() || repoListRateLimit.shouldFetch(String.valueOf(user_id));
+                //return data == null || data.isEmpty() || repoListRateLimit.shouldFetch(String.valueOf(user_id));
+                return true;
             }
 
             @NonNull

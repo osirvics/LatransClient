@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.airbnb.lottie.LottieAnimationView
 import com.example.victor.latrans.R
 import com.example.victor.latrans.dependency.AppFactory
@@ -76,7 +75,7 @@ class ProfileOrderFragment : Fragment(),OnItemClick {
         if (resource!!.data != null) {
             mOrderAdapter.addOrder(resource.data)
         } else {
-            Toast.makeText(activity, "No orders found this time", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(activity, "No orders found this time", Toast.LENGTH_SHORT).show()
         }
     }
 

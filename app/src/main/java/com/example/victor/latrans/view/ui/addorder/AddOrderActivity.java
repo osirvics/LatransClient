@@ -157,6 +157,7 @@ public class AddOrderActivity extends AppCompatActivity implements DatePickerDia
     @OnClick(R.id.add_order_button)
     public void postRequest(){
         if(validate()){
+            startAnim();
             mPostButton.setEnabled(false);
             mAddOrderViewModel.startUpload().observe(this, this::handleUploadResponse);
         }

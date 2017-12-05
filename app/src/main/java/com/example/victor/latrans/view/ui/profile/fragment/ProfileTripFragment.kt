@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.airbnb.lottie.LottieAnimationView
 import com.example.victor.latrans.R
 import com.example.victor.latrans.dependency.AppFactory
@@ -83,8 +82,10 @@ class ProfileTripFragment : Fragment(), OnItemClick , ActionDial{
             for ((id) in listResource.data) {
                 Timber.e("Trip id: " + id!!)
             }
-        } else
-            Toast.makeText(activity, "No data found", Toast.LENGTH_SHORT).show()
+        } else{
+
+        }
+                //  Toast.makeText(activity, "No data found", Toast.LENGTH_SHORT).show()
         //                break;
         //            case MESSAGE:
         ////                stopAnim();
